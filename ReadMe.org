@@ -1,4 +1,3 @@
-#+title: TerrainPi
+#+title: AutoPi
 
-
-Automatically Generate 3d Models of areas around you using Camera and LIDAR sensors.
+*AutoPi* is a project framework that automatically interfaces with sensors and other devices peripherals with Raspberry Pi and in turn enables everyone to create their own Embedded project.
