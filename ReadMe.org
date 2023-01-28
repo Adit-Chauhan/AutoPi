@@ -1,3 +1,17 @@
 #+title: AutoPi
 
 *AutoPi* is a project framework that automatically interfaces with sensors and other devices peripherals with Raspberry Pi and in turn enables everyone to create their own Embedded project.
+
+* Build Instructions
+#+begin_quote
+Install meson and ninja for building
+#+end_quote
+
+#+begin_src bash
+meson setup build
+cd build
+# to complile project run
+meson compile
+# to run tests run
+meson test
+#+end_src
