@@ -2,8 +2,9 @@ project('hello','cpp')
 gtest_proj = subproject('gtest')
 gtest_dep = gtest_proj.get_variable('gtest_dep')
 gmock_dep = gtest_proj.get_variable('gmock_dep')
-
-executable('hello','src/hello.cpp')
+log_dep = subproject('spdlog').get_variable('spdlog_dep')
+executable('hello','src/hello.cpp',
+  dependencies : [log_dep])
 
 
 tests_src = [
@@ -16,6 +17,7 @@ test_bin = executable(
   tests_src,
   dependencies : [
     gtest_dep,
-    gmock_dep])
+    gmock_dep,
+    log_dep])
 
 test('gtest',test_bin)
