@@ -1,6 +1,6 @@
 #+title: AutoPi
 
-*AutoPi* is a project framework that automatically interfaces with sensors and other devices peripherals with Raspberry Pi and in turn enables everyone to create their own Embedded project.
+*AutoPi* is a driving assistance project that helps in you drive safely.
 
 * Build Instructions
 #+begin_quote
