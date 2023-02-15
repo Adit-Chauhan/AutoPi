@@ -1,3 +1,3 @@
 #include "spdlog/spdlog.h"
 
-int main() { spdlog::info("Hello Logging"); }
+int main() { spdlog::info("Hello Dev"); }
