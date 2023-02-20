@@ -8,7 +8,6 @@
 #include "spdlog/spdlog.h"
 
 i2cBase::i2cBase(uint8_t address) {
-  slave_addr = address;
   handle = open(i2c_bus, O_RDWR);
 
   // TODO: better Error Handling
@@ -17,8 +16,8 @@ i2cBase::i2cBase(uint8_t address) {
   }
 
   // TODO: better Error Handling
-  if (ioctl(handle, I2C_SLAVE, slave_addr) < 0) {
-    spdlog::error("Cannot Connect to device on {0:x}", slave_addr);
+  if (ioctl(handle, I2C_SLAVE, address) < 0) {
+    spdlog::error("Cannot Connect to device on {0:x}", address);
   }
 }
 
