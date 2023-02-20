@@ -4,7 +4,7 @@ gtest_dep = gtest_proj.get_variable('gtest_dep')
 gmock_dep = gtest_proj.get_variable('gmock_dep')
 log_dep = subproject('spdlog').get_variable('spdlog_dep')
 
-bin_src = ['src/utils/i2cBase.cpp']
+bin_src = ['src/utils/i2c.cpp']
 
 executable('hello',['src/hello.cpp'] + bin_src,
   dependencies : [log_dep])

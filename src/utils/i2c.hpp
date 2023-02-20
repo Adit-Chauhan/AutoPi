@@ -1,12 +1,11 @@
 #pragma once
 
-#include <array>
+#include "buffer.hpp"
+
 #include <cstdint>
-#include <memory>
 
-// Buffer alias currently using array but will switch to custom DS
-typedef std::array<uint8_t, 100> buffer8bit;
-
+// Buffer alias using simple buffer type
+typedef buffer<uint8_t, 100> buffer8bit;
 class i2cBase {
 private:
   const char *i2c_bus = "/dev/i2c-1";

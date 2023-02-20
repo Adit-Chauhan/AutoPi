@@ -1,4 +1,4 @@
-#include "../src/utils/i2cBase.hpp"
+#include "../src/utils/i2c.hpp"
 #include "gtest/gtest.h"
 #include <cerrno>
 #include <cstdint>
