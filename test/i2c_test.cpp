@@ -7,7 +7,10 @@
 #include <iostream>
 #include <string>
 
+namespace i2c_test {
 const char *test_read = "/home/adit/College/AutoPi/test/test_text.txt";
+}
+
 class i2cMock : public i2cBase {
   const static uint8_t slave_addr = 0x10;
 
@@ -19,7 +22,7 @@ public:
 
 TEST(i2c, baseClass) {
   // GTEST_SKIP_("Cannot test on Laptop");
-  int f = open(test_read, O_RDONLY);
+  int f = open(i2c_test::test_read, O_RDONLY);
   i2cMock m = i2cMock(f);
   EXPECT_EQ(0, errno);
   m.read(100);

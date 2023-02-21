@@ -11,11 +11,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 namespace buffer_test {
-
 const char *test_read = "/home/adit/College/AutoPi/test/test_text.txt";
 const char *test_write = "/home/adit/College/AutoPi/test/test_write.txt";
 void error_buffer_init() { buffer<int, 3> b{1, 2, 3, 4, 5}; }
 } // namespace buffer_test
+
 TEST(BufferTest, OverwrittenFunctions) {
   std::array<uint8_t, 100> arr;
   buffer<uint8_t, 100> buff;
