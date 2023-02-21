@@ -1,6 +1,7 @@
 #pragma once
 
 #include "buffer.hpp"
+
 #include <array>
 #include <cstdint>
 
