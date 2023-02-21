@@ -1,8 +1,10 @@
 #include "i2c.hpp"
+#include <array>
 #include <cstdint>
 #include <fcntl.h>
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
+#include <unistd.h>
 
 #include "spdlog/spdlog.h"
 
@@ -21,10 +23,17 @@ i2cBase::i2cBase(uint8_t address) {
   }
 }
 
-i2cBase::~i2cBase() {}
+i2cBase::i2cBase(int file) { handle = file; }
 
-bool i2cBase::_read(uint16_t length) {
-  return read_buffer.read_from(handle, length) < 0;
+i2cBase::~i2cBase() {
+  delete read_buffer;
+  delete write_buffer;
 }
 
-bool i2cBase::_write() { return write_buffer.write_to(handle) < 0; }
+bool i2cBase::_read(uint16_t length) {
+  return ::read(handle, read_buffer, length) < 0;
+}
+
+bool i2cBase::_write() {
+  return ::write(handle, write_buffer, write_buffer->size()) < 0;
+}
