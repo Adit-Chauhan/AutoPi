@@ -1,13 +1,17 @@
 #pragma once
 
+#include "buffer.hpp"
 #include <array>
 #include <cstdint>
+
 // Buffer alias using simple buffer type
-class i2cBase {
-  typedef std::array<uint8_t, 100> buffer8bit;
+template <uint8_t _S = 10> class i2cBase {
+  typedef buffer<uint8_t, _S> buffer8bit;
 
 private:
   const char *i2c_bus = "/dev/i2c-1";
+
+protected:
   int handle;
 
 protected:
@@ -22,8 +26,8 @@ public:
   i2cBase(uint8_t address);
   i2cBase(int file);
   ~i2cBase();
-  buffer8bit *read_buffer = new buffer8bit();
-  buffer8bit *write_buffer = new buffer8bit();
+  buffer8bit read_buffer;
+  buffer8bit write_buffer;
 
   // Error Handled versions of the read and write to be implemented by child
   // classes

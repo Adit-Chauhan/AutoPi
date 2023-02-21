@@ -8,7 +8,7 @@
 
 #include "spdlog/spdlog.h"
 
-i2cBase::i2cBase(uint8_t address) {
+template <> i2cBase<>::i2cBase(uint8_t address) {
   handle = open(i2c_bus, O_RDWR);
 
   // TODO: better Error Handling
@@ -23,17 +23,14 @@ i2cBase::i2cBase(uint8_t address) {
   }
 }
 
-i2cBase::i2cBase(int file) { handle = file; }
+template <> i2cBase<>::i2cBase(int file) { handle = file; }
 
-i2cBase::~i2cBase() {
-  delete read_buffer;
-  delete write_buffer;
+template <> i2cBase<>::~i2cBase() {}
+
+template <> bool i2cBase<>::_read(uint16_t length) {
+  return read_buffer.read_from(handle, length) < 0;
 }
 
-bool i2cBase::_read(uint16_t length) {
-  return ::read(handle, read_buffer, length) < 0;
-}
-
-bool i2cBase::_write() {
-  return ::write(handle, write_buffer, write_buffer->size()) < 0;
+template <> bool i2cBase<>::_write() {
+  return write_buffer.write_to(handle) < 0;
 }
