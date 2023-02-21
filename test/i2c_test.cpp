@@ -16,14 +16,14 @@ class i2cMock : public i2cBase<> {
 
 public:
   using i2cBase::i2cBase;
-  void write() override { _write(); }
-  void read(uint16_t length = 0) override { _read(length); }
+  bool write() { return _write(); }
+  bool read() { return _read(); }
 };
 
 TEST(i2c, baseClassRead) {
   int f = open(i2c_test::test_read, O_RDONLY);
   i2cMock m = i2cMock(f);
   EXPECT_EQ(0, errno);
-  m.read(100);
+  m.read();
   EXPECT_EQ(0, errno);
 }

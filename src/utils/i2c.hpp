@@ -32,6 +32,10 @@ public:
 
   // Error Handled versions of the read and write to be implemented by child
   // classes
-  virtual void read(uint16_t length = 0) = 0;
-  virtual void write() = 0;
+  //
+  // It seems better to handle the errors on a case by case basis even in the
+  // class
+  //
+  //  virtual void read(uint16_t length = 0) = 0;
+  //  virtual void write() = 0;
 };
