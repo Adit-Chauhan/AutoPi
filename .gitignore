@@ -5,5 +5,5 @@ tmp/
 build/
 .cache
 .vscode
-
+test/test_write.txt
 subprojects/*/*
