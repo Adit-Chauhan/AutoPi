@@ -2,9 +2,12 @@
 #include "spdlog/spdlog.h"
 
 #include <array>
+#include <cstdarg>
 #include <cstdint>
 #include <fcntl.h>
+#include <initializer_list>
 #include <linux/i2c-dev.h>
+#include <stdexcept>
 #include <sys/ioctl.h>
 #include <unistd.h>
 
@@ -33,4 +36,13 @@ template <> bool i2cBase<>::_read(uint16_t length) {
 
 template <> bool i2cBase<>::_write() {
   return write_buffer.write_to(handle) < 0;
+}
+template <> bool i2cBase<>::_write(std::initializer_list<uint8_t> data) {
+  write_buffer = data;
+  return write_buffer.write_to(handle) < 0;
+}
+
+template <> bool i2cBase<>::_write(uint16_t length) {
+  write_buffer.set_written_bytes(length);
+  return _write();
 }
