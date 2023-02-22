@@ -7,7 +7,7 @@
 #include <initializer_list>
 
 // Buffer alias using simple buffer type
-template <uint8_t _S = 10> class i2cBase {
+template <uint8_t _S = 4> class i2cBase {
   typedef buffer<uint8_t, _S> buffer8bit;
 
 private:
