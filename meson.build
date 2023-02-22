@@ -1,4 +1,4 @@
-project('hello','cpp',default_options : ['cpp_std=c++17', ])
+project('AutoPi','cpp',default_options : ['cpp_std=c++17', ])
 
 gtest_proj = subproject('gtest')
 gtest_dep = gtest_proj.get_variable('gtest_dep')
@@ -29,4 +29,4 @@ test_bin = executable(
 cpp_args : ['-DGTEST_HAS_EXCEPTIONS=1', '-fexceptions'])
 
 
-test('gtest',test_bin)
+test('AutoPi test',test_bin)
