@@ -1,5 +1,5 @@
+#include "../src/utils/buffer.hpp"
 #include "../src/utils/i2c.hpp"
-#include "src/utils/buffer.hpp"
 #include "gtest/gtest.h"
 #include <cerrno>
 #include <cstdint>
