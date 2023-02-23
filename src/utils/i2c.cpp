@@ -12,6 +12,9 @@
 #include <unistd.h>
 
 template <> i2cBase<>::i2cBase(uint8_t address) {
+#include <spdlog/spdlog.h>
+
+i2cBase::i2cBase(uint8_t address) {
   handle = open(i2c_bus, O_RDWR);
 
   // TODO: better Error Handling

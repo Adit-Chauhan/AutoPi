@@ -1,15 +1,12 @@
-#include "src/utils/buffer.hpp"
+#include "../src/utils/buffer.hpp"
 #include "gtest/gtest.h"
 
 #include <algorithm>
 #include <array>
 #include <cstdint>
 #include <fcntl.h>
-#include <ranges>
-#include <stdexcept>
 #include <string>
 #include <sys/stat.h>
-#include <sys/types.h>
 #include <unistd.h>
 
 namespace buffer_test {
