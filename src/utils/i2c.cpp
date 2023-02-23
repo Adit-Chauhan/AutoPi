@@ -1,20 +1,13 @@
 #include "i2c.hpp"
 #include "spdlog/spdlog.h"
 
-#include <array>
-#include <cstdarg>
 #include <cstdint>
 #include <fcntl.h>
 #include <initializer_list>
 #include <linux/i2c-dev.h>
-#include <stdexcept>
 #include <sys/ioctl.h>
-#include <unistd.h>
 
 template <> i2cBase<>::i2cBase(uint8_t address) {
-#include <spdlog/spdlog.h>
-
-i2cBase::i2cBase(uint8_t address) {
   handle = open(i2c_bus, O_RDWR);
 
   // TODO: better Error Handling

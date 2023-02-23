@@ -15,6 +15,7 @@ set(SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/buffer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/tf_luna.cpp
 )
 
 # Set up test files

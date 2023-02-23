@@ -1,7 +1,7 @@
 #pragma once
 
-#include "spdlog/spdlog.h"
-#include "src/utils/i2c.hpp"
+#include <spdlog/spdlog.h>
+#include "../utils/i2c.hpp"
 #include <cstdint>
 #include <initializer_list>
 
