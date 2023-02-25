@@ -35,14 +35,14 @@ add_executable(AutoPi ${CMAKE_CURRENT_SOURCE_DIR}/src/hello.cpp ${SRC_FILES})
 target_link_libraries(AutoPi PRIVATE spdlog::spdlog)
 
 # Create executable for tests
-add_executable(AutoPi_tests ${SRC_FILES} ${TEST_FILES})
+add_executable(tests ${SRC_FILES} ${TEST_FILES})
 
 # Link with gtest and spdlog
-target_link_libraries(AutoPi_tests PRIVATE GTest::gtest GTest::gtest_main spdlog::spdlog)
+target_link_libraries(tests PRIVATE GTest::gtest GTest::gtest_main spdlog::spdlog)
 
 # Exclude hello.cpp from AutoPi_tests
-set_target_properties(AutoPi_tests PROPERTIES EXCLUDE_FROM_ALL 1)
+#set_target_properties(AutoPi_tests PROPERTIES EXCLUDE_FROM_ALL 1)
 
 # Add tests to CTest
 include(GoogleTest)
-gtest_discover_tests(AutoPi_tests)
+gtest_discover_tests(tests)
