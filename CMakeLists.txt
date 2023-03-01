@@ -11,18 +11,20 @@ find_package(spdlog CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 
 # Set up source files
+#file(GLOB_RECURSE SRC_FILES *.cpp)
 set(SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/buffer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/tf_luna.cpp
-)
+        )
 
 # Set up test files
 set(TEST_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/test/buffer_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/i2c_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/sample_test.cpp
+
 )
 
 # Include source directory for header files

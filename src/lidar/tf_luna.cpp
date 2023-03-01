@@ -1,5 +1,6 @@
 #include "tf_luna.hpp"
 #include <cstdint>
+#include <spdlog/spdlog.h>
 #include <stdexcept>
 
 using namespace luna;
@@ -10,6 +11,7 @@ Luna::Luna() : i2cBase<4>::i2cBase(_addr) {
 
   // Check for correctness
   // TODO: Error Handling
+
   bool _ = _write({0x3C, 0x3D, 0x3E, 0x3F});
 
   _ = _read();
@@ -18,6 +20,8 @@ Luna::Luna() : i2cBase<4>::i2cBase(_addr) {
         read_buffer[2] == 'N' && read_buffer[3] == 'A')) {
     spdlog::error("Signature Error");
     throw new std::runtime_error("Connection Signature did not match");
+  } else {
+    spdlog::info("Luna Connected");
   }
 }
 
