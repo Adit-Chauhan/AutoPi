@@ -1,8 +1,8 @@
 #include "tf_luna.hpp"
 #include <cstdint>
+#include <pigpio.h>
 #include <spdlog/spdlog.h>
 #include <stdexcept>
-
 using namespace luna;
 
 // Luna Public Method
@@ -11,7 +11,8 @@ Luna::Luna() : i2cBase<4>::i2cBase(_addr) {
 
   // Check for correctness
   // TODO: Error Handling
-
+  // i2cReadI2CBlockData(unsigned int handle, unsigned int i2cReg, char *buf,
+  // unsigned int count)
   bool _ = _write({0x3C, 0x3D, 0x3E, 0x3F});
 
   _ = _read();
