@@ -19,21 +19,23 @@ template <> i2cBase<>::i2cBase(uint8_t address) {
 
 template <> i2cBase<>::i2cBase(int file) { handle = file; }
 
-template <> i2cBase<>::~i2cBase() {}
+template <> i2cBase<>::~i2cBase() { i2cClose(handle); }
 
-template <> bool i2cBase<>::_read(uint16_t length) {
-  return read_buffer.read_from(handle, length) < 0;
+template <> bool i2cBase<>::_read(uint8_t subAddr, uint16_t length) {
+  return read_buffer.read_from(handle, subAddr, length) < 0;
 }
 
-template <> bool i2cBase<>::_write() {
-  return write_buffer.write_to(handle) < 0;
+template <> bool i2cBase<>::_write(uint8_t subAddr) {
+  return write_buffer.write_to(handle, subAddr) < 0;
 }
-template <> bool i2cBase<>::_write(std::initializer_list<uint8_t> data) {
+
+template <>
+bool i2cBase<>::_write(uint8_t subAddr, std::initializer_list<uint8_t> data) {
   write_buffer = data;
-  return write_buffer.write_to(handle) < 0;
+  return write_buffer.write_to(handle, subAddr) < 0;
 }
 
-template <> bool i2cBase<>::_write(uint16_t length) {
+template <> bool i2cBase<>::_write(uint8_t subAddr, uint16_t length) {
   write_buffer.set_written_bytes(length);
-  return _write();
+  return _write(subAddr);
 }

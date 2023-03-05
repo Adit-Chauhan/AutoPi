@@ -1,9 +1,9 @@
 #pragma once
 
-#include <spdlog/spdlog.h>
 #include "../utils/i2c.hpp"
 #include <cstdint>
 #include <initializer_list>
+#include <spdlog/spdlog.h>
 
 namespace luna {
 namespace settings {
@@ -37,6 +37,10 @@ private:
   settings::Mode current_mode = settings::Continuous;
   inline bool flip_mode();
   uint16_t get_16bit_out(const uint8_t low_addr, const uint8_t high_addr);
+  bool write() override;
+  bool write(std::initializer_list<uint8_t> data) override;
+  bool write(uint16_t length) override;
+  bool read(uint16_t length = 4) override;
 
 public:
   Luna();

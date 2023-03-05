@@ -29,24 +29,24 @@ Luna::Luna() : i2cBase<4>::i2cBase(_addr) {
 bool Luna::set_power_level(settings::PowerLevel lvl) {
   switch (lvl) {
   case settings::Normal:
-    return _write({reg::UltraLowPower, 0x00}) && _write({reg::LowPower, 0x00});
+    return write({reg::UltraLowPower, 0x00}) && _write({reg::LowPower, 0x00});
   case settings::LowPower:
-    return _write({reg::LowPower, 0x01});
+    return write({reg::LowPower, 0x01});
   case settings::UltraLowPower:
-    return _write({reg::UltraLowPower, 0x01});
+    return write({reg::UltraLowPower, 0x01});
   }
 }
 
-bool Luna::save_settings() { return _write({reg::Save}); }
+bool Luna::save_settings() { return write({reg::Save}); }
 
 bool Luna::boot(settings::State state) {
   switch (state) {
   case settings::On:
-    return _write({reg::Enable, 0x01});
+    return write({reg::Enable, 0x01});
   case settings::Off:
-    return _write({reg::Enable, 0x00});
+    return write({reg::Enable, 0x00});
   case settings::Reboot:
-    return _write({reg::Reboot});
+    return write({reg::Reboot});
   }
 }
 
@@ -62,7 +62,7 @@ bool Luna::trigger_capture() {
     return false;
   }
 
-  return _write({reg::TrigShot, 0x01});
+  return write({reg::TrigShot, 0x01});
 }
 
 float Luna::get_temperature() {
@@ -81,15 +81,15 @@ uint16_t Luna::get_distance() {
 // Luna Private Methods
 
 uint16_t Luna::get_16bit_out(const uint8_t low_addr, const uint8_t high_addr) {
-  if (_write({low_addr})) {
+  if (write({low_addr})) {
   }
-  if (_read()) {
+  if (read()) {
   }
   uint8_t low = read_buffer[0];
 
-  if (_write({high_addr})) {
+  if (write({high_addr})) {
   }
-  if (_read()) {
+  if (read()) {
   }
   uint8_t high = read_buffer[0];
 
@@ -101,5 +101,15 @@ inline bool Luna::flip_mode() {
   current_mode = static_cast<settings::Mode>(current_mode ^ 0x01);
   write_buffer[0] = reg::Mode;
   write_buffer[1] = current_mode;
-  return _write(2);
+  return write(2);
 }
+
+bool Luna::write() { return _write(_addr); }
+
+bool Luna::write(std::initializer_list<uint8_t> data) {
+  return _write(_addr, data);
+}
+
+bool Luna::write(uint16_t length) { return _write(_addr, length); }
+
+bool Luna::read(uint16_t length) { return _read(_addr, length); }

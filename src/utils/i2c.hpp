@@ -20,10 +20,14 @@ protected:
   // raw read/write operations that are not error handled
   // read with length == 0 refers to do a maxium possible read currently
   // UINT16_LIMIT
-  [[nodiscard]] bool _read(uint16_t length = 0);
-  [[nodiscard]] bool _write();
-  [[nodiscard]] bool _write(std::initializer_list<uint8_t> data);
-  [[nodiscard]] bool _write(uint16_t length);
+  [[nodiscard]] bool _read(uint8_t, uint16_t length = _S);
+  [[nodiscard]] bool _write(uint8_t);
+  [[nodiscard]] bool _write(uint8_t, std::initializer_list<uint8_t> data);
+  [[nodiscard]] bool _write(uint8_t, uint16_t length);
+  virtual bool write() = 0;
+  virtual bool write(std::initializer_list<uint8_t> data) = 0;
+  virtual bool write(uint16_t length) = 0;
+  virtual bool read(uint16_t length = _S) = 0;
 
 public:
   i2cBase();
@@ -32,13 +36,4 @@ public:
   ~i2cBase();
   buffer8bit read_buffer;
   buffer8bit write_buffer;
-
-  // Error Handled versions of the read and write to be implemented by child
-  // classes
-  //
-  // It seems better to handle the errors on a case by case basis even in the
-  // class
-  //
-  //  virtual void read(uint16_t length = 0) = 0;
-  //  virtual void write() = 0;
 };
