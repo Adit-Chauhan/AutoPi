@@ -5,20 +5,15 @@
 #include <fcntl.h>
 #include <initializer_list>
 #include <linux/i2c-dev.h>
+#include <pigpio.h>
 #include <stdexcept>
 #include <sys/ioctl.h>
 
 template <> i2cBase<>::i2cBase(uint8_t address) {
-  handle = open(i2c_bus, O_RDWR);
-
-  if (handle == -1) {
+  handle = i2cOpen(i2c_bus, address, 0);
+  if (handle < 0) {
     spdlog::critical("Failed to connect to i2c Bus");
     throw new std::runtime_error("Failed to connect to i2c bus");
-  }
-
-  if (ioctl(handle, I2C_SLAVE, address) < 0) {
-    spdlog::error("Cannot Connect to device on {0:x}", address);
-    throw new std::runtime_error("Failed to connect to decive");
   }
 }
 

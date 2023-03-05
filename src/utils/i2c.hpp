@@ -11,7 +11,7 @@ template <uint8_t _S = 4> class i2cBase {
   typedef buffer<uint8_t, _S> buffer8bit;
 
 private:
-  const char *i2c_bus = "/dev/i2c-1";
+  const int i2c_bus = 1;
 
 protected:
   int handle;
