@@ -28,9 +28,8 @@ template <> bool i2cBase<>::_read(uint8_t subAddr, uint16_t length) {
 template <> bool i2cBase<>::_write(uint8_t subAddr) {
   return write_buffer.write_to(handle, subAddr) < 0;
 }
-
 template <>
-bool i2cBase<>::_write(uint8_t subAddr, std::initializer_list<uint8_t> data) {
+bool i2cBase<>::_write(uint8_t subAddr, std::initializer_list<char> data) {
   write_buffer = data;
   return write_buffer.write_to(handle, subAddr) < 0;
 }

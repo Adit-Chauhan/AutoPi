@@ -38,7 +38,7 @@ private:
   inline bool flip_mode();
   uint16_t get_16bit_out(const uint8_t low_addr, const uint8_t high_addr);
   bool write() override;
-  bool write(std::initializer_list<uint8_t> data) override;
+  bool write(std::initializer_list<char> data) override;
   bool write(uint16_t length) override;
   bool read(uint16_t length = 4) override;
 

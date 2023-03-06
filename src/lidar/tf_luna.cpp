@@ -13,9 +13,9 @@ Luna::Luna() : i2cBase<4>::i2cBase(_addr) {
   // TODO: Error Handling
   // i2cReadI2CBlockData(unsigned int handle, unsigned int i2cReg, char *buf,
   // unsigned int count)
-  bool _ = _write({0x3C, 0x3D, 0x3E, 0x3F});
+  bool _ = write({0x3C, 0x3D, 0x3E, 0x3F});
 
-  _ = _read();
+  _ = read();
 
   if (!(read_buffer[0] == 'L' && read_buffer[1] == 'U' &&
         read_buffer[2] == 'N' && read_buffer[3] == 'A')) {
@@ -29,7 +29,7 @@ Luna::Luna() : i2cBase<4>::i2cBase(_addr) {
 bool Luna::set_power_level(settings::PowerLevel lvl) {
   switch (lvl) {
   case settings::Normal:
-    return write({reg::UltraLowPower, 0x00}) && _write({reg::LowPower, 0x00});
+    return write({reg::UltraLowPower, 0x00}) && write({reg::LowPower, 0x00});
   case settings::LowPower:
     return write({reg::LowPower, 0x01});
   case settings::UltraLowPower:
@@ -106,7 +106,7 @@ inline bool Luna::flip_mode() {
 
 bool Luna::write() { return _write(_addr); }
 
-bool Luna::write(std::initializer_list<uint8_t> data) {
+bool Luna::write(std::initializer_list<char> data) {
   return _write(_addr, data);
 }
 
