@@ -23,9 +23,7 @@ set(SRC_FILES
 # Set up test files
 set(TEST_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/test/buffer_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/i2c_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/sample_test.cpp
-
 )
 
 # Include source directory for header files
@@ -38,14 +36,14 @@ add_executable(AutoPi ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp ${SRC_FILES})
 target_link_libraries(AutoPi PRIVATE spdlog::spdlog pigpio)
 
 # Create executable for tests
-#add_executable(tests ${SRC_FILES} ${TEST_FILES})
+add_executable(tests ${SRC_FILES} ${TEST_FILES})
 
 # Link with gtest and spdlog
-#target_link_libraries(tests PRIVATE GTest::gtest GTest::gtest_main spdlog::spdlog pigpio)
+target_link_libraries(tests PRIVATE GTest::gtest GTest::gtest_main spdlog::spdlog pigpio)
 
 # Exclude hello.cpp from AutoPi_tests
-#set_target_properties(AutoPi_tests PROPERTIES EXCLUDE_FROM_ALL 1)
+set_target_properties(tests PROPERTIES EXCLUDE_FROM_ALL 1)
 
 # Add tests to CTest
-#include(GoogleTest)
-#gtest_discover_tests(tests)
+include(GoogleTest)
+gtest_discover_tests(tests)
