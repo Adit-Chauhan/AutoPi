@@ -34,9 +34,11 @@ public:
       temp = i2cReadByteData(handle, subAddr);
       *(this->begin()) = (uint8_t)temp;
     }
-    //                          Wow this looks like a memory hazard but idc
-    filled_till = i2cReadBlockData(handle, subAddr, this->begin());
-    return filled_till;
+    // this looks like a memory hazard but idc
+    for (int i = 0; i < max_size; i++) {
+      (this->begin() + i) = i2cReadByteData(handle, subAddr);
+    }
+    return max_size;
   }
 
   ssize_t write_to(int handle, int subAddr) {

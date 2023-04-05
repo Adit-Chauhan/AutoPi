@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.18)
 
 project(AutoPi)
 
@@ -18,6 +18,7 @@ set(SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/tf_luna.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/lunadriver.cpp
         )
 
 # Set up test files
