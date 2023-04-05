@@ -3,6 +3,7 @@
 #include <pigpio.h>
 #include <spdlog/spdlog.h>
 #include <stdexcept>
+#include <unistd.h>
 using namespace luna;
 
 // Luna Public Method
@@ -14,7 +15,7 @@ Luna::Luna() : i2cBase<4>::i2cBase(_addr) {
   // i2cReadI2CBlockData(unsigned int handle, unsigned int i2cReg, char *buf,
   // unsigned int count)
   bool _ = write({0x3C, 0x3D, 0x3E, 0x3F});
-
+  usleep(20000);
   _ = read();
 
   if (!(read_buffer[0] == 'L' && read_buffer[1] == 'U' &&

@@ -36,7 +36,7 @@ public:
     }
     // this looks like a memory hazard but idc
     for (int i = 0; i < max_size; i++) {
-      (this->begin() + i) = i2cReadByteData(handle, subAddr);
+      *(this->begin() + i) = i2cReadByteData(handle, subAddr);
     }
     return max_size;
   }
