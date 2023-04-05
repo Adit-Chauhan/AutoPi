@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 find_package(spdlog REQUIRED)
 
 # Find and include gtest
-find_package(GTest CONFIG REQUIRED)
+#find_package(GTest CONFIG REQUIRED)
 
 
 # Set up source files
