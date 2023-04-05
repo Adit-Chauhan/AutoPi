@@ -7,7 +7,7 @@
 const uint16_t ISR_TIMEOUT = 1000;
 
 LunaDriver::LunaDriver() {
-  lidar = luna::Luna();
+  lidar = new luna::Luna();
   gpioSetMode(22, PI_INPUT);
   gpioSetISRFuncEx(22, RISING_EDGE, ISR_TIMEOUT, lunaISR, (void *)this);
 }
@@ -22,6 +22,8 @@ void LunaDriver::dataReady() {
     spdlog::error("Did not init any callback func");
     return;
   }
-  uint16_t dist = lidar.get_distance();
+  uint16_t dist = lidar->get_distance();
   callback->hasSample(dist);
 }
+
+LunaDriver::~LunaDriver() { delete lidar; }

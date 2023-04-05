@@ -11,10 +11,10 @@ public:
 
 class LunaDriver {
 public:
-  luna::Luna lidar;
+  luna::Luna *lidar;
   LunaCallback *callback;
   LunaDriver();
-
+  ~LunaDriver();
   void dataReady();
 
   static void lunaISR(int gpio, int level, uint32_t tick, void *userdata);
