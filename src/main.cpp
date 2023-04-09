@@ -49,7 +49,7 @@ int main() {
   while (true) {
     // Write to sensor to trigger measurement
     char txbuf[1] = {0x01};
-    if (i2cWriteDevice(handle, txbuf, 1) < 0) {
+    if (i2cWriteByteData(handle, 0x01, 1) < 0) {
       spdlog::error("Failed to write to sensor");
       i2cClose(handle);
       gpioTerminate();
