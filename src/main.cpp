@@ -46,7 +46,7 @@ void simulateAlcoholSensor(std::mutex& mutex, std::condition_variable& cv, bool&
 
 int main()
 {
-    std::mutex mutex;
+    std::mutex mutha;
     std::condition_variable cv;
     bool stop = false;
 
