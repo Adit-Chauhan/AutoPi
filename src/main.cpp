@@ -1,19 +1,23 @@
-#include "lidar/tf_luna.hpp"
-#include <pigpio.h>
-#include <spdlog/common.h>
+#include "utils/server.h"
 #include <spdlog/spdlog.h>
+#include <string>
+class HelloResp : public serverCallback {
+  void serverAction() { spdlog::info("Running Hello Resp"); }
+};
+
+class DateResp : public serverCallback {
+  void serverAction() { spdlog::info("Running Date Resp"); }
+};
 
 int main() {
-  // INIT pigpio;;
-  int cfg = gpioCfgGetInternals();
-  cfg |= PI_CFG_NOSIGHANDLER;
-  gpioCfgSetInternals(cfg);
-  if (gpioInitialise() < 0) {
-    spdlog::error("Failed to Init pigs");
-    return 1;
-  }
-  using namespace luna;
-  Luna lidar = Luna();
+  spdlog::info("Hello Dev");
 
+  HelloResp hello;
+  DateResp date;
+  Server server = Server();
+
+  server.register_callback_action("/hello", &hello);
+  server.register_callback_action("/date", &date);
+  server.run();
   return 0;
 }
