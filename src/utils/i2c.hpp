@@ -1,32 +1,39 @@
 #pragma once
 
+#include "buffer.hpp"
+
 #include <array>
 #include <cstdint>
+#include <initializer_list>
+
 // Buffer alias using simple buffer type
-class i2cBase {
-  typedef std::array<uint8_t, 100> buffer8bit;
+template <uint8_t _S = 4> class i2cBase {
+  typedef buffer<_S> buffer8bit;
 
 private:
-  const char *i2c_bus = "/dev/i2c-1";
+  const int i2c_bus = 1;
+
+protected:
   int handle;
 
 protected:
   // raw read/write operations that are not error handled
   // read with length == 0 refers to do a maxium possible read currently
   // UINT16_LIMIT
-  bool _read(uint16_t length = 0);
-  bool _write();
+  [[nodiscard]] bool _read(uint8_t, uint16_t length = _S);
+  [[nodiscard]] bool _write(uint8_t);
+  [[nodiscard]] bool _write(uint8_t subAddr, std::initializer_list<char> data);
+  [[nodiscard]] bool _write(uint8_t, uint16_t length);
+  virtual bool write() = 0;
+  virtual bool write(std::initializer_list<char> data) = 0;
+  virtual bool write(uint16_t length) = 0;
+  virtual bool read(uint16_t length = _S) = 0;
 
 public:
   i2cBase();
   i2cBase(uint8_t address);
   i2cBase(int file);
   ~i2cBase();
-  buffer8bit *read_buffer = new buffer8bit();
-  buffer8bit *write_buffer = new buffer8bit();
-
-  // Error Handled versions of the read and write to be implemented by child
-  // classes
-  virtual void read(uint16_t length = 0) = 0;
-  virtual void write() = 0;
+  buffer8bit read_buffer;
+  buffer8bit write_buffer;
 };
