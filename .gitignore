@@ -8,3 +8,4 @@ build/
 cmake-*
 test/test_write.txt
 subprojects/*/*
+.ccls-*
