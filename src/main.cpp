@@ -1,68 +1,44 @@
 #include <iostream>
 #include <thread>
-#include <chrono>
-#include <string>
-#include <mutex>
-#include <condition_variable>
-#include <cstdlib>
-#include <ctime>
-#include <fstream>
+#include "alcohol_detection.h" // header file for alcohol detection function
+#include "drowsiness_detection.h" // header file for drowsiness detection function
 
-// Email alert function
-void sendEmailAlert(const std::string& recipient)
-{
-    // Code to send an email alert to recipient
-    std::cout << "Email alert sent to " << recipient << "!" << std::endl;
-}
+class Detection {
+public:
+    Detection() {} // default constructor
 
-// Function to simulate alcohol sensor readings
-void simulateAlcoholSensor(std::mutex& mutex, std::condition_variable& cv, bool& stop)
-{
-    std::srand(std::time(nullptr)); // Seed random number generator
-    double alcoholLevel = 0.0;
-    const double threshold = 0.08;
-    std::ofstream logFile("drunk.log");
-
-    while (!stop)
-    {
-        // Simulate alcohol level reading
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        alcoholLevel = static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX);
-
-        // Write to log file
-        logFile << alcoholLevel << std::endl;
-
-        // Check if alcohol level exceeds threshold
-        if (alcoholLevel > threshold)
-        {
-            std::unique_lock<std::mutex> lock(mutex);
-            cv.wait(lock); // Wait for signal from main thread
-            sendEmailAlert("reshmi2722000@gmail.com"); // Send email alert to friend
-            lock.unlock(); // Release mutex
+    void checkAlcoholLevel() {
+        float level = getAlcoholLevel(); // call alcohol detection function
+        if (level > 0.08) {
+            std::cout << "You are legally intoxicated." << std::endl;
+            sendEmail("Intoxication Alert", "The person is legally intoxicated."); // call send email function
+        } else {
+            std::cout << "You are not legally intoxicated." << std::endl;
         }
     }
-    logFile.close();
-}
 
-int main()
-{
-    std::mutex mutha;
-    std::condition_variable cv;
-    bool stop = false;
+    void checkDrowsiness() {
+        bool isDrowsy = detectDrowsiness(); // call drowsiness detection function
+        if (isDrowsy) {
+            std::cout << "You appear to be drowsy." << std::endl;
+            sendEmail("Drowsiness Alert", "The person appears to be drowsy."); // call send email function
+        } else {
+            std::cout << "You do not appear to be drowsy." << std::endl;
+        }
+    }
 
-    // Start alcohol sensor thread
-    std::thread alcoholSensorThread(simulateAlcoholSensor, std::ref(mutex), std::ref(cv), std::ref(stop));
+    void sendEmail(const std::string& subject, const std::string& body) {
+        // code for sending email
+        std::cout << "Sending email: " << subject << std::endl;
+        std::cout << "Body: " << body << std::endl;
+    }
+};
 
-    // Wait for user input to send email alert
-    std::cout << "Press enter to send email alert to friend..." << std::endl;
-    std::cin.get();
-
-    // Signal alcohol sensor thread to send email alert
-    cv.notify_one();
-
-    // Wait for alcohol sensor thread to exit
-    stop = true;
-    alcoholSensorThread.join();
-
+int main() {
+    Detection detection;
+    std::thread t1(&Detection::checkAlcoholLevel, &detection);
+    std::thread t2(&Detection::checkDrowsiness, &detection);
+    t1.join();
+    t2.join();
     return 0;
 }
