@@ -26,11 +26,13 @@ int main() {
     gpioTerminate();
     return 1;
   }
-
+  int isOn = 10;
+  isOn = i2cReadByteData(handle, luna::reg::Enable);
+  spdlog::info("IsOn {}", isOn);
   // Read distance data from sensor
   int current_mode = 10;
   current_mode = i2cReadByteData(handle, luna::reg::Mode);
-  spdlog::info("Current Mode");
+  spdlog::info("Current Mode {}", current_mode);
   if (i2cWriteByteData(handle, luna::reg::Mode, luna::settings::Mode::Trigger) <
       0) {
     spdlog::error("failed to change luna mode");
