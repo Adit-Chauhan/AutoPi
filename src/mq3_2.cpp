@@ -5,7 +5,7 @@
 #include <pigpio.h>
 #include <thread>
 #include <chrono>
-#include "spdlog/spdlog.h"
+
 class MQ3Sensor {
 public:
     MQ3Sensor(int clk_pin, int miso_pin, int mosi_pin, int cs_pin, int sensor_pin) :
@@ -77,15 +77,15 @@ private:
 
 int main() {
     if (gpioInitialise() < 0) {
-        spdlog::error("pigpio initialization failed.");
+        std::cerr << "pigpio initialization failed." << std::endl;
         return -1;
     }
 
-    MQ3Sensor mq3_sensor(11, 9, 10, 8,4);
+    MQ3Sensor mq3_sensor(11, 9, 10, 8, 4);
 
     while (true) {
         float ppm = mq3_sensor.get_sensor_ppm();
-        spdlog::info("Sensor PPM: {}",ppm);
+        std::cout << "Sensor PPM: " << ppm << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
