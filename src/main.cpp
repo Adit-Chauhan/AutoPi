@@ -18,7 +18,7 @@ class isDrunk: public mq3Callback{
     void hasSample(float sample){
         spdlog::info("Sample {}",sample);
         if(stopCount)return;
-        if(sample>20){
+        if(sample < 20){
             count_over_20++;
         }
         if(count_over_20 > 10){
