@@ -57,7 +57,7 @@ private:
     float sensor_voltage;
     float sensor_ppm;
     bool stopRead = false;
-
+    bool dataReady = false;
     std::thread read_thread_;
 
     void read_sensor();
