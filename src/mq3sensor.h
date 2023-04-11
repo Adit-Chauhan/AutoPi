@@ -34,7 +34,7 @@ public:
     }
 
     ~MQ3Sensor() {
-        //stopRead = true;
+        stopRead = true;
         read_thread_.join();
         spiClose(handle_);
         gpioTerminate();
