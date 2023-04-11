@@ -8,10 +8,9 @@
 #include "mq3sensor.h"
 
 void MQ3Sensor::read_sensor() {
-    while (!stopRead) {
-        if(dataReady){
-            std::this_thread::sleep_for(std::chrono::milliseconds(400));
-            continue;}
+    if(dataReady){
+        return sensor_ppm;
+    }
         // Read sensor value from MCP3008
         char tx[3] = {1, static_cast<char>((8 + 0) << 4), 0};
         char rx[3] = {0};
@@ -26,9 +25,7 @@ void MQ3Sensor::read_sensor() {
         sensor_ppm = sensor_voltage * SENSOR_CALIBRATION;
 
         // Sleep for 1 second
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
         dataReady = true;
-    }
     // Calculate sensor voltage
 }
 

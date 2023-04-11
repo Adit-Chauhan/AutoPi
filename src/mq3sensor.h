@@ -12,6 +12,8 @@
 
 class MQ3Sensor {
 public:
+    bool dataReady = false;
+
     MQ3Sensor(int clk_pin, int miso_pin, int mosi_pin, int cs_pin, int sensor_pin) :
             CLK_PIN(clk_pin),
             MISO_PIN(miso_pin),
@@ -43,6 +45,7 @@ public:
     float get_sensor_ppm() const {
         return sensor_ppm;
     }
+    void read_sensor();
 
 private:
     const int CLK_PIN;
@@ -57,10 +60,8 @@ private:
     float sensor_voltage;
     float sensor_ppm;
     bool stopRead = false;
-    bool dataReady = false;
     std::thread read_thread_;
 
-    void read_sensor();
 };
 
 #endif //AUTOPI_MQ3SENSOR_H

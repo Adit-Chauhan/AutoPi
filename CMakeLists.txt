@@ -19,6 +19,8 @@ set(SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/mq3_2.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/mq3Driver.cpp
+
         )
 # Set up test files
 set(TEST_FILES
