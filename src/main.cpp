@@ -2,6 +2,7 @@
 #include <spdlog/spdlog.h>
 #include <string>
 #include "mq3sensor.h"
+#include "pigpio.h"
 class HelloResp : public serverCallback {
   void serverAction() { spdlog::info("Running Hello Resp"); }
 };
@@ -11,6 +12,11 @@ class DateResp : public serverCallback {
 };
 
 int main() {
+    if (gpioInitialise() < 0) {
+        spdlog::error("pigpio initialization failed.");
+        return 1;
+    }
+
   spdlog::info("Hello mq3");
     {
         MQ3Sensor mq3_sensor(11, 9, 10, 8, 4);
