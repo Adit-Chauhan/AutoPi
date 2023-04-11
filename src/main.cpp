@@ -36,7 +36,7 @@ int main() {
     }
     mq3Driver driver;
     isDrunk* drunk = new isDrunk();
-    driver.registerCallback(*drunk);
+    driver.registerCallback(drunk);
 
     spdlog::info("Hello mq3");
     for(int i = 21;i>0;i--){
