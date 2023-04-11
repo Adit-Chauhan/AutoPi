@@ -9,7 +9,7 @@
 
 void MQ3Sensor::read_sensor() {
     if(dataReady){
-        return sensor_ppm;
+        return;
     }
         // Read sensor value from MCP3008
         char tx[3] = {1, static_cast<char>((8 + 0) << 4), 0};
