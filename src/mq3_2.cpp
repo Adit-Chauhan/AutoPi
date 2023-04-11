@@ -8,7 +8,7 @@
 #include "mq3sensor.h"
 
 void MQ3Sensor::read_sensor() {
-    while (true) {
+    while (!stopRead) {
         // Read sensor value from MCP3008
         char tx[3] = {1, static_cast<char>((8 + 0) << 4), 0};
         char rx[3] = {0};

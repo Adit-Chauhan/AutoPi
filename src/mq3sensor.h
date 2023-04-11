@@ -9,6 +9,8 @@
 #include <thread>
 #include <chrono>
 
+bool stopRead = false;
+
 class MQ3Sensor {
 public:
     MQ3Sensor(int clk_pin, int miso_pin, int mosi_pin, int cs_pin, int sensor_pin) :
@@ -33,6 +35,7 @@ public:
     }
 
     ~MQ3Sensor() {
+        //stopRead = true;
         read_thread_.join();
         spiClose(handle_);
         gpioTerminate();

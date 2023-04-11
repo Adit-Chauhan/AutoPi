@@ -11,14 +11,13 @@ class DateResp : public serverCallback {
 };
 
 int main() {
-  spdlog::info("Hello Dev");
-
-    MQ3Sensor mq3_sensor(11, 9, 10, 8, 4);
-
-    while (true) {
-        float ppm = mq3_sensor.get_sensor_ppm();
-        std::cout << "Sensor PPM: " << ppm << std::endl;
+  spdlog::info("Hello mq3");
+    {
+        MQ3Sensor mq3_sensor(11, 9, 10, 8, 4);
+            float ppm = mq3_sensor.get_sensor_ppm();
+            std::cout << "Sensor PPM: " << ppm << std::endl;
     }
+    spdlog::info("bye mq3");
 
     return 0;
 }
