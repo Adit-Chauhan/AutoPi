@@ -9,7 +9,6 @@
 #include <thread>
 #include <chrono>
 
-bool stopRead = false;
 
 class MQ3Sensor {
 public:
@@ -57,6 +56,8 @@ private:
     float sensor_value;
     float sensor_voltage;
     float sensor_ppm;
+    bool stopRead = false;
+
     std::thread read_thread_;
 
     void read_sensor();
