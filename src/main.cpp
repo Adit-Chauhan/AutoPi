@@ -28,30 +28,30 @@ void read_tfluna_data(SerialPort &ser, double &distance, double &strength,
     char data;
     ser.ReadByte(data);
     if (data == 0x59) {
+      dataArr[0] = 0x59;
       ser.ReadByte(data);
       if (data == 0x59) {
+        dataArr[1] = 0x59;
         for (int i = 2; i < 9; i++) {
           ser.ReadByte(dataArr[i]);
         }
       }
     }
-    dataArr[0] = 0x59;
-    dataArr[1] = 0x59;
-    for (auto datas : dataArr) {
-      cout << datas << " , ";
+    //    for (auto datas : dataArr) {
+    //      cout << datas << " , ";
+    //    }
+    //    cout << "\n";
+    if (dataArr[0] == 0x59 && dataArr[1] == 0x59) {
+      distance = dataArr[2] + dataArr[3] * 256;
+      strength = dataArr[4] + dataArr[5] * 256;
+      temperature = dataArr[6] + dataArr[7] * 256;
+      temperature = (temperature / 8.0) - 256.0;
+      distance /= 100.0;
+      cout << distance << '\n';
+      sleep(1);
     }
-    cout << "\n";
-
-    //    if (bytes_serial[0] == 0x59 && bytes_serial[1] == 0x59) {
-    //      distance = bytes_serial[2] + bytes_serial[3] * 256;
-    //      strength = bytes_serial[4] + bytes_serial[5] * 256;
-    //      temperature = bytes_serial[6] + bytes_serial[7] * 256;
-    //      temperature = (temperature / 8.0) - 256.0;
-    //      distance /= 100.0;
-    sleep(1);
   }
 }
-
 int main() {
   SerialPort ser;
   ser.Open("/dev/serial0");
