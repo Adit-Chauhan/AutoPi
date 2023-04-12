@@ -38,7 +38,7 @@ void read_tfluna_data(SerialPort &ser, double &distance, double &strength,
     dataArr[0] = 0x59;
     dataArr[1] = 0x59;
     for (auto datas : dataArr) {
-      cout << std::hex << datas << " , ";
+      cout << datas << " , ";
     }
     cout << "\n";
 
