@@ -24,9 +24,24 @@ void read_tfluna_data(SerialPort &ser, double &distance, double &strength,
     while (!ser.IsDataAvailable()) {
       usleep(1000);
     }
-    std::string dataString;
-    ser.ReadLine(dataString);
-    cout << dataString << '\n';
+    char dataArr[9];
+    char data;
+    ser.ReadByte(data);
+    if (data == 0x59) {
+      ser.ReadByte(data);
+      if (data == 0x59) {
+        for (int i = 2; i < 9; i++) {
+          ser.ReadByte(dataArr[i]);
+        }
+      }
+    }
+    dataArr[0] = 0x59;
+    dataArr[1] = 0x59;
+    for (auto datas : dataArr) {
+      cout << std::hex << datas << " , ";
+    }
+    cout << "\n";
+
     //    if (bytes_serial[0] == 0x59 && bytes_serial[1] == 0x59) {
     //      distance = bytes_serial[2] + bytes_serial[3] * 256;
     //      strength = bytes_serial[4] + bytes_serial[5] * 256;
