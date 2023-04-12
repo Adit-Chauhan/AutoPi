@@ -1,10 +1,10 @@
 #include "lidar/lunadriver.h"
 #include "lidar/tf_luna.hpp"
+#include <chrono>
 #include <pigpio.h>
 #include <spdlog/common.h>
 #include <spdlog/spdlog.h>
 #include <unistd.h>
-
 int main() {
   // Initialize pigpio library
   if (gpioInitialise() < 0) {
@@ -18,7 +18,7 @@ int main() {
   // Set register addresses for distance data
   int distance_high_byte = 0x01;
   int distance_low_byte = 0x00;
-
+  std::chrono::seconds();
   // Open I2C bus
   int handle = i2cOpen(1, address, 0);
   if (handle < 0) {
