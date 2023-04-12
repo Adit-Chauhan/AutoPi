@@ -12,6 +12,7 @@
 #include <libserial/SerialPort.h>
 #include <libserial/SerialPortConstants.h>
 #include <libserial/SerialStream.h>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
 
@@ -24,16 +25,21 @@ void read_tfluna_data(SerialPort &ser, double &distance, double &strength,
     while (!ser.IsDataAvailable()) {
       usleep(1000);
     }
+    string strs[] = {"HEAD",  "HEAD",   "Dist_L", "Dist_H",  "Amp_L",
+                     "Amp_H", "Temp_L", "Temp_H", "CheckSum"};
     char dataArr[9];
     char data;
     ser.ReadByte(data);
+    spdlog::debug("Head:: {}", data);
     if (data == 0x59) {
       dataArr[0] = 0x59;
       ser.ReadByte(data);
+      spdlog::debug("Head:: {}", data);
       if (data == 0x59) {
         dataArr[1] = 0x59;
         for (int i = 2; i < 9; i++) {
-          ser.ReadByte(dataArr[i]);
+          ser.ReadByte(data);
+          spdlog::debug("{}:: {}", strs[i], data);
         }
       }
     }
