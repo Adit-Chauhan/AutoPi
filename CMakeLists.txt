@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Find and include spdlog
 find_package(spdlog REQUIRED)
+find_package(serial REQUIRED)
 
 # Find and include gtest
 #find_package(GTest CONFIG REQUIRED)
@@ -32,7 +33,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_executable(AutoPi ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp ${SRC_FILES})
 
 # Link with spdlog
-target_link_libraries(AutoPi PRIVATE spdlog::spdlog pigpio)
+target_link_libraries(AutoPi PRIVATE spdlog::spdlog pigpio serial)
 
 # Create executable for test
 #add_executable(AutoPi_tests ${SRC_FILES} ${TEST_FILES})
