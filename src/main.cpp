@@ -59,7 +59,7 @@ int main() {
   ser.SetBaudRate(BaudRate::BAUD_115200);
   ser.SetCharacterSize(CharacterSize::CHAR_SIZE_8);
   ser.SetStopBits(StopBits::STOP_BITS_1);
-
+  ser.SetParity(Parity::PARITY_NONE);
   double distance, strength, temperature;
   read_tfluna_data(ser, distance, strength, temperature);
 
