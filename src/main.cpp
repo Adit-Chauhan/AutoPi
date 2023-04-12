@@ -53,12 +53,13 @@ void read_tfluna_data(SerialPort &ser, double &distance, double &strength,
       temperature = dataArr[6] + dataArr[7] * 256;
       temperature = (temperature / 8.0) - 256.0;
       distance /= 100.0;
-      cout << distance << '\n';
+      // cout << distance << '\n';
       sleep(1);
     }
   }
 }
 int main() {
+  spdlog::set_level(spdlog::level::debug); // Set global log level to debug
   SerialPort ser;
   ser.Open("/dev/serial0");
 
