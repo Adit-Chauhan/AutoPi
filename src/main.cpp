@@ -33,7 +33,7 @@ void read_tfluna_data(SerialPort &ser, double &distance, double &strength,
     //      temperature = bytes_serial[6] + bytes_serial[7] * 256;
     //      temperature = (temperature / 8.0) - 256.0;
     //      distance /= 100.0;
-    return;
+    sleep(1);
   }
 }
 
