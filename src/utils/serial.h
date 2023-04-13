@@ -37,7 +37,9 @@ public:
     return write(g_fd, data, data_len);
   }
   int serial_read(uint8_t *data, int data_len) {
-    return read(g_fd, data, data_len);
+    int op = read(g_fd, data, data_len);
+    tcflush(g_fd, TCIOFLUSH);
+    return op;
   }
 
 private:
