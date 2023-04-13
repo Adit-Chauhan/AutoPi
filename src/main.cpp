@@ -24,7 +24,7 @@ int main() {
 
   spdlog::set_level(spdlog::level::debug);
   SerialPort serial;
-  serial.Open("/dev/serial0");
+  serial.Open("/dev/ttyS0");
   using LibSerial::BaudRate;
   serial_port.SetBaudRate(BaudRate::BAUD_115200);
 
