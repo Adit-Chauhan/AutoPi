@@ -21,14 +21,14 @@ int main() {
   spdlog::set_level(spdlog::level::debug);
 
   Serial serial("/dev/serial0");
-  std::array<uint8_t, 8> send = {0xD, 0xE, 0xA, 0xD, 0xB, 0xE, 0xE, 0xF};
-  std::array<uint8_t, 8> recv = {0};
-  serial.serial_write(send.data(), send.size());
-  sleep(1);
-  serial.serial_read(recv.data(), recv.size());
-
-  spdlog::info("Sent Data :: {}", spdlog::to_hex(send));
-  spdlog::info("Recv Data :: {}", spdlog::to_hex(recv));
+  // std::array<uint8_t, 9> send = {0xD, 0xE, 0xA, 0xD, 0xB, 0xE, 0xE, 0xF};
+  std::array<uint8_t, 9> recv = {0};
+  while (true) {
+    recv = {0};
+    serial.serial_read(recv.data(), recv.size());
+    spdlog::debug("data :: {}", spdlog::to_hex(recv));
+    sleep(1);
+  }
 
   return 0;
 }
