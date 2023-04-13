@@ -8,33 +8,35 @@
 // class DateResp : public serverCallback {
 //  void serverAction() { spdlog::info("Running Date Resp"); }
 //};
-#include "utils/serial.h"
+//#include "utils/serial.h"
+#include "libserial/SerialPort.h"
 #include <array>
 #include <cstdint>
 #include <iostream>
+#include <libserial/SerialPortConstants.h>
 #include <spdlog/common.h>
 #include <spdlog/fmt/bin_to_hex.h>
 #include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
 int main() {
+  using LibSerial::SerialPort;
+  SerialPort serial_port;
+
   spdlog::set_level(spdlog::level::debug);
+  serial_port.Open("/dev/serial0");
+  using LibSerial::BaudRate;
+  serial_port.SetBaudRate(BaudRate::BAUD_115200);
+  serial_port.SetCharacterSize(LibSerial::CharacterSize::CHAR_SIZE_8);
+  serial_port.SetParity(LibSerial::Parity::PARITY_NONE);
+  serial_port.SetStopBits(LibSerial::StopBits::STOP_BITS_1);
 
-  Serial serial("/dev/serial0");
-  std::array<uint8_t, 5> send = {0x5A, 0x05, 0x05, 0x08, 0x00};
-  serial.serial_write(send.begin(), send.size());
-  sleep(1);
-  std::array<uint8_t, 5> setting = {0};
-  serial.serial_read(setting.data(), setting.size());
-  spdlog::debug("data :: {}", spdlog::to_hex(setting));
   while (true) {
-    std::array<uint8_t, 11> recv = {0};
-    serial.serial_read(recv.data(), recv.size());
-    spdlog::debug("data :: {}", spdlog::to_hex(recv));
-    spdlog::debug("dist cm :: {}, Light :: {}", recv[2] | (recv[3] << 8),
-                  recv[4] | (recv[5] << 8));
-    usleep(1'000'000);
+    std::array<uint8_t, 9> arr;
+    for (int i = 0; i < 9; i++)
+      serial_port.ReadByte(arr[i], 25);
+    sleep(1);
+    spdlog::debug("Data :: {}", spdlog::to_hex(arr));
   }
-
   return 0;
 }
