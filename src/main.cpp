@@ -13,10 +13,10 @@
 #include <cstdint>
 #include <iostream>
 #include <spdlog/common.h>
+#include <spdlog/fmt/bin_to_hex.h>
 #include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
-
 int main() {
   spdlog::set_level(spdlog::level::debug);
 
@@ -26,8 +26,9 @@ int main() {
   serial.serial_write(send.data(), send.size());
   sleep(1);
   serial.serial_read(recv.data(), recv.size());
-  spdlog::info("Sent Data :: {}", send);
-  spdlog::info("Recv Data :: {}", recv);
+
+  spdlog::info("Sent Data :: {}", spdlog::to_hex(send));
+  spdlog::info("Recv Data :: {}", spdlog::to_hex(recv));
 
   return 0;
 }
