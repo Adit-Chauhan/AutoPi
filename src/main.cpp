@@ -25,13 +25,13 @@ int main() {
   serial.serial_write(send.begin(), send.size());
   sleep(1);
   std::array<uint8_t, 9> recv = {0};
-  serial.serial_read(recv.data(), 6);
+  serial.serial_read(recv.data(), 9);
   spdlog::debug("Version :: {}", spdlog::to_hex(recv));
   while (true) {
     recv = {0};
     serial.serial_read(recv.data(), recv.size());
     spdlog::debug("data :: {}", spdlog::to_hex(recv));
-    sleep(1);
+    usleep(100'000);
   }
 
   return 0;
