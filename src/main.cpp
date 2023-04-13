@@ -23,8 +23,7 @@ int main() {
   SerialPort serial_port;
 
   spdlog::set_level(spdlog::level::debug);
-  SerialPort serial;
-  serial.Open("/dev/ttyS0");
+  serial_port.Open("/dev/serial0");
   using LibSerial::BaudRate;
   serial_port.SetBaudRate(BaudRate::BAUD_115200);
 
