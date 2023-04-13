@@ -12,7 +12,6 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
-#include <libserial/SerialPortConstants.h>
 #include <spdlog/common.h>
 #include <spdlog/fmt/bin_to_hex.h>
 #include <spdlog/spdlog.h>
@@ -21,6 +20,7 @@
 int main() {
   Serial serial("/dev/serial0");
   spdlog::set_level(spdlog::level::debug);
+  serial_port.Open("/dev/serial0");
 
   while (true) {
     std::array<uint8_t, 9> arr;
