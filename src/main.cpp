@@ -31,7 +31,9 @@ int main() {
     recv = {0};
     serial.serial_read(recv.data(), recv.size());
     spdlog::debug("data :: {}", spdlog::to_hex(recv));
-    usleep(100'000);
+    spdlog::debug("dist cm :: {}, Light :: {}", recv[2] | (recv[3] << 8),
+                  recv[4] | (recv[5] << 8));
+    usleep(1'000'000);
   }
 
   return 0;
