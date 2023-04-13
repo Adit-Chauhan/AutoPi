@@ -21,8 +21,10 @@ int main() {
   spdlog::set_level(spdlog::level::debug);
 
   Serial serial("/dev/serial0");
-  // std::array<uint8_t, 9> send = {0xD, 0xE, 0xA, 0xD, 0xB, 0xE, 0xE, 0xF};
+  std::array<uint8_t, 4> send = {0x5A, 0x04, 0x01, 0x00};
+  serial.serial_write(send.begin(), send.size());
   std::array<uint8_t, 9> recv = {0};
+  serial.serial_read(recv.data(), 6);
   while (true) {
     recv = {0};
     serial.serial_read(recv.data(), recv.size());
