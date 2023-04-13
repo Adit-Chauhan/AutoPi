@@ -24,6 +24,9 @@ int main() {
   std::array<uint8_t, 5> send = {0x5A, 0x05, 0x05, 0x08, 0x00};
   serial.serial_write(send.begin(), send.size());
   sleep(1);
+  std::array<uint8_t, 5> setting = {0};
+  serial.serial_read(setting.data(), setting.size());
+  spdlog::debug("data :: {}", spdlog::to_hex(setting));
   while (true) {
     std::array<uint8_t, 11> recv = {0};
     serial.serial_read(recv.data(), recv.size());
