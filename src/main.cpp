@@ -22,7 +22,7 @@ int main() {
 
   Serial serial("/dev/serial0");
   std::array<uint8_t, 4> send = {0x5A, 0x04, 0x01, 0x00};
-  serial.serial_write(send.begin(), send.size());
+  // serial.serial_write(send.begin(), send.size());
   sleep(1);
   std::array<uint8_t, 9> recv = {0};
   serial.serial_read(recv.data(), 9);
