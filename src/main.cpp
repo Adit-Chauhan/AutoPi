@@ -13,6 +13,7 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
+#include <libserial/SerialPortConstants.h>
 #include <spdlog/common.h>
 #include <spdlog/fmt/bin_to_hex.h>
 #include <spdlog/spdlog.h>
@@ -26,6 +27,9 @@ int main() {
   serial_port.Open("/dev/serial0");
   using LibSerial::BaudRate;
   serial_port.SetBaudRate(BaudRate::BAUD_115200);
+  serial_port.SetCharacterSize(LibSerial::CharacterSize::CHAR_SIZE_8);
+  serial_port.SetParity(LibSerial::Parity::PARITY_NONE);
+  serial_port.SetStopBits(LibSerial::StopBits::STOP_BITS_1);
 
   while (true) {
     std::array<uint8_t, 9> arr;
