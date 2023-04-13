@@ -18,8 +18,6 @@ pkg_check_modules(SERIAL libserial)
 #file(GLOB_RECURSE SRC_FILES *.cpp)
 set(SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/buffer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
 )
 # Set up test files
