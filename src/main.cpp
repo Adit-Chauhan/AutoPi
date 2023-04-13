@@ -26,7 +26,7 @@ int main() {
   sleep(1);
   std::array<uint8_t, 9> recv = {0};
   serial.serial_read(recv.data(), 6);
-  spdlog::debug("data :: {}", spdlog::to_hex(recv));
+  spdlog::debug("Version :: {}", spdlog::to_hex(recv));
   while (true) {
     recv = {0};
     serial.serial_read(recv.data(), recv.size());
