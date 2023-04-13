@@ -76,7 +76,7 @@ int main() {
     std::cout << "Detecting alcohol and drowsiness..." << std::endl;
 
     // Send email with parameters
-    sender.sendEmail("reshmi2722000@gmail.com", "Alert", "Email body");
+    sender.sendEmail("reshmi2722000@gmail.com", "Alert", "This person is in danger");
 
     return 0;
 }
