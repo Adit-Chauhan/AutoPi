@@ -21,11 +21,11 @@ int main() {
   spdlog::set_level(spdlog::level::debug);
 
   Serial serial("/dev/serial0");
-  std::array<uint8_t, 4> send = {0x5A, 0x04, 0x01, 0x00};
-  // serial.serial_write(send.begin(), send.size());
+  std::array<uint8_t, 5> send = {0x5A, 0x05, 0x05, 0x08, 0x00};
+  serial.serial_write(send.begin(), send.size());
   sleep(1);
   while (true) {
-    std::array<uint8_t, 9> recv = {0};
+    std::array<uint8_t, 11> recv = {0};
     serial.serial_read(recv.data(), recv.size());
     spdlog::debug("data :: {}", spdlog::to_hex(recv));
     spdlog::debug("dist cm :: {}, Light :: {}", recv[2] | (recv[3] << 8),
