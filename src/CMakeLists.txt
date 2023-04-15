@@ -1,13 +1,16 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
+
 project(AutoPi)
 
-set(CMAKE_CXX_STANDARD 14)
-
+# Find OpenCV
 find_package(OpenCV REQUIRED)
 
+# Add include directories
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-add_executable(DrowsinessDetector main.cpp)
+# Add executable
+add_executable(drowsiness_detector drowsiness.cpp)
 
-target_link_libraries(DrowsinessDetector ${OpenCV_LIBS})
+# Link against OpenCV
+target_link_libraries(drowsiness_detector ${OpenCV_LIBS})
 

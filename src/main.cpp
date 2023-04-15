@@ -1,60 +1,101 @@
-#include <opencv2/opencv.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/objdetect/objdetect.hpp>
+#include <opencv2/objdetect.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <iostream>
+#include <chrono>
+#include <thread>
+#include <ctime>
 
-// ... Driver class ...
+using namespace cv;
+using namespace std;
 
 class DrowsinessDetector {
 public:
-    DrowsinessDetector(Driver& driver)
-        : driver_(driver),
-          face_cascade_("haarcascade_frontalface_default.xml"),
-          eye_cascade_("haarcascade_eye.xml") {}
-
-    bool initialize_camera() {
-        // Open the default camera (0)
-        cap_.open(0);
-        return cap_.isOpened();
+    DrowsinessDetector() {
+        face_cascade.load("data/haarcascade_frontalface_default.xml");
+        eye_cascade.load("data/haarcascade_eye_tree_eyeglasses.xml");
     }
 
-    bool detect_drowsiness() {
-        cv::Mat frame, gray;
-        cap_ >> frame;
-
-        // Convert the frame to grayscale
-        cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
-
-        // Detect the driver's face
-        std::vector<cv::Rect> faces;
-        face_cascade_.detectMultiScale(gray, faces, 1.1, 2, 0 | cv::CASCADE_SCALE_IMAGE, cv::Size(30, 30));
-
-        if (faces.empty()) {
-            return false;  // Face not found, assume the driver is awake
+    void run() {
+        VideoCapture capture(0);
+        if (!capture.isOpened()) {
+            cout << "Error initializing the camera." << endl;
+            return;
         }
 
-        // Analyze the largest face detected
-        cv::Rect largest_face = *std::max_element(faces.begin(), faces.end(),
-                                                  [](const cv::Rect& a, const cv::Rect& b) {
-                                                      return a.area() < b.area();
-                                                  });
+        Mat frame;
+        while (capture.read(frame)) {
+            if (frame.empty()) {
+                cout << "Empty frame." << endl;
+                break;
+            }
 
-        cv::Mat face_roi = gray(largest_face);
+            detectAndDisplay(frame);
 
-        // Detect the eyes in the face ROI
-        std::vector<cv::Rect> eyes;
-        eye_cascade_.detectMultiScale(face_roi, eyes, 1.1, 2, 0 | cv::CASCADE_SCALE_IMAGE, cv::Size(30, 30));
+            imshow("Drowsiness Detector", frame);
 
-        // If less than 2 eyes are detected, assume the driver is drowsy
-        return eyes.size() < 2;
+            if (waitKey(10) == 27) {
+                break;
+            }
+        }
     }
 
 private:
-    Driver& driver_;
-    cv::VideoCapture cap_;
-    cv::CascadeClassifier face_cascade_;
-    cv::CascadeClassifier eye_cascade_;
+    CascadeClassifier face_cascade;
+    CascadeClassifier eye_cascade;
+    int no_eyes_count = 0;
+    int total_count = 0;
+    time_t start_time = time(0);
+
+    void detectAndDisplay(Mat frame) {
+        Mat frame_gray;
+        cvtColor(frame, frame_gray, COLOR_BGR2GRAY);
+        equalizeHist(frame_gray, frame_gray);
+
+        vector<Rect> faces;
+        face_cascade.detectMultiScale(frame_gray, faces, 1.3, 5);
+
+        if (faces.empty()) {
+            cout << "No face detected" << endl;
+        }
+
+        for (size_t i = 0; i < faces.size(); i++) {
+            rectangle(frame, faces[i], Scalar(255, 0, 0), 2);
+            Mat faceROI = frame_gray(faces[i]);
+
+            vector<Rect> eyes;
+            eye_cascade.detectMultiScale(faceROI, eyes);
+
+            if (difftime(time(0), start_time) >= 15) {
+                if (static_cast<double>(no_eyes_count) / total_count >= 0.2) {
+                    cout << "****ALERT***** " << no_eyes_count << " " << total_count << " " << static_cast<double>(no_eyes_count) / total_count << endl;
+                } else {
+                    cout << "safe " << static_cast<double>(no_eyes_count) / total_count << endl;
+                }
+                start_time = time(0);
+                no_eyes_count = 0;
+                total_count = 0;
+            }
+
+            if (eyes.empty()) {
+                no_eyes_count++;
+                cout << "no eyes!!!" << endl;
+            } else {
+                total_count++;
+                cout << "eyes!!!" << endl;
+            }
+
+            for (size_t j = 0; j < eyes.size(); j++) {
+                rectangle(frame, faces[i].tl() + eyes[j].tl(), faces[i].tl() + eyes[j].br(), Scalar(0, 255, 0), 2);
+            }
+        }
+    }
 };
 
-// ... main function ...
+int main() {
+    DrowsinessDetector drowsiness_detector;
+    drowsiness_detector.run();
+
+    return 0;
+}
 
