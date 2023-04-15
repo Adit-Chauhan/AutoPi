@@ -1,13 +1,8 @@
 #pragma once
-#include <array>
-#include <cstddef>
-#include <cstdint>
-#include <cstdlib>
-#include <fcntl.h>
-#include <spdlog/spdlog.h>
-#include <string.h>
-#include <termios.h>
-#include <unistd.h>
+
+#include <cstdint>   // for uint8_t
+#include <termios.h> // for termios
+#include <unistd.h>  // for close, write, NULL
 
 enum SerialErrors {
   FailedToOpen,

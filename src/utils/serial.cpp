@@ -1,13 +1,13 @@
 #include "serial.h"
-#include <array>
-#include <cstddef>
-#include <cstdint>
-#include <cstdlib>
-#include <fcntl.h>
-#include <spdlog/spdlog.h>
-#include <string.h>
-#include <termios.h>
-#include <unistd.h>
+#include <bits/termios-baud.h> // for B115200
+#include <cstddef>             // for NULL
+#include <cstdint>             // for uint8_t
+#include <exception>           // for exception
+#include <fcntl.h>             // for open, O_NONBLOCK, O_RDWR
+#include <fmt/core.h>          // for basic_string_view, format, vformat_to
+#include <spdlog/spdlog.h>     // for error, debug
+#include <termios.h>           // for termios, cfmakeraw, cfsetispeed, cfse...
+#include <unistd.h>            // for read, usleep
 
 Serial::Serial(const char *fname, termios *config) {
   g_fd = open(fname, O_RDWR | O_NONBLOCK);
