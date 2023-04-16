@@ -27,5 +27,7 @@ meson test
 * Follow us on
 #+begin_quote
 [[https://instagram.com/aut_opi][Instagram]]: AutoPi 
+[![Instagram Follow](https://img.shields.io/badge/Follow-Instagram-ff69b4?style=social&logo=instagram)](https://www.instagram.com/aut_opi/)
+
 #+end_quote
 
