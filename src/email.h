@@ -8,8 +8,8 @@
 #include <iostream>
 #include <string>
 #include <functional>
-#include <unistd.h>
 #include "SMTPclient.h"
+#include <vector>
 
 class EmailSender {
 public:
@@ -18,13 +18,8 @@ public:
             m_username(username),
             m_password(password) {}
 
-    // Setter for callback function
-    void setCallback(std::function<void()> callback) {
-        m_callback = callback;
-    }
-
     // Function to send email
-    void sendEmail(const std::string& to, const std::string& subject, const std::string& body) {
+    void sendEmails(const std::string& subject, const std::string& body) {
         SMTPclient smtp;
         smtp.server = "smtp.gmail.com";
         smtp.port = 587;
@@ -32,55 +27,67 @@ public:
         smtp.password = m_password;
 
         // Set email parameters
-        smtp.from = m_username;
-        smtp.to = to;
-        smtp.subject = subject;
-        smtp.message = body;
+        for (auto to:recivers){
+            smtp.from = m_username;
+            smtp.to = to;
+            smtp.subject = subject;
+            smtp.message = body;
 
-        // Send email
-        if (smtp.send()) {
-            std::cout << "Email sent successfully!" << std::endl;
-
-            // Call callback function
-            if (m_callback) {
-                m_callback();
+            // Send email
+            if (smtp.send()) {
+                std::cout << "Email sent successfully!" << std::endl;
+            } else {
+                std::cout << "Error sending email." << std::endl;
             }
         }
-        else {
-            std::cout << "Error sending email." << std::endl;
-        }
     }
-
+    void new_friend(std::string newEmail){
+        recivers.pushback(newEmail);
+    }
 private:
     // SMTP login credentials
     std::string m_username;
     std::string m_password;
-
-    // Callback function
-    std::function<void()> m_callback;
+    std::vector<std::string> recivers;
 };
 
-// Function to be called by the callback
-void myCallback() {
-    std::cout << "Email sent. Taking appropriate action..." << std::endl;
-}
+class emailCallback {
+public:
+    virtual void send_email() = 0;
 
-int main() {
-    // Create instance of EmailSender with login credentials
-    EmailSender sender("aknair174@gmail.com", "aknair@1");
+protected:
+    // Email sender object
+    EmailSender m_sender;
 
-    // Set the callback function
-    sender.setCallback(myCallback);
+};
 
-    // Simulate alcohol detection and drowsiness
-    std::cout << "Detecting alcohol and drowsiness..." << std::endl;
+class DrunkCallback : public emailCallback {
+public:
+    DrunkCallback(EmailSender* email) :
+            m_sender(email){}
 
-    // Send email with parameters
-    sender.sendEmail("reshmi2722000@gmail.com", "Alert", "This person is in danger");
+    void send_email() override {
+        // Send email to friend
+        std::string subject = "Driver is drunk";
+        std::string body = "Please take appropriate action.";
+        m_sender.sendEmails(subject, body);
 
-    return 0;
-}
+        std::cout << "Drunk email sent to friend." << std::endl;
+    }
+};
 
+class SleepyCallback : public emailCallback {
+public:
+    SleepyCallback(EmailSender *email):
+            m_sender(email) {}
 
+    void send_email() override {
+        // Send email to friend
+        std::string subject = "Driver is drowsy";
+        std::string body = "Please take appropriate action.";
+        m_sender.sendEmails(subject, body);
+        std::cout << "Drowsy email sent to friend." << std::endl;
+    }
 
+};
 #endif //AUTOPI_EMAIL_H
