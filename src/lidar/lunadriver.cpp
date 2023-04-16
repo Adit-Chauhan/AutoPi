@@ -2,26 +2,42 @@
 #include "tf_luna.hpp"
 #include <cstdint>
 #include <pigpio.h>
+#include <poll.h>
 #include <spdlog/spdlog.h>
-
-const uint16_t ISR_TIMEOUT = 1000;
-
-LunaDriver::LunaDriver() {
-  lidar = luna::Luna();
-  gpioSetMode(22, PI_INPUT);
-  gpioSetISRFuncEx(22, RISING_EDGE, ISR_TIMEOUT, lunaISR, (void *)this);
-}
-void LunaDriver::lunaISR(int gpio, int level, uint32_t tick, void *userdata) {
-  if (level) {
-    ((LunaDriver *)userdata)->dataReady();
-  }
-}
+#include <sys/ioctl.h>
+#include <sys/poll.h>
+#include <thread>
+LunaDriver::LunaDriver() {}
 
 void LunaDriver::dataReady() {
-  if (!callback) {
-    spdlog::error("Did not init any callback func");
+  if (callback == NULL) {
     return;
   }
-  uint16_t dist = lidar.get_distance();
-  callback->hasSample(dist);
+  uint8_t data[8];
+  lidar.read(data, 8);
+  callback->hasSample(data);
 }
+
+void LunaDriver::read_thread() {
+  struct pollfd p_fd;
+  p_fd.fd = lidar.get_raw_fd();
+  p_fd.events = POLLIN;
+  p_fd.revents = 0;
+
+  int bytes_avaiable;
+  while (true) {
+    int check = poll(&p_fd, 1, -1);
+    ioctl(p_fd.fd, FIONREAD, &bytes_avaiable);
+    spdlog::trace("Number of bytes {}", bytes_avaiable);
+    if (bytes_avaiable < bytes_to_read)
+      continue;
+    spdlog::debug("Colleted 8 bytes");
+    bytes_avaiable = 0;
+    dataReady();
+  }
+}
+
+std::thread LunaDriver::start_read_thread() {
+  return std::thread(&LunaDriver::read_thread, this);
+}
+void LunaDriver::registerCallback(LunaCallback *fn) { callback = fn; }
