@@ -42,14 +42,9 @@ void LunaDriver::read_thread() {
           counter++;
       }
     } else {
-      int data_len = 0;
-      while (data_len < data) {
-        int check = poll(&p_fd, 1, -1);
-        if (check != 1 || p_fd.revents == POLLERR || p_fd.revents == POLLNVAL) {
-          spdlog::error("Error in polling fd");
-        }
-        ioctl(p_fd.fd, FIONREAD, &data_len);
-      }
+      wait_for_data(&p_fd, data - 2);
+      uint8_t dead[data];
+      lidar.read(dead, data); // Ignore Header Data
     }
     dataReady();
   }
@@ -57,30 +52,19 @@ void LunaDriver::read_thread() {
 
 int LunaDriver::check_data_type(pollfd *p_fd) {
   spdlog::debug("Checking Data type");
-  while (true) {
-    int check = poll(p_fd, 1, -1);
-    if (check != 1 || p_fd->revents == POLLERR || p_fd->revents == POLLNVAL) {
-      spdlog::error("Error in polling fd");
-    }
-    int bytes_available;
-    ioctl(p_fd->fd, FIONREAD, &bytes_available);
-    spdlog::trace("Number of bytes {}", bytes_available);
-    if (bytes_available < 2)
-      continue;
-
-    std::array<uint8_t, 2> arr;
-    lidar.read(arr.data(), 2);
-    if (arr[0] == 0x59 && arr[1] == 0x59) {
-      spdlog::debug("Found Normal Data");
-      return 0; // Normal Data
-    }
-    if (arr[0] == 0x5A) {
-      spdlog::debug("Found Header Data");
-      return arr[1]; // Return next read size
-    }
-    spdlog::debug("Found error");
-    return -1; // Error
+  wait_for_data(p_fd, 2);
+  std::array<uint8_t, 2> arr;
+  lidar.read(arr.data(), 2);
+  if (arr[0] == 0x59 && arr[1] == 0x59) {
+    spdlog::debug("Found Normal Data");
+    return 0; // Normal Data
   }
+  if (arr[0] == 0x5A) {
+    spdlog::debug("Found Header Data");
+    return arr[1]; // Return next read size
+  }
+  spdlog::debug("Found error");
+  return -1; // Error
 }
 
 std::thread LunaDriver::start_read_thread() {
@@ -89,19 +73,16 @@ std::thread LunaDriver::start_read_thread() {
 void LunaDriver::registerCallback(LunaCallback *fn) { callback = fn; }
 
 void LunaDriver::wait_for_data(pollfd *p_fd, uint8_t num_bytes) {
-  while (true) {
+  int bytes_available;
+  while (bytes_available < num_bytes) {
     int check = poll(p_fd, 1, -1);
     if (check != 1 || p_fd->revents == POLLERR || p_fd->revents == POLLNVAL) {
       spdlog::error("Error in polling fd");
     }
-    int bytes_available;
     ioctl(p_fd->fd, FIONREAD, &bytes_available);
     spdlog::trace("Number of bytes {}", bytes_available);
-    if (bytes_available < num_bytes)
-      continue;
-
-    return;
   }
+  return;
 }
 
 void LunaDriver::normal_data(pollfd *p_fd) {
