@@ -40,6 +40,7 @@ void LunaDriver::read_thread() {
 #endif
       reset_luna();
       // lidar.flush_sys_buffer();
+      std::exit(42);
     }
     normal_data(&p_fd);
     dataReady();
