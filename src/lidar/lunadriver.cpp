@@ -27,6 +27,10 @@ void LunaDriver::read_thread() {
   p_fd.revents = 0;
   while (true) {
     int data = check_data_type(&p_fd);
+    if (data == -1) {
+      continue;
+    }
+
     //    if (data == 0) {
     //      normal_data(&p_fd);
     //    } else if (data == -1) {
