@@ -73,15 +73,15 @@ void DrowsinessDetector::run() {
 
   
 
-        cv::imshow("Drowsiness Detector", frame); 
+      //  cv::imshow("Drowsiness Detector", frame); 
 
   
 
-        if (cv::waitKey(1000/30) == 27) { 
+        //if (cv::waitKey(1000/30) == 27) { 
 
-            break; 
+          //  break; 
 
-        } 
+       // } 
 
     } 
 
