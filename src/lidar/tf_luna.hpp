@@ -10,7 +10,7 @@ enum ID { LowPower = 0x35, Freq = 0x03 };
 class Luna {
 public:
   Luna();
-  ~Luna();
+  ~Luna() {}
   void read(uint8_t *data, int size = 8);
   void write(uint8_t *data, int size);
   void write(uint8_t *data);
