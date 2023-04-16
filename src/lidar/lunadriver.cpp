@@ -12,7 +12,7 @@
 #include <thread>
 #include <unistd.h>
 
-#define DBG_SLEEP
+//#define DBG_SLEEP
 
 LunaDriver::LunaDriver() {}
 
@@ -35,11 +35,9 @@ void LunaDriver::read_thread() {
 #ifdef DBG_SLEEP
       spdlog::error("Improper lidar Data:: {:x}  {:x}", normal_read_buffer[0],
                     normal_read_buffer[1]);
-      // Actually see the error point
       sleep(1);
-#endif
       reset_luna();
-      // lidar.flush_sys_buffer();
+#endif
       std::exit(42);
     }
     normal_data(&p_fd);
@@ -71,7 +69,10 @@ int LunaDriver::check_data_type(pollfd *p_fd) {
 std::thread LunaDriver::start_read_thread() {
   return std::thread(&LunaDriver::read_thread, this);
 }
-void LunaDriver::registerCallback(LunaCallback *fn) { callback = fn; }
+
+void LunaDriver::registerCallback(std::unique_ptr<LunaCallback> fn) {
+  callback = move(fn);
+}
 
 void LunaDriver::wait_for_data(pollfd *p_fd, uint8_t num_bytes) {
   int bytes_available;
