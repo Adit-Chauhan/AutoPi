@@ -18,8 +18,8 @@
 #include <spdlog/fmt/bin_to_hex.h>
 #include <spdlog/spdlog.h>
 #include <string>
-#include "mq3sensor.h"
-#include "mq3Driver.h"
+#include "mq3/mq3sensor.h"
+#include "mq3/mq3Driver.h"
 #include "pigpio.h"
 #include <unistd.h>
 
