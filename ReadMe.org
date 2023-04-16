@@ -7,10 +7,6 @@ The project utilizes smart technology to enhance road safety and prevent acciden
 
 * Contributors
 
-**Social Media**
-- [[https://twitter.com/WaveGuide20][Twitter]]: WaveGuide
-- [[https://instagram.com/waveguide._][Instagram]]: WaveGuide
-
 
 
 * Build Instructions
@@ -30,6 +26,7 @@ meson test
 
 * Follow us on
 #+begin_quote
+[[https://instagram.com/AutoPi._][Instagram]]: AutoPi 
 https://www.instagram.com/p/Cq3OoDQN-Eo/?igshid=MDJmNzVkMjY=
 #+end_quote
 
