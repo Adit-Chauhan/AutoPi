@@ -20,7 +20,7 @@ set(SRC_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/tf_luna.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/serial.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/email.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/Email/email.cpp
         )
 # Set up test files
 set(TEST_FILES
