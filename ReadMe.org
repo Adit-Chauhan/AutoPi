@@ -4,6 +4,7 @@
  This project aims to provide an ultimate safety companion for your ride using an embedded system that combines drowsiness detection, alcohol detection, and Lidar technology to keep you and others safe on the road. The system detects whether the driver is intoxicated or sleepy and sends an alert to their loved ones for their protection.
 
 The project utilizes state-of-the-art technology to enhance road safety and prevent accidents caused by drunk or drowsy driving. The code for this project is available on GitHub, and we encourage developers to contribute and make the roads safer for everyone.
+
 * Build Instructions
 #+begin_quote
 Install meson and ninja for building
@@ -17,3 +18,10 @@ meson compile
 # to run tests run
 meson test
 #+end_src
+
+
+* Follow us on
+#+begin_quote
+https://www.instagram.com/p/Cq3OoDQN-Eo/?igshid=MDJmNzVkMjY=
+#+end_quote
+
