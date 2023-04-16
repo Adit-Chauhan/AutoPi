@@ -44,9 +44,8 @@ termios Serial::get_config() {
 }
 
 void Serial::serial_read(uint8_t *data, int data_len) {
-  if (read(g_fd, data, data_len)) {
-    throw ReadError;
-  }
+  read(g_fd, data, data_len);
+
 #ifdef FLUSH_ALL_READ
   tcflush(g_fd, TCIOFLUSH);
 #endif

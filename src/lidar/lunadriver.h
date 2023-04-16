@@ -2,9 +2,11 @@
 #define LUNADRIVER_H_
 
 #include "tf_luna.hpp"
+#include <array>
 #include <cstdint>
+#include <poll.h>
 #include <thread>
-
+#include <vector>
 class LunaCallback {
 public:
   virtual void hasSample(uint8_t *sample) = 0;
@@ -24,9 +26,14 @@ public:
   }
 
 private:
-  int bytes_to_read = 9;
+  std::array<uint8_t, 9> normal_read_buffer;
+  std::vector<uint8_t> other_read_buffer;
+  bool is_normal_data = true;
   luna::Luna lidar;
   void read_thread();
+  int check_data_type(pollfd *p_fd);
+  void wait_for_data(pollfd *p_fd, uint8_t num_bytes);
+  void normal_data(pollfd *p_fd);
 };
 
 #endif // LUNADRIVER_H_

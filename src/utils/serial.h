@@ -8,8 +8,6 @@ enum SerialErrors {
   FailedToOpen,
   FailedToGatherPortAttr,
   FailedToSetPortAttr,
-  ReadError,
-  WriteError,
 };
 
 class Serial {
@@ -21,8 +19,7 @@ public:
   ~Serial() { close(g_fd); }
 
   void serial_write(uint8_t *data, int data_len) {
-    if (write(g_fd, data, data_len))
-      throw WriteError;
+    write(g_fd, data, data_len);
   }
 
   void serial_read(uint8_t *data, int data_len);
