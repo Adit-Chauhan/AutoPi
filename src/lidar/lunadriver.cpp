@@ -1,4 +1,5 @@
 #include "lunadriver.h"
+#include "../utils/serial.h"
 #include "tf_luna.hpp"
 #include <cstdint>
 #include <pigpio.h>
@@ -14,7 +15,11 @@ void LunaDriver::dataReady() {
     return;
   }
   uint8_t data[8];
-  lidar.read(data, 8);
+  try {
+    lidar.read(data, 8);
+  } catch (SerialErrors::ReadError e) {
+    spdlog::error("Error in reading from fd");
+  }
   callback->hasSample(data);
 }
 
@@ -27,11 +32,14 @@ void LunaDriver::read_thread() {
   int bytes_avaiable;
   while (true) {
     int check = poll(&p_fd, 1, -1);
+    if (check != 1 || p_fd.revents == POLLERR || p_fd.revents == POLLNVAL) {
+      spdlog::error("Error in polling fd");
+    }
     ioctl(p_fd.fd, FIONREAD, &bytes_avaiable);
     spdlog::trace("Number of bytes {}", bytes_avaiable);
     if (bytes_avaiable < bytes_to_read)
       continue;
-    spdlog::debug("Colleted 8 bytes");
+    spdlog::debug("Colleted 9 bytes");
     bytes_avaiable = 0;
     dataReady();
   }
