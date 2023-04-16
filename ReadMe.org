@@ -6,7 +6,7 @@ This project aims to provide an ultimate safety companion for your ride using an
 The project utilizes smart technology to enhance road safety and prevent accidents caused by drunk or drowsy driving. The code for this project is available on GitHub, and we encourage developers to contribute and make the roads safer for everyone.
 
 * Contributors
-
+![](https://avatars.githubusercontent.com/u/48003413?v=4)
 
 * Build Instructions
 #+begin_quote
