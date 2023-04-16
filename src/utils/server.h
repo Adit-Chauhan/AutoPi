@@ -1,13 +1,14 @@
-#include "unordered_map"
-#include <string>
-#include <unordered_map>
+#include <netinet/in.h>  // for sockaddr_in
+#include <string>        // for string, basic_string
+#include <unordered_map> // for unordered_map
 
-#include <arpa/inet.h>
-#include <cstdlib>
-#include <cstring>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <unistd.h>
+enum ServerError {
+  FailedToCreateSocket,
+  FailedToSetSocketProperties,
+  FailedToBindToSocket,
+  FailedToStartListening,
+  FailedToAcceptClient,
+};
 
 class serverCallback {
 public:

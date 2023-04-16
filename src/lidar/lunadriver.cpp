@@ -1,27 +1,94 @@
 #include "lunadriver.h"
+#include "../utils/serial.h"
 #include "tf_luna.hpp"
+#include <algorithm>
+#include <array>
 #include <cstdint>
 #include <pigpio.h>
+#include <poll.h>
 #include <spdlog/spdlog.h>
+#include <sys/ioctl.h>
+#include <sys/poll.h>
+#include <thread>
 
-const uint16_t ISR_TIMEOUT = 1000;
-
-LunaDriver::LunaDriver() {
-  lidar = luna::Luna();
-  gpioSetMode(22, PI_INPUT);
-  gpioSetISRFuncEx(22, RISING_EDGE, ISR_TIMEOUT, lunaISR, (void *)this);
-}
-void LunaDriver::lunaISR(int gpio, int level, uint32_t tick, void *userdata) {
-  if (level) {
-    ((LunaDriver *)userdata)->dataReady();
-  }
-}
+LunaDriver::LunaDriver() {}
 
 void LunaDriver::dataReady() {
-  if (!callback) {
-    spdlog::error("Did not init any callback func");
+  if (callback == NULL) {
     return;
   }
-  uint16_t dist = lidar.get_distance();
-  callback->hasSample(dist);
+  callback->hasSample(normal_read_buffer.data());
+}
+
+void LunaDriver::read_thread() {
+  struct pollfd p_fd;
+  p_fd.fd = lidar.get_raw_fd();
+  p_fd.events = POLLIN;
+  p_fd.revents = 0;
+  while (true) {
+    int data = check_data_type(&p_fd);
+    if (data == -1) {
+      while (true) {
+        uint8_t burn;
+        lidar.read(&burn, 1);
+        spdlog::trace("Found first Burn {}", burn);
+        if (burn != 0x59)
+          continue;
+        lidar.read(&burn, 1);
+        spdlog::trace("Found second Burn {}", burn);
+        if (burn != 0x59)
+          continue;
+        break;
+      }
+    }
+    normal_data(&p_fd);
+    dataReady();
+  }
+}
+
+int LunaDriver::check_data_type(pollfd *p_fd) {
+  spdlog::debug("Checking Data type");
+  wait_for_data(p_fd, 2);
+  std::array<uint8_t, 2> arr;
+  lidar.read(arr.data(), 2);
+  if (arr[0] == 0x59 && arr[1] == 0x59) {
+    spdlog::debug("Found Normal Data");
+    return 0; // Normal Data
+  }
+  if (arr[0] == 0x5A) {
+    spdlog::debug("Found Header Data");
+    return arr[1]; // Return next read size
+  }
+  spdlog::debug("Found error");
+  return -1; // Error
+}
+
+std::thread LunaDriver::start_read_thread() {
+  return std::thread(&LunaDriver::read_thread, this);
+}
+void LunaDriver::registerCallback(LunaCallback *fn) { callback = fn; }
+
+void LunaDriver::wait_for_data(pollfd *p_fd, uint8_t num_bytes) {
+  int bytes_available;
+  while (bytes_available < num_bytes) {
+    int check = poll(p_fd, 1, -1);
+    if (check != 1 || p_fd->revents == POLLERR || p_fd->revents == POLLNVAL) {
+      spdlog::error("Error in polling fd");
+    }
+    ioctl(p_fd->fd, FIONREAD, &bytes_available);
+    spdlog::trace("Number of bytes {}", bytes_available);
+  }
+  return;
+}
+
+void LunaDriver::normal_data(pollfd *p_fd) {
+  wait_for_data(p_fd, 7);
+  uint8_t data[7];
+  lidar.read(data, 7);
+  normal_read_buffer = {
+      0x59,
+      0x59,
+  };
+  std::copy(data, data + 7, normal_read_buffer.begin() + 2);
+  is_normal_data = true;
 }

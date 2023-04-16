@@ -1,14 +1,14 @@
 #include "server.h"
-#include <arpa/inet.h>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
-#include <netinet/in.h>
-#include <spdlog/spdlog.h>
-#include <string>
-#include <sys/socket.h>
-#include <unistd.h>
-#define PORT 8080
+#include <arpa/inet.h>     // for htons
+#include <cerrno>          // for errno
+#include <cstring>         // for strlen, strtok, strerror, NULL
+#include <exception>       // for exception
+#include <fmt/core.h>      // for basic_string_view, format, vformat_to
+#include <netinet/in.h>    // for sockaddr_in, INADDR_ANY, in_addr
+#include <spdlog/spdlog.h> // for error, info
+#include <string>          // for string, basic_string, hash, operator==
+#include <sys/socket.h>    // for accept, bind, listen, setsockopt, socket
+#include <unistd.h>        // for close, write, read
 
 Server::Server() {
   int opt = 1;
@@ -17,14 +17,14 @@ Server::Server() {
   // Create a socket for the server
   if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
     spdlog::error("socket failed");
-    exit(EXIT_FAILURE);
+    throw FailedToCreateSocket;
   }
 
   // Set socket options to reuse the address and port
   if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt,
                  sizeof(opt))) {
     spdlog::error("setsockopt failed");
-    exit(EXIT_FAILURE);
+    throw FailedToSetSocketProperties;
   }
 
   // Bind the socket to a specific address and port
@@ -34,13 +34,13 @@ Server::Server() {
 
   if (bind(server_socket, (struct sockaddr *)&address, sizeof(address)) < 0) {
     spdlog::error("bind failed");
-    exit(EXIT_FAILURE);
+    throw FailedToBindToSocket;
   }
 
   // Listen for incoming connections
   if (listen(server_socket, 3) < 0) {
     spdlog::error("listen failed");
-    exit(EXIT_FAILURE);
+    throw FailedToStartListening;
   }
 }
 
@@ -55,10 +55,9 @@ void Server::run() {
   while (true) {
     if ((client_socket = accept(server_socket, (struct sockaddr *)&address,
                                 (socklen_t *)&addrlen)) < 0) {
-      perror("accept failed");
-      exit(EXIT_FAILURE);
+      spdlog::error("Failed to accept client :: {} ", std::strerror(errno));
+      throw FailedToAcceptClient;
     }
-
     handle_call(client_socket);
   }
 }
