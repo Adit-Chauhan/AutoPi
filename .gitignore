@@ -5,5 +5,11 @@ tmp/
 build/
 .cache
 .vscode
-
+cmake-*
+test/test_write.txt
 subprojects/*/*
+<<<<<<< HEAD
+.ccls-*
+=======
+/.ccls-cache/
+>>>>>>> c0805756312a99d7418bea3ba25bebdb6eaeba4a
