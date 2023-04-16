@@ -17,6 +17,8 @@ pkg_check_modules(SERIAL libserial)
 # Set up source files
 #file(GLOB_RECURSE SRC_FILES *.cpp)
 set(SRC_FILES
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/mq3_2.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/mq3Driver.cpp        
 	${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/lunadriver.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/tf_luna.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
