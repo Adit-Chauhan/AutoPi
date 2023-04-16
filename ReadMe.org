@@ -26,6 +26,7 @@ meson test
 
 * Follow us on
 #+begin_quote
+[[https://www.instagram.com/aut_opi/][https://img.icons8.com/color/48/000000/instagram-new.png][Aut_Opi Instagram]]
 [[https://instagram.com/aut_opi][Instagram]]: AutoPi
 #+end_quote
 
