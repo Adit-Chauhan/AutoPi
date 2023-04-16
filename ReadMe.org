@@ -26,7 +26,8 @@ meson test
 
 * Follow us on
 #+begin_quote
-[[https://www.instagram.com/aut_opi/][file:///path/to/white-boxed/instagram/icon.png][auto_pi]]
+[[https://www.instagram.com/aut_opi/][https://img.icons8.com/officel/40/000000/instagram-new.png]][AutoPi]
+
 
 
 #+end_quote
