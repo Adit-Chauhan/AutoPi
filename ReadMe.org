@@ -2,6 +2,7 @@
 
 *AutoPi* is a driving assistance project that helps in you drive safely.
 
+
 * Build Instructions
 #+begin_quote
 Install meson and ninja for building
@@ -15,3 +16,10 @@ meson compile
 # to run tests run
 meson test
 #+end_src
+
+
+* Follow us on
+#+begin_quote
+https://www.instagram.com/p/Cq3OoDQN-Eo/?igshid=MDJmNzVkMjY=
+#+end_quote
+
