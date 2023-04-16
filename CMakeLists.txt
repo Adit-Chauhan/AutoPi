@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD 17)
 # Find and include spdlog
 find_package(spdlog REQUIRED)
 
+find_package(PkgConfig)
+pkg_check_modules(SERIAL libserial)
+
 # Find and include gtest
 #find_package(GTest CONFIG REQUIRED)
 
@@ -14,10 +17,10 @@ find_package(spdlog REQUIRED)
 # Set up source files
 #file(GLOB_RECURSE SRC_FILES *.cpp)
 set(SRC_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/buffer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/lunadriver.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/tf_luna.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/serial.cpp
 )
 # Set up test files
 set(TEST_FILES
@@ -32,7 +35,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_executable(AutoPi ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp ${SRC_FILES})
 
 # Link with spdlog
-target_link_libraries(AutoPi PRIVATE spdlog::spdlog pigpio)
+target_link_libraries(AutoPi PRIVATE spdlog::spdlog pigpio ${SERIAL_LDFLAGS})
 
 # Create executable for test
 #add_executable(AutoPi_tests ${SRC_FILES} ${TEST_FILES})
