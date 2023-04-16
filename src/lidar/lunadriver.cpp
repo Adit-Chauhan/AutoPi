@@ -11,6 +11,8 @@
 #include <sys/poll.h>
 #include <thread>
 
+#define DBG_SLEEP
+
 LunaDriver::LunaDriver() {}
 
 void LunaDriver::dataReady() {
@@ -26,20 +28,14 @@ void LunaDriver::read_thread() {
   p_fd.events = POLLIN;
   p_fd.revents = 0;
   while (true) {
-    int data = check_data_type(&p_fd);
-    if (data == -1) {
-      while (true) {
-        uint8_t burn;
-        lidar.read(&burn, 1);
-        spdlog::trace("Found first Burn {}", burn);
-        if (burn != 0x59)
-          continue;
-        lidar.read(&burn, 1);
-        spdlog::trace("Found second Burn {}", burn);
-        if (burn != 0x59)
-          continue;
-        break;
-      }
+    if (check_data_type(&p_fd)) {
+      // Flush If improper data
+      spdlog::error("Improper lidar Data");
+      // Actually see the error point
+#ifdef DBG_SLEEP
+      sleep(1);
+#endif
+      lidar.flush_sys_buffer();
     }
     normal_data(&p_fd);
     dataReady();

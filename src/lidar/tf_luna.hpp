@@ -15,6 +15,7 @@ public:
   void write(uint8_t *data, int size);
   void write(uint8_t *data);
   int get_raw_fd() { return serial.get_fd(); }
+  void flush_sys_buffer() { serial.flush(); }
 
 private:
   Serial serial;
