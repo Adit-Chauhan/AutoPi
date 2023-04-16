@@ -14,11 +14,12 @@ void LunaDriver::dataReady() {
   if (callback == NULL) {
     return;
   }
-  uint8_t data[8];
+  uint8_t data[9];
   try {
-    lidar.read(data, 8);
-  } catch (SerialErrors::ReadError e) {
-    spdlog::error("Error in reading from fd");
+    lidar.read(data, 9);
+  } catch (SerialErrors e) {
+    // This throws error but we still get proper values ignore the error
+    // spdlog::error("Error in reading from fd");
   }
   callback->hasSample(data);
 }

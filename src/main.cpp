@@ -30,7 +30,7 @@ class LunaPrintData : public LunaCallback {
 };
 
 int main() {
-  spdlog::set_level(spdlog::level::trace);
+  spdlog::set_level(spdlog::level::debug);
   LunaDriver luna;
   std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
   luna.registerCallback(callback.get());
