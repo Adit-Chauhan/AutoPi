@@ -38,7 +38,8 @@ void LunaDriver::read_thread() {
       // Actually see the error point
       sleep(1);
 #endif
-      lidar.flush_sys_buffer();
+      reset_luna();
+      // lidar.flush_sys_buffer();
     }
     normal_data(&p_fd);
     dataReady();
