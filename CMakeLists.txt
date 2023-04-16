@@ -14,10 +14,12 @@ find_package(spdlog REQUIRED)
 # Set up source files
 #file(GLOB_RECURSE SRC_FILES *.cpp)
 set(SRC_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/buffer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/i2c.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/mq3_2.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/mq3Driver.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/lunadriver.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/tf_luna.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/serial.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/email.cpp
         )
 # Set up test files
@@ -33,7 +35,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_executable(AutoPi ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp ${SRC_FILES})
 
 # Link with spdlog
-target_link_libraries(AutoPi PRIVATE spdlog::spdlog pigpio)
+target_link_libraries(AutoPi PRIVATE spdlog::spdlog pigpio ${SERIAL_LDFLAGS})
 
 # Create executable for test
 #add_executable(AutoPi_tests ${SRC_FILES} ${TEST_FILES})
