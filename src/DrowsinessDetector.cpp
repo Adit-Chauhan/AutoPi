@@ -8,7 +8,7 @@ DrowsinessDetector::DrowsinessDetector()
 
     : no_eyes_count(0), total_count(0), start_time(time(0)), cascades_loaded(true) { 
 
-    if (!face_cascade.load("haarcascade_frontalface_default.xml")) { 
+    if (!face_cascade.load("/home/autopi/AutoPi/data/haarcascade_frontalface_default.xml")) { 
 
         std::cout << "Error loading face cascade." << std::endl; 
 
@@ -16,7 +16,7 @@ DrowsinessDetector::DrowsinessDetector()
 
     } 
 
-    if (!eye_cascade.load("haarcascade_eye_tree_eyeglasses.xml")) { 
+    if (!eye_cascade.load("/home/autopi/AutoPi/data/haarcascade_eye_tree_eyeglasses.xml")) { 
 
         std::cout << "Error loading eye cascade." << std::endl; 
 
@@ -27,7 +27,6 @@ DrowsinessDetector::DrowsinessDetector()
 } 
 
   
-
 void DrowsinessDetector::run() { 
 
     if (!cascades_loaded) { 
@@ -42,6 +41,10 @@ void DrowsinessDetector::run() {
 
     cv::VideoCapture capture(0); 
 
+    // Set camera resolution
+    capture.set(cv::CAP_PROP_FRAME_WIDTH, 640); // Set the desired width
+    capture.set(cv::CAP_PROP_FRAME_HEIGHT, 480); // Set the desired height
+ 
     if (!capture.isOpened()) { 
 
         std::cout << "Error initializing the camera." << std::endl; 
@@ -74,7 +77,7 @@ void DrowsinessDetector::run() {
 
   
 
-        if (cv::waitKey(10) == 27) { 
+        if (cv::waitKey(1000/30) == 27) { 
 
             break; 
 
@@ -98,7 +101,7 @@ void DrowsinessDetector::detectAndDisplay(cv::Mat frame) {
 
     std::vector<cv::Rect> faces; 
 
-    face_cascade.detectMultiScale(frame_gray, faces, 1.3, 5); 
+    face_cascade.detectMultiScale(frame_gray, faces, 1.5, 3); 
 
   
 
