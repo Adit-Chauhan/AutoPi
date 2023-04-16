@@ -31,8 +31,10 @@ void LunaDriver::read_thread() {
     if (check_data_type(&p_fd)) {
       // Flush If improper data
       spdlog::error("Improper lidar Data");
-      // Actually see the error point
 #ifdef DBG_SLEEP
+      spdlog::error("Improper lidar Data:: {:x}  {:x}", normal_read_buffer[0],
+                    normal_read_buffer[1]);
+      // Actually see the error point
       sleep(1);
 #endif
       lidar.flush_sys_buffer();
@@ -56,6 +58,10 @@ int LunaDriver::check_data_type(pollfd *p_fd) {
     return arr[1]; // Return next read size
   }
   spdlog::debug("Found error");
+#ifdef DBG_SLEEP
+  normal_read_buffer[0] = arr[0];
+  normal_read_buffer[1] = arr[1];
+#endif       // DBG_SLEEP
   return -1; // Error
 }
 
