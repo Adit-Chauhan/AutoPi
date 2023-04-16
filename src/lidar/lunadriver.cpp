@@ -27,25 +27,26 @@ void LunaDriver::read_thread() {
   p_fd.revents = 0;
   while (true) {
     int data = check_data_type(&p_fd);
-    if (data == 0) {
-      normal_data(&p_fd);
-    } else if (data == -1) {
-      int counter = 0;
-      while (true) {
-        if (counter == 2) {
-          normal_data(&p_fd);
-          break;
-        }
-        uint8_t stuf[2];
-        lidar.read(stuf, 1);
-        if (stuf[0] == 0x59)
-          counter++;
-      }
-    } else {
-      wait_for_data(&p_fd, data - 2);
-      uint8_t dead[data];
-      lidar.read(dead, data); // Ignore Header Data
-    }
+    //    if (data == 0) {
+    //      normal_data(&p_fd);
+    //    } else if (data == -1) {
+    //      int counter = 0;
+    //      while (true) {
+    //        if (counter == 2) {
+    //          normal_data(&p_fd);
+    //          break;
+    //        }
+    //        uint8_t stuf[2];
+    //        lidar.read(stuf, 1);
+    //        if (stuf[0] == 0x59)
+    //          counter++;
+    //      }
+    //    } else {
+    //      wait_for_data(&p_fd, data - 2);
+    //      uint8_t dead[data];
+    //      lidar.read(dead, data); // Ignore Header Data
+    //    }
+    normal_data(&p_fd);
     dataReady();
   }
 }
