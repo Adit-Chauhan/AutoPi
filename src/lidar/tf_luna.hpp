@@ -6,7 +6,7 @@
 #include <spdlog/spdlog.h>
 
 namespace luna {
-enum ID { LowPower = 0x35, Freq = 0x03 };
+enum ID { LowPower = 0x35, Freq = 0x03, Reset = 0x02 };
 class Luna {
 public:
   Luna();

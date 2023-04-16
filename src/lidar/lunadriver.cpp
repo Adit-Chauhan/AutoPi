@@ -10,6 +10,7 @@
 #include <sys/ioctl.h>
 #include <sys/poll.h>
 #include <thread>
+#include <unistd.h>
 
 #define DBG_SLEEP
 
@@ -93,4 +94,12 @@ void LunaDriver::normal_data(pollfd *p_fd) {
   };
   std::copy(data, data + 7, normal_read_buffer.begin() + 2);
   is_normal_data = true;
+}
+
+void LunaDriver::reset_luna() {
+  spdlog::info("Resetting Luna");
+  uint8_t arr[] = {0x5A, 0x04, 0x02, 0x00};
+  lidar.write(arr);
+  usleep(250'000);
+  lidar.flush_sys_buffer();
 }

@@ -34,6 +34,7 @@ private:
   int check_data_type(pollfd *p_fd);
   void wait_for_data(pollfd *p_fd, uint8_t num_bytes);
   void normal_data(pollfd *p_fd);
+  void reset_luna();
 };
 
 #endif // LUNADRIVER_H_
