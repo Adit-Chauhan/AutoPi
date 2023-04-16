@@ -23,6 +23,7 @@
 #include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
+
 class HelloResp : public serverCallback {
   void serverAction() { spdlog::info("Running Hello Resp"); }
 };
