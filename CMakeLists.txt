@@ -7,9 +7,6 @@ set(CMAKE_CXX_STANDARD 17)
 # Find and include spdlog
 find_package(spdlog REQUIRED)
 
-find_package(PkgConfig)
-pkg_check_modules(SERIAL libserial)
-
 # Find and include gtest
 #find_package(GTest CONFIG REQUIRED)
 
@@ -18,12 +15,13 @@ pkg_check_modules(SERIAL libserial)
 #file(GLOB_RECURSE SRC_FILES *.cpp)
 set(SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/mq3_2.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/mq3Driver.cpp        
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/mq3Driver.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/lunadriver.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/tf_luna.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/serial.cpp
-)
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/email.cpp
+        )
 # Set up test files
 set(TEST_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/test/buffer_test.cpp
