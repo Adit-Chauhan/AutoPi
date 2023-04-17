@@ -15,8 +15,12 @@
 #include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
+#include "Email/email.h"
 int main() {
   spdlog::set_level(spdlog::level::debug);
+//    auto sender = EmailSender("36421f6eda2d39","3f0572ee524be2");
+//    sender.sendEmails("hello", "helllo");
+//    while (true) {
   auto gpio = std::make_shared<GPIOHandler>();
   auto luna = make_luna(gpio);
   while (true) {
