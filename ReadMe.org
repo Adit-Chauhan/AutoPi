@@ -7,6 +7,8 @@ The project utilizes smart technology to enhance road safety and prevent acciden
 
 * Contributors
 
+* Dependencies
+
 * Hardware Schematic 
 
 * Build Instructions
