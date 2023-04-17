@@ -48,7 +48,10 @@ void DrowsinessDetector::run() {
 
   cv::Mat frame;
 
-  while (capture.read(frame)) {
+  bool stop_capture = false; // Initialize flag variable
+
+
+  while (capture.read(frame) && !stop_capture) {
 
     if (frame.empty()) {
 
@@ -58,6 +61,11 @@ void DrowsinessDetector::run() {
     }
 
     detectAndDisplay(frame);
+
+    // Check for stop_capture flag
+        if (stop_capture) {
+            break;
+        }
 
     //  cv::imshow("Drowsiness Detector", frame);
 
@@ -100,14 +108,13 @@ void DrowsinessDetector::detectAndDisplay(cv::Mat frame) {
 
       if (static_cast<double>(no_eyes_count) / total_count >= 0.2) {
 
-        spdlog::info("****ALERT***** "
-                     << no_eyes_count << " " << total_count << " "
-                     << static_cast<double>(no_eyes_count) / total_count);
+        spdlog::info("****ALERT***** " + std::to_string(no_eyes_count) + " " + std::to_string(total_count) + " " + std::to_string(static_cast<double>(no_eyes_count) / total_count));
+
 
       } else {
 
-        spdlog::debug("safe "
-                      << static_cast<double>(no_eyes_count) / total_count);
+        spdlog::debug("safe " + std::to_string(static_cast<double>(no_eyes_count) / total_count));
+
       }
 
       start_time = time(0);
@@ -136,6 +143,7 @@ void DrowsinessDetector::detectAndDisplay(cv::Mat frame) {
                     faces[i].tl() + eyes[j].br(), cv::Scalar(0, 255, 0), 2);
     }
   }
+}
 
   int main() {
 

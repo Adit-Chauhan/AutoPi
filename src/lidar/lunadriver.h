@@ -6,6 +6,7 @@
 #ifndef LUNADRIVER_H_
 #define LUNADRIVER_H_
 
+#include "../utils/gpio_callbacks.h"
 #include "tf_luna.hpp"
 #include <array>
 #include <cstdint>
@@ -25,13 +26,17 @@ public:
    *   @param sample Pointer to the data.
    */
   virtual void hasSample(uint8_t *sample) = 0;
+
+  void registerGPIOHandler(std::shared_ptr<GPIOHandler> ptr) { handle = ptr; }
+
+protected:
+  std::shared_ptr<GPIOHandler> handle;
 };
 /**
  *   @brief Class representing a driver for the TF-Luna lidar sensor.
  */
 class LunaDriver {
 public:
-  std::unique_ptr<LunaCallback> callback;
   LunaDriver();
   /**
    *   @brief Called when data is ready to be read from the sensor.
@@ -66,6 +71,8 @@ private:
       true;         //!< flag that marks the location of data, currently unused
   luna::Luna lidar; //!< Lidar Object
 
+  std::unique_ptr<LunaCallback> callback;
+  std::shared_ptr<GPIOHandler> handler;
   /**
    *   @brief Thread function for continuously reading data from the sensor.
    */

@@ -1,7 +1,9 @@
+#include "inits/luna_init.h"
 #include "lidar/lunadriver.h"
 #include "mq3/mq3Driver.h"
 #include "mq3/mq3sensor.h"
 #include "pigpio.h"
+#include "utils/gpio_callbacks.h"
 #include "utils/server.h"
 #include <algorithm>
 #include <array>
@@ -16,9 +18,12 @@
 #include "Email/email.h"
 int main() {
   spdlog::set_level(spdlog::level::debug);
-    auto sender = EmailSender("36421f6eda2d39","3f0572ee524be2");
-    sender.sendEmails("hello", "helllo");
-    while (true) {
+//    auto sender = EmailSender("36421f6eda2d39","3f0572ee524be2");
+//    sender.sendEmails("hello", "helllo");
+//    while (true) {
+  auto gpio = std::make_shared<GPIOHandler>();
+  auto luna = make_luna(gpio);
+  while (true) {
     sleep(1);
   }
   return 0;
