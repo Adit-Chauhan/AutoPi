@@ -8,6 +8,11 @@ The project utilizes smart technology to enhance road safety and prevent acciden
 * Contributors
 
 * Dependencies
+  To build the AutoPi , you need the following dependencies: 
+  1. CMake()
+  2. OpenCV()
+  3. pigpio
+  4. Gtest
 
 * Hardware Schematic 
 
