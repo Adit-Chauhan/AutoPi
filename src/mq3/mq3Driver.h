@@ -30,35 +30,38 @@ public:
   /**
   @brief Constructor for the mq3Driver class
   */
-  mq3Driver()
-  /**
-  @brief A function to indicate that the data from the MQ3 sensor is ready
-  */
-  {
+  mq3Driver() {
     sensor = std::make_unique<MQ3Sensor>(11, 9, 10, 8, 4);
     sensor->read_sensor(); // First Value is always zero
     sensor->dataReady = false;
     std::this_thread::sleep_for(std::chrono::seconds(1));
     sensor->read_sensor(); // actual Value
   }
-
-  void dataReady()
   /**
-  @brief A function to register a callback function to handle the sample event
-  @param fn A pointer to the callback function
+  @brief A function to indicate that the data from the MQ3 sensor is ready
   */
-  {
+  void dataReady() {
     sensor->dataReady = false;
     sensor->read_sensor();
     callback->hasSample(sensor->get_sensor_ppm());
   }
-  void registerCallback(std::unique_ptr<mq3Callback> fn)
+
+  /**
+  @brief A function to register a callback function to handle the sample event
+  @param fn A pointer to the callback function
+  */
+  void registerCallback(std::unique_ptr<mq3Callback> fn) {
+    callback = move(fn);
+  }
+
+  void loop_for_10_sec() {
+    int count = 10 * 200;
+    while (count-- > 0)
+      dataReady();
+  }
   /**
   @brief Destructor for the mq3Driver class
   */
-  {
-    callback = move(fn);
-  }
   ~mq3Driver() {}
 
 private:

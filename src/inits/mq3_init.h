@@ -15,7 +15,7 @@ class isDrunk : public mq3Callback {
     if (sample < 20) {
       count_over_20++;
     }
-    if (count_over_20 > 10) {
+    if (count_over_20 > 1500) {
       stopCount = true;
       // Reshmi's email call back
       spdlog::info("send email");

@@ -1,3 +1,4 @@
+#include <memory>
 #include <netinet/in.h>  // for sockaddr_in
 #include <string>        // for string, basic_string
 #include <unordered_map> // for unordered_map
@@ -44,7 +45,7 @@ public:
    * request is received on the specified API route.
    */
   void register_callback_action(std::string api_route,
-                                serverCallback *callbackAction);
+                                std::unique_ptr<serverCallback> callbackAction);
   /**
    * @brief Constructs a new Server object.
    */
@@ -64,7 +65,7 @@ public:
   void run();
 
 private:
-  std::unordered_map<std::string, serverCallback *>
+  std::unordered_map<std::string, std::unique_ptr<serverCallback>>
       routs;             //!< stores various callbacks wrt to their routs
   const int port = 8080; //!< default port to use
   int server_socket;     //!< socket fd

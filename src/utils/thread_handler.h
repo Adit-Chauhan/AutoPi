@@ -18,12 +18,15 @@ class MetaThread {
 
 class ThreadHandler {
 public:
+  void start_drunk();
   void start(ThreadTypes type);
   void stop(ThreadTypes type);
   void add(ThreadTypes type, MetaThread thread);
+  void stop_camera();
+  void start_camera();
 
 private:
-  std::unordered_map<ThreadTypes, MetaThread> threads;
+  std::unordered_map<ThreadTypes, std::thread> threads;
 };
 
 #endif // THREAD_HANDLER_H_

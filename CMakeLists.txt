@@ -11,7 +11,7 @@ find_package(spdlog REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 
 # Find and include OpenCV
-find_package(OpenCV REQUIRED)
+#find_package(OpenCV REQUIRED)
 
 find_package(OpenSSL REQUIRED)
 
@@ -25,13 +25,14 @@ set(SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/tf_luna.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/serial.cpp
-    #    ${CMAKE_CURRENT_SOURCE_DIR}/src/DrowsinessCheck/DrowsinessDetector.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/DrowsinessCheck/DrowsinessDetector.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Email/email.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/smtp_easy/email.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/smtp_easy/smtpclient.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/smtp_easy/base64.cpp
 
     )
+
 # Set up test files
 set(TEST_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/test/sample_test.cpp

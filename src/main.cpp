@@ -1,10 +1,10 @@
 #include "inits/luna_init.h"
+#include "inits/server_init.h"
 #include "lidar/lunadriver.h"
 #include "mq3/mq3Driver.h"
 #include "mq3/mq3sensor.h"
 #include "pigpio.h"
 #include "utils/gpio_callbacks.h"
-#include "utils/server.h"
 #include <algorithm>
 #include <array>
 #include <cstdint>
