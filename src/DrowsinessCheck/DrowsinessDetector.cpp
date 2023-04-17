@@ -1,188 +1,143 @@
-#include "DrowsinessDetector.h" 
+#include "DrowsinessDetector.h"
 
-#include <iostream> 
+#include <spdlog/spdlog.h>
 
-  
+DrowsinessDetector::DrowsinessDetector()
 
-DrowsinessDetector::DrowsinessDetector() 
+    : no_eyes_count(0), total_count(0), start_time(time(0)),
+      cascades_loaded(true) {
+   
+  if (!face_cascade.load(
+          "/home/autopi/temp/AutoPi/data/haarcascade_frontalface_default.xml")) {
 
-    : no_eyes_count(0), total_count(0), start_time(time(0)), cascades_loaded(true) { 
+    spdlog::error("Error loading face cascade.");
 
-    if (!face_cascade.load("/home/autopi/AutoPi/data/haarcascade_frontalface_default.xml")) { 
+    cascades_loaded = false;
+  }
 
-        std::cout << "Error loading face cascade." << std::endl; 
+  if (!eye_cascade.load(
+          "/home/autopi/temp/AutoPi/data/haarcascade_eye_tree_eyeglasses.xml")) {
 
-        cascades_loaded = false; 
+    spdlog::error("Error loading eye cascade.");
 
-    } 
+    cascades_loaded = false;
+  }
+}
 
-    if (!eye_cascade.load("/home/autopi/AutoPi/data/haarcascade_eye_tree_eyeglasses.xml")) { 
+void DrowsinessDetector::run() {
 
-        std::cout << "Error loading eye cascade." << std::endl; 
+  if (!cascades_loaded) {
 
-        cascades_loaded = false; 
+    spdlog::error("Cascades not loaded, exiting.");
 
-    } 
+    return;
+  }
 
-} 
+  cv::VideoCapture capture(0);
 
-  
-void DrowsinessDetector::run() { 
+  // Set camera resolution
+  capture.set(cv::CAP_PROP_FRAME_WIDTH, 640);  // Set the desired width
+  capture.set(cv::CAP_PROP_FRAME_HEIGHT, 480); // Set the desired height
 
-    if (!cascades_loaded) { 
+  if (!capture.isOpened()) {
 
-        std::cout << "Cascades not loaded, exiting." << std::endl; 
+    spdlog::error("Error initializing the camera.");
 
-        return; 
+    return;
+  }
 
-    } 
+  cv::Mat frame;
 
-  
+  while (capture.read(frame) && !stop_capture) {
 
-    cv::VideoCapture capture(0); 
+    if (frame.empty()) {
 
-    // Set camera resolution
-    capture.set(cv::CAP_PROP_FRAME_WIDTH, 640); // Set the desired width
-    capture.set(cv::CAP_PROP_FRAME_HEIGHT, 480); // Set the desired height
- 
-    if (!capture.isOpened()) { 
+      spdlog::debug("Empty frame.");
 
-        std::cout << "Error initializing the camera." << std::endl; 
+      break;
+    }
 
-        return; 
+    detectAndDisplay(frame);
 
-    } 
+    // Check for stop_capture flag
+        if (stop_capture) {
+            break;
+        }
 
-  
+    //  cv::imshow("Drowsiness Detector", frame);
 
-    cv::Mat frame; 
+    // if (cv::waitKey(1000/30) == 27) {
 
-    while (capture.read(frame)) { 
+    //  break;
 
-        if (frame.empty()) { 
+    // }
+  }
+}
 
-            std::cout << "Empty frame." << std::endl; 
+void DrowsinessDetector::detectAndDisplay(cv::Mat frame) {
 
-            break; 
+  cv::Mat frame_gray;
 
-        } 
+  cv::cvtColor(frame, frame_gray, cv::COLOR_BGR2GRAY);
 
-  
+  cv::equalizeHist(frame_gray, frame_gray);
 
-        detectAndDisplay(frame); 
+  std::vector<cv::Rect> faces;
 
-  
+  face_cascade.detectMultiScale(frame_gray, faces, 1.5, 3);
 
-      //  cv::imshow("Drowsiness Detector", frame); 
+  if (faces.empty()) {
 
-  
+    spdlog::debug("No face detected");
+  }
 
-        //if (cv::waitKey(1000/30) == 27) { 
+  for (size_t i = 0; i < faces.size(); i++) {
 
-          //  break; 
+    cv::rectangle(frame, faces[i], cv::Scalar(255, 0, 0), 2);
 
-       // } 
+    cv::Mat faceROI = frame_gray(faces[i]);
 
-    } 
+    std::vector<cv::Rect> eyes;
 
-} 
+    eye_cascade.detectMultiScale(faceROI, eyes);
 
-  
+    if (difftime(time(0), start_time) >= 15) {
 
-void DrowsinessDetector::detectAndDisplay(cv::Mat frame) { 
+      if (static_cast<double>(no_eyes_count) / total_count >= 0.2) {
 
-    cv::Mat frame_gray; 
+        spdlog::info("****ALERT***** " + std::to_string(no_eyes_count) + " " + std::to_string(total_count) + " " + std::to_string(static_cast<double>(no_eyes_count) / total_count));
 
-    cv::cvtColor(frame, frame_gray, cv::COLOR_BGR2GRAY); 
 
-    cv::equalizeHist(frame_gray, frame_gray); 
+      } else {
 
-  
+        spdlog::debug("safe " + std::to_string(static_cast<double>(no_eyes_count) / total_count));
 
-    std::vector<cv::Rect> faces; 
+      }
 
-    face_cascade.detectMultiScale(frame_gray, faces, 1.5, 3); 
+      start_time = time(0);
 
-  
+      no_eyes_count = 0;
 
-    if (faces.empty()) { 
+      total_count = 0;
+    }
 
-        std::cout << "No face detected" << std::endl; 
+    if (eyes.empty()) {
 
-    } 
+      no_eyes_count++;
 
-  
+      spdlog::debug("no eyes!!!");
 
-    for (size_t i = 0; i < faces.size(); i++) { 
+    } else {
 
-        cv::rectangle(frame, faces[i], cv::Scalar(255, 0, 0), 2); 
+      total_count++;
 
-        cv::Mat faceROI = frame_gray(faces[i]); 
+      spdlog::debug("eyes!!!");
+    }
 
-  
+    for (size_t j = 0; j < eyes.size(); j++) {
 
-        std::vector<cv::Rect> eyes; 
-
-        eye_cascade.detectMultiScale(faceROI, eyes); 
-
-  
-
-        if (difftime(time(0), start_time) >= 15) { 
-
-            if (static_cast<double>(no_eyes_count) / total_count >= 0.2) { 
-
-                std::cout << "****ALERT***** " << no_eyes_count << " " << total_count << " " << static_cast<double>(no_eyes_count) / total_count << std::endl; 
-
-            } else { 
-
-                             std::cout << "safe " << static_cast<double>(no_eyes_count) / total_count << std::endl; 
-
-            } 
-
-            start_time = time(0); 
-
-            no_eyes_count = 0; 
-
-            total_count = 0; 
-
-        } 
-
-  
-
-        if (eyes.empty()) { 
-
-            no_eyes_count++; 
-
-            std::cout << "no eyes!!!" << std::endl; 
-
-        } else { 
-
-            total_count++; 
-
-            std::cout << "eyes!!!" << std::endl; 
-
-        } 
-
-  
-
-        for (size_t j = 0; j < eyes.size(); j++) { 
-
-            cv::rectangle(frame, faces[i].tl() + eyes[j].tl(), faces[i].tl() + eyes[j].br(), cv::Scalar(0, 255, 0), 2); 
-
-        } 
-
-    } 
-
-}  
-
-int main() { 
-
-    DrowsinessDetector drowsiness_detector; 
-
-    drowsiness_detector.run(); 
-
-  
-
-    return 0; 
-
-} 
+      cv::rectangle(frame, faces[i].tl() + eyes[j].tl(),
+                    faces[i].tl() + eyes[j].br(), cv::Scalar(0, 255, 0), 2);
+    }
+  }
+}
