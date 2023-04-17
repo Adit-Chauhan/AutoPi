@@ -29,7 +29,7 @@ make
 sudo ./Autopi
 #+end_src
 
-
+* Limitations
 * Follow us on
 #+begin_quote
 [[https://instagram.com/aut_opi][Instagram]]: AutoPi
