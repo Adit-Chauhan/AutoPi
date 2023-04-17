@@ -18,8 +18,7 @@
 int main() {
   spdlog::set_level(spdlog::level::debug);
   auto gpio = std::make_shared<GPIOHandler>();
-  make_luna(gpio);
-
+  auto luna = make_luna(gpio);
   while (true) {
     sleep(1);
   }
