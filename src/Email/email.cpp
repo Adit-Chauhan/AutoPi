@@ -8,7 +8,7 @@ EmailSender::EmailSender(const std::string &username,
 void EmailSender::sendEmails(const std::string &subject,
                              const std::string &body) {
   SMTPclient smtp;
-  smtp.server = "smtp.gmail.com";
+  smtp.server = "smt.gmail.com";
   smtp.port = 587;
   smtp.login = m_username;
   smtp.password = m_password;
