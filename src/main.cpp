@@ -13,14 +13,12 @@
 #include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
+#include "email.h"
 int main() {
   spdlog::set_level(spdlog::level::debug);
-  if (gpioInitialise() < 0) {
-    spdlog::error("pigpio initialization failed.");
-    return 1;
-  }
-
-  while (true) {
+    auto sender = EmailSender("36421f6eda2d39","3f0572ee524be2");
+    sender.sendEmails("hello", "helllo");
+    while (true) {
     sleep(1);
   }
   return 0;

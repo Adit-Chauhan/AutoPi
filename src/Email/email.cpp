@@ -7,9 +7,9 @@ EmailSender::EmailSender(const std::string &username,
         : m_username(username), m_password(password) {}
 
 void EmailSender::sendEmails(const string& subject, const string& body) {
-    SMTPClient smtp("smtp.gmail.com", 587, m_username, m_password);
+    SMTPClient smtp("sandbox.smtp.mailtrap.io", 587, m_username, m_password);
 
-    Email mail("aknair@gmail.com", recivers[0], subject , body);
+    Email mail("aknair@gmail.com", "reshmi272000@gmail.com", subject , body);
     smtp.SendMail(mail);
 
         //if (smtp.SendMail(email)) {
