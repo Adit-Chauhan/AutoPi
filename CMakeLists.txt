@@ -11,7 +11,7 @@ find_package(spdlog REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 
 # Find and include OpenCV
-#find_package(OpenCV REQUIRED)
+find_package(OpenCV REQUIRED)
 
 find_package(OpenSSL REQUIRED)
 
