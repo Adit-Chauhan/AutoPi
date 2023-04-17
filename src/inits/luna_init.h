@@ -31,15 +31,40 @@ class LunaPrintData : public LunaCallback {
     spdlog::debug("Data :: {}", spdlog::to_hex(array));
   }
 };
+
+class LunaTooClose : public LunaCallback {
+public:
+  void hasSample(uint8_t *sample) {
+    if (get_dist(sample) > 10) {
+      if (pinSet)
+        pinSet = false;
+      return;
+    }
+    if (!pinSet)
+      handle->set(pin);
+  }
+
+private:
+  const int pin = 10;
+  bool pinSet = false;
+  inline uint16_t get_dist(uint8_t *sample) {
+    uint16_t dist = sample[3];
+    dist = dist << 8;
+    dist |= sample[2];
+    return dist;
+  }
+};
+
 /**
  *   @brief A function for initializing the Luna LIDAR driver and registering a
  *  callback function.
  *   @return A unique pointer to the initialized Luna driver object.
  */
-std::unique_ptr<LunaDriver> make_luna() {
+std::unique_ptr<LunaDriver> make_luna(std::shared_ptr<GPIOHandler> hand) {
   spdlog::info("LUNA:: Initilizing Luna");
   auto luna = std::make_unique<LunaDriver>();
-  std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
+  std::unique_ptr<LunaTooClose> callback = std::make_unique<LunaTooClose>();
+  callback->registerGPIOHandler(hand);
   luna->registerCallback(move(callback));
   if (callback == nullptr) {
     spdlog::info("LUNA:: Callback Moved Successfully");
