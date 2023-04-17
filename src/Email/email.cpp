@@ -6,7 +6,7 @@ EmailSender::EmailSender(const std::string &username,
                          const std::string &password)
         : m_username(username), m_password(password) {}
 
-void EmailSender::sendEmails(const string& subject, const string& body) {
+void EmailSender::sendEmails(const std::string& subject, const std::string& body) {
     SMTPClient smtp("sandbox.smtp.mailtrap.io", 587, m_username, m_password);
 
     Email mail("aknair@gmail.com", "reshmi272000@gmail.com", subject , body);
