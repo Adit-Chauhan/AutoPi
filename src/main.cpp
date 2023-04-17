@@ -23,6 +23,7 @@
 #include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
+
 class HelloResp : public serverCallback {
   void serverAction() { spdlog::info("Running Hello Resp"); }
 };
@@ -60,16 +61,16 @@ int main() {
     spdlog::error("pigpio initialization failed.");
     return 1;
   }
-  mq3Driver driver;
-  isDrunk *drunk = new isDrunk();
-  driver.registerCallback(drunk);
-
-  spdlog::info("Hello mq3");
-  for (int i = 21; i > 0; i--) {
-    sleep(1);
-    driver.dataReady();
-  }
-  spdlog::info("bye mq3");
+  //  mq3Driver driver;
+  //  isDrunk *drunk = new isDrunk();
+  //  driver.registerCallback(drunk);
+  //
+  //  spdlog::info("Hello mq3");
+  //  for (int i = 21; i > 0; i--) {
+  //    sleep(1);
+  //    driver.dataReady();
+  //  }
+  //  spdlog::info("bye mq3");
 
   LunaDriver luna;
   std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
