@@ -15,7 +15,7 @@ The project utilizes smart technology to enhance road safety and prevent acciden
   4. Gtest
 
 * Hardware Schematic 
- [[./githubproject.jpg]]
+ [[./githubproject .jpg]]
 
 
 * Build Instructions
