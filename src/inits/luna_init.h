@@ -32,8 +32,20 @@ class LunaPrintData : public LunaCallback {
   }
 };
 
+/**
+ *   @brief The LunaTooClose class represents a callback that handles samples
+ * received from a Luna sensor. This class inherits from the LunaCallback class
+ * and implements the hasSample() method to process the received sample. If the
+ * distance measurement of the sample is greater than 10 units, it will unset
+ * the pin if it was previously set. If the distance measurement is less than or
+ * equal to 10 units, it will set the pin if it was previously unset.
+ */
 class LunaTooClose : public LunaCallback {
 public:
+  /**
+   *   @brief Method that processes a sample received from the Luna sensor.
+   *   @param sample Pointer to the sample data.
+   */
   void hasSample(uint8_t *sample) {
     if (get_dist(sample) > 10) {
       if (pinSet)
@@ -45,8 +57,14 @@ public:
   }
 
 private:
-  const int pin = 10;
-  bool pinSet = false;
+  const int pin = 10;  //!< Pin number to raise
+  bool pinSet = false; //!< See if Pin is Set
+
+  /**
+   * @brief Method that extracts the distance measurement from the sample data.
+   * @param sample Pointer to the sample data.
+   * @return The distance measurement extracted from the sample data.
+   */
   inline uint16_t get_dist(uint8_t *sample) {
     uint16_t dist = sample[3];
     dist = dist << 8;

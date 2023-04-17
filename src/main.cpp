@@ -26,12 +26,13 @@ int main() {
   auto emailsender =
       std::make_shared<EmailSender>("36421f6eda2d39", "3f0572ee524be2");
   auto gpio = std::make_shared<GPIOHandler>();
-  auto thread_handler = std::make_unique<ThreadHandler>();
+  auto thread_handler = std::make_shared<ThreadHandler>();
   thread_handler->register_cam(make_drowsy());
   thread_handler->register_mq3(make_mq3(emailsender));
   auto luna = make_luna(gpio);
   thread_handler->start_camera();
-  auto serv = make_server(thread_handler.get());
+  auto serv = make_server(thread_handler);
+
   serv->run();
   return 0;
 }
