@@ -12,9 +12,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../mq3/mq3Driver.h"
-
 #include "../DrowsinessCheck/DrowsinessDetector.h"
+#include "../Email/email.h"
+#include "../mq3/mq3Driver.h"
 
 /**
  *   @enum ThreadTypes
@@ -41,7 +41,7 @@ public:
 
       @brief Starts the thread responsible for detecting drunk driving.
       */
-  void start_drunk();
+  void start_drunk(std::shared_ptr<EmailSender> send);
   /**
 
       @brief Starts the specified thread.

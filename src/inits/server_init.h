@@ -30,14 +30,18 @@ public:
    * @brief Constructor that initializes the thread handler.
    * @param th A shared_ptr to the ThreadHandler instance.
    */
-  StartDrunkManual(std::shared_ptr<ThreadHandler> th) : th(th) {}
+  StartDrunkManual(std::shared_ptr<ThreadHandler> th,
+                   std::shared_ptr<EmailSender> send)
+      : th(th), send(send) {}
+
   void serverAction() {
     spdlog::info("Starting Manual Drunk detection");
-    th->start_drunk();
+    th->start_drunk(send);
   }
 
 private:
   std::shared_ptr<ThreadHandler> th;
+  std::shared_ptr<EmailSender> send;
 };
 
 /**
@@ -84,12 +88,13 @@ private:
  *   @param th A shared_ptr to the ThreadHandler instance.
  *   @return A unique_ptr to a Server instance.
  */
-std::unique_ptr<Server> make_server(std::shared_ptr<ThreadHandler> th) {
+std::unique_ptr<Server> make_server(std::shared_ptr<ThreadHandler> th,
+                                    std::shared_ptr<EmailSender> send) {
   auto serve = std::make_unique<Server>();
   serve->register_callback_action("/hello", std::make_unique<ServerHello>());
 
   serve->register_callback_action("/checkdrunk",
-                                  std::make_unique<StartDrunkManual>(th));
+                                  std::make_unique<StartDrunkManual>(th, send));
   serve->register_callback_action("/stopcamera",
                                   std::make_unique<ServerStopCamera>(th));
   serve->register_callback_action("/startcamera",

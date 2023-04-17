@@ -48,7 +48,7 @@ int main() {
   // Start the camera thread
   thread_handler->start_camera();
   // Create an instance of the server class
-  auto serv = make_server(thread_handler);
+  auto serv = make_server(thread_handler, emailsender);
   // Start the server
   serv->run();
   // Return the exit status code of the application
