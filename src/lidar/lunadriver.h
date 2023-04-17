@@ -1,9 +1,8 @@
-// clang-format off
 /**
  *   @file LunaDriver.h
- *   @brief Header file for LunaDriver class, which provides an interface for reading data from a TF-Luna lidar sensor.
+ *   @brief Header file for LunaDriver class, which provides an interface for
+ * reading data from a TF-Luna lidar sensor.
  */
-// clang-format on
 #ifndef LUNADRIVER_H_
 #define LUNADRIVER_H_
 
@@ -14,11 +13,10 @@
 #include <poll.h>
 #include <thread>
 #include <vector>
-// clang-format off
 /**
- *   @brief Abstract class representing a callback for LunaDriver to call when it has new data.
+ *   @brief Abstract class representing a callback for LunaDriver to call when
+ * it has new data.
  */
-// clang-format on
 
 class LunaCallback {
 public:
