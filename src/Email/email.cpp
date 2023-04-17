@@ -23,6 +23,7 @@ void EmailSender::sendEmails(const string& subject, const string& body) {
         }
     }
 }
+
 void EmailSender::new_friend(std::string newEmail) {
     recivers.push_back(newEmail);
 }
