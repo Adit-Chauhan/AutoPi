@@ -48,9 +48,6 @@ void DrowsinessDetector::run() {
 
   cv::Mat frame;
 
-  bool stop_capture = false; // Initialize flag variable
-
-
   while (capture.read(frame) && !stop_capture) {
 
     if (frame.empty()) {
