@@ -1,3 +1,7 @@
+/**
+    @file main.cpp
+    @brief The main entry point of the application.
+    */
 #include "Email/email.h"
 #include "inits/camera_init.h"
 #include "inits/luna_init.h"
@@ -19,20 +23,34 @@
 #include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
+/**
 
+    @brief The main entry point of the application.
+    The function creates instances of required classes and starts the server.
+    @return The exit status code of the application.
+    */
 int main() {
-  spdlog::set_level(spdlog::level::debug);
-
+  // Set log level to info
+  spdlog::set_level(spdlog::level::info);
+  // Create an instance of the email sender class
   auto emailsender =
       std::make_shared<EmailSender>("36421f6eda2d39", "3f0572ee524be2");
+  // Create an instance of the GPIOHandler class
   auto gpio = std::make_shared<GPIOHandler>();
+  // Create an instance of the ThreadHandler class
   auto thread_handler = std::make_shared<ThreadHandler>();
+  // Register the drowsiness detection camera thread
   thread_handler->register_cam(make_drowsy());
+  // Register the MQ-3 gas sensor thread with email notifications
   thread_handler->register_mq3(make_mq3(emailsender));
+  // Create an instance of the LunaDriver class
   auto luna = make_luna(gpio);
+  // Start the camera thread
   thread_handler->start_camera();
+  // Create an instance of the server class
   auto serv = make_server(thread_handler);
-
+  // Start the server
   serv->run();
+  // Return the exit status code of the application
   return 0;
 }
