@@ -12,12 +12,6 @@ void EmailSender::sendEmails(const string& subject, const string& body) {
     Email mail("aknair@gmail.com", "reshmi272000@gmail.com", subject , body);
     smtp.SendMail(mail);
 
-        //if (smtp.SendMail(email)) {
-      //      std::cout << "Email sent successfully" << std::endl;// Do something on success
-      //  } else {
-     //       std::cout << "Error sending email" << std::endl;// Do something on failure
-        //}
-    }
 }
 
 void EmailSender::new_friend(std::string newEmail) {
