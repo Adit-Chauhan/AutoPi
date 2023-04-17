@@ -1,34 +1,28 @@
 #include "email.h"
-#include "SMTPclient.h"
+#include "../../smtp_easy/smtpclient.h"
+
 
 EmailSender::EmailSender(const std::string &username,
                          const std::string &password)
-    : m_username(username), m_password(password) {}
+        : m_username(username), m_password(password) {}
 
-void EmailSender::sendEmails(const std::string &subject,
-                             const std::string &body) {
-  SMTPclient smtp;
-  smtp.server = "smtp.gmail.com";
-  smtp.port = 587;
-  smtp.login = m_username;
-  smtp.password = m_password;
+void EmailSender::sendEmails(const string& subject, const string& body) {
+    SMTPClient smtp("smtp.gmail.com", 587, m_username, m_password);
 
-  // Set email parameters
-  for (auto to : recivers) {
-    smtp.from = m_username;
-    smtp.to = to;
-    smtp.subject = subject;
-    smtp.message = body;
+    for (const auto& to : m_emailList) {
+        Email email;
+        email.from = m_username;
+        email.to = to;
+        email.subject = subject;
+        email.body = body;
 
-    // Send email
-    if (smtp.send()) {
-      std::cout << "Email sent successfully!" << std::endl;
-    } else {
-      std::cout << "Error sending email." << std::endl;
+        if (smtp.SendMail(email)) {
+            std::cout << "Email sent successfully" << std::endl;// Do something on success
+        } else {
+            std::cout << "Error sending email" << std::endl;// Do something on failure
+        }
     }
-  }
 }
-
 void EmailSender::new_friend(std::string newEmail) {
-  recivers.push_back(newEmail);
+    recivers.push_back(newEmail);
 }
