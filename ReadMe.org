@@ -1,5 +1,5 @@
 #+title: AutoPi
-                                                                 [[./logo1.jpg]]
+[[./logo1.jpg]]
 
 *AutoPi* is a driving assistance project that helps in you drive safely.
 This project aims to provide an ultimate safety companion for your ride using an embedded system that combines drowsiness detection, alcohol detection, and Lidar technology to keep you and others safe on the road. The system detects whether the driver is intoxicated or sleepy and sends an alert to their loved ones for their protection.
