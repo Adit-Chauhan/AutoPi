@@ -30,7 +30,7 @@ set(SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/smtp_easy/email.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/smtp_easy/smtpclient.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/smtp_easy/base64.cpp
-
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/thread_handler.cpp
     )
 
 # Set up test files
