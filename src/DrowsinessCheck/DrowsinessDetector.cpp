@@ -6,9 +6,9 @@ DrowsinessDetector::DrowsinessDetector()
 
     : no_eyes_count(0), total_count(0), start_time(time(0)),
       cascades_loaded(true) {
-
+   
   if (!face_cascade.load(
-          "/home/autopi/AutoPi/data/haarcascade_frontalface_default.xml")) {
+          "/home/autopi/temp/AutoPi/data/haarcascade_frontalface_default.xml")) {
 
     spdlog::error("Error loading face cascade.");
 
@@ -16,7 +16,7 @@ DrowsinessDetector::DrowsinessDetector()
   }
 
   if (!eye_cascade.load(
-          "/home/autopi/AutoPi/data/haarcascade_eye_tree_eyeglasses.xml")) {
+          "/home/autopi/temp/AutoPi/data/haarcascade_eye_tree_eyeglasses.xml")) {
 
     spdlog::error("Error loading eye cascade.");
 
@@ -144,12 +144,3 @@ void DrowsinessDetector::detectAndDisplay(cv::Mat frame) {
     }
   }
 }
-
-  int main() {
-
-    DrowsinessDetector drowsiness_detector;
-
-    drowsiness_detector.run();
-
-    return 0;
-  }
