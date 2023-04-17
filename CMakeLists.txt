@@ -11,7 +11,7 @@ find_package(spdlog REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 
 # Find and include OpenCV
-find_package(OpenCV REQUIRED)
+#find_package(OpenCV REQUIRED)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 # Set up source files
@@ -23,8 +23,8 @@ set(SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/tf_luna.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/serial.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/DrowsinessCheck/DrowsinessDetector.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Email/email.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/src/DrowsinessCheck/DrowsinessDetector.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/src/Email/email.cpp
 )
 # Set up test files
 set(TEST_FILES
@@ -38,7 +38,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_executable(AutoPi ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp ${SRC_FILES})
 
 # Link with spdlog
-target_link_libraries(AutoPi PRIVATE spdlog::spdlog pigpio ${OpenCV_LIBS})
+target_link_libraries(AutoPi PRIVATE spdlog::spdlog pigpio)# ${OpenCV_LIBS})
 
 # Create executable for test
 add_executable(AutoPi_tests ${SRC_FILES} ${TEST_FILES})
