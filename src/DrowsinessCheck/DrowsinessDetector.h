@@ -10,7 +10,7 @@ class DrowsinessDetector {
 public:
     DrowsinessDetector();
     void run();
-
+    void stop(){stop_capture = true;};
 private:
     cv::CascadeClassifier face_cascade;
     cv::CascadeClassifier eye_cascade;
@@ -18,9 +18,8 @@ private:
     int total_count;
     time_t start_time;
     bool cascades_loaded;
-
+    bool stop_capture = false;
     void detectAndDisplay(cv::Mat frame);
 };
 
 #endif // DROWSINESS_DETECTOR_H
-
