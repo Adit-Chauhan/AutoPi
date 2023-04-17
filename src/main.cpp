@@ -13,7 +13,7 @@
 #include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
-#include "email.h"
+#include "Email/email.h"
 int main() {
   spdlog::set_level(spdlog::level::debug);
     auto sender = EmailSender("36421f6eda2d39","3f0572ee524be2");
