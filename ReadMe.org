@@ -29,7 +29,6 @@ make
 sudo ./Autopi
 #+end_src
 
-* Contributors
 
 * Follow us on
 #+begin_quote
