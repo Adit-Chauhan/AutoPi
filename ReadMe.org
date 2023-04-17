@@ -30,9 +30,7 @@ make
 sudo ./Autopi
 #+end_src
 
-* Limitations
-
-* Future Scope
+* Future Scope And Limitations 
 As a future scope, the code for sending emails using SMTP is currently compiling without any errors, but the mail is not being sent properly due to incorrect SMTP username and password. The issue is being investigated, and the plan is to find the correct SMTP credentials and update the code accordingly. This will ensure that the code can send emails successfully using SMTP. 
 
 * Follow us on
