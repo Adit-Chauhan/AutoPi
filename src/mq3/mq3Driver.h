@@ -67,5 +67,4 @@ private:
     mq3Callback* callback; ///< A pointer to the callback object
 };
 
-
-#endif //AUTOPI_MQ3DRIVER_H
+#endif // AUTOPI_MQ3DRIVER_H
