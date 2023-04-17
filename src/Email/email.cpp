@@ -1,34 +1,19 @@
 #include "email.h"
-#include "SMTPclient.h"
+#include "../../smtp_easy/smtpclient.h"
+#include "../../smtp_easy/email.h"
 
 EmailSender::EmailSender(const std::string &username,
                          const std::string &password)
-    : m_username(username), m_password(password) {}
+        : m_username(username), m_password(password) {}
 
-void EmailSender::sendEmails(const std::string &subject,
-                             const std::string &body) {
-  SMTPclient smtp;
-  smtp.server = "smt.gmail.com";
-  smtp.port = 587;
-  smtp.login = m_username;
-  smtp.password = m_password;
+void EmailSender::sendEmails(const std::string& subject, const std::string& body) {
+    SMTPClient smtp("sandbox.smtp.mailtrap.io", 587, m_username, m_password);
 
-  // Set email parameters
-  for (auto to : recivers) {
-    smtp.from = m_username;
-    smtp.to = to;
-    smtp.subject = subject;
-    smtp.message = body;
+    Email mail("aknair@gmail.com", "reshmi272000@gmail.com", subject , body);
+    smtp.SendMail(mail);
 
-    // Send email
-    if (smtp.send()) {
-      std::cout << "Email sent successfully!" << std::endl;
-    } else {
-      std::cout << "Error sending email." << std::endl;
-    }
-  }
 }
 
 void EmailSender::new_friend(std::string newEmail) {
-  recivers.push_back(newEmail);
+    recivers.push_back(newEmail);
 }
