@@ -10,6 +10,9 @@
 #include <sys/ioctl.h>
 #include <sys/poll.h>
 #include <thread>
+#include <unistd.h>
+
+//#define DBG_SLEEP
 
 LunaDriver::LunaDriver() {}
 
@@ -26,20 +29,16 @@ void LunaDriver::read_thread() {
   p_fd.events = POLLIN;
   p_fd.revents = 0;
   while (true) {
-    int data = check_data_type(&p_fd);
-    if (data == -1) {
-      while (true) {
-        uint8_t burn;
-        lidar.read(&burn, 1);
-        spdlog::trace("Found first Burn {}", burn);
-        if (burn != 0x59)
-          continue;
-        lidar.read(&burn, 1);
-        spdlog::trace("Found second Burn {}", burn);
-        if (burn != 0x59)
-          continue;
-        break;
-      }
+    if (check_data_type(&p_fd)) {
+      // Flush If improper data
+      spdlog::error("Improper lidar Data");
+#ifdef DBG_SLEEP
+      spdlog::error("Improper lidar Data:: {:x}  {:x}", normal_read_buffer[0],
+                    normal_read_buffer[1]);
+      sleep(1);
+      reset_luna();
+#endif
+      std::exit(42);
     }
     normal_data(&p_fd);
     dataReady();
@@ -60,13 +59,20 @@ int LunaDriver::check_data_type(pollfd *p_fd) {
     return arr[1]; // Return next read size
   }
   spdlog::debug("Found error");
+#ifdef DBG_SLEEP
+  normal_read_buffer[0] = arr[0];
+  normal_read_buffer[1] = arr[1];
+#endif       // DBG_SLEEP
   return -1; // Error
 }
 
 std::thread LunaDriver::start_read_thread() {
   return std::thread(&LunaDriver::read_thread, this);
 }
-void LunaDriver::registerCallback(LunaCallback *fn) { callback = fn; }
+
+void LunaDriver::registerCallback(std::unique_ptr<LunaCallback> fn) {
+  callback = move(fn);
+}
 
 void LunaDriver::wait_for_data(pollfd *p_fd, uint8_t num_bytes) {
   int bytes_available;
@@ -91,4 +97,12 @@ void LunaDriver::normal_data(pollfd *p_fd) {
   };
   std::copy(data, data + 7, normal_read_buffer.begin() + 2);
   is_normal_data = true;
+}
+
+void LunaDriver::reset_luna() {
+  spdlog::info("Resetting Luna");
+  uint8_t arr[] = {0x5A, 0x04, 0x02, 0x00};
+  lidar.write(arr);
+  usleep(250'000);
+  lidar.flush_sys_buffer();
 }

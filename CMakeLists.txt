@@ -8,23 +8,22 @@ set(CMAKE_CXX_STANDARD 17)
 find_package(spdlog REQUIRED)
 
 # Find and include gtest
-#find_package(GTest CONFIG REQUIRED)
+find_package(GTest CONFIG REQUIRED)
 
 
 # Set up source files
 #file(GLOB_RECURSE SRC_FILES *.cpp)
 set(SRC_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/src/mq3/mq3_2.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/mq3/mq3Driver.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/lunadriver.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/tf_luna.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/serial.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/Email/email.cpp
-        )
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mq3/mq3_2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mq3/mq3Driver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/lunadriver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lidar/tf_luna.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/server.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/serial.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/src/Email/email.cpp
+)
 # Set up test files
 set(TEST_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/buffer_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/sample_test.cpp
 )
 
@@ -35,17 +34,17 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_executable(AutoPi ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp ${SRC_FILES})
 
 # Link with spdlog
-target_link_libraries(AutoPi PRIVATE spdlog::spdlog pigpio ${SERIAL_LDFLAGS})
+target_link_libraries(AutoPi PRIVATE spdlog::spdlog pigpio)
 
 # Create executable for test
-#add_executable(AutoPi_tests ${SRC_FILES} ${TEST_FILES})
+add_executable(AutoPi_tests ${SRC_FILES} ${TEST_FILES})
 
 # Link with gtest and spdlog
-#target_link_libraries(AutoPi_tests PRIVATE GTest::gtest GTest::gtest_main spdlog::spdlog)
+target_link_libraries(AutoPi_tests PRIVATE GTest::gtest GTest::gtest_main spdlog::spdlog)
 
 # Exclude hello.cpp from AutoPi_tests
-#set_target_properties(AutoPi_tests PROPERTIES EXCLUDE_FROM_ALL 1)
+set_target_properties(AutoPi_tests PROPERTIES EXCLUDE_FROM_ALL 1)
 
 # Add tests to CTest
-#include(GoogleTest)
-#gtest_discover_tests(AutoPi_tests)
+include(GoogleTest)
+gtest_discover_tests(AutoPi_tests)

@@ -4,6 +4,7 @@
 #include "tf_luna.hpp"
 #include <array>
 #include <cstdint>
+#include <memory>
 #include <poll.h>
 #include <thread>
 #include <vector>
@@ -14,11 +15,11 @@ public:
 
 class LunaDriver {
 public:
-  LunaCallback *callback;
+  std::unique_ptr<LunaCallback> callback;
   LunaDriver();
 
   void dataReady();
-  void registerCallback(LunaCallback *fn);
+  void registerCallback(std::unique_ptr<LunaCallback> fn);
   std::thread start_read_thread();
   void setLunaSpeed(uint8_t hz) {
     uint8_t msg[] = {0x5A, 0x06, luna::Freq, hz, 0, 0};
@@ -34,6 +35,7 @@ private:
   int check_data_type(pollfd *p_fd);
   void wait_for_data(pollfd *p_fd, uint8_t num_bytes);
   void normal_data(pollfd *p_fd);
+  void reset_luna();
 };
 
 #endif // LUNADRIVER_H_

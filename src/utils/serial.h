@@ -25,6 +25,8 @@ public:
   void serial_read(uint8_t *data, int data_len);
   int get_fd() { return g_fd; }
 
+  void flush() { tcflush(g_fd, TCIOFLUSH); }
+
 private:
   termios get_config();
 };
