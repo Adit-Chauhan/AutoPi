@@ -22,12 +22,11 @@ Install meson and ninja for building
 #+end_quote
 
 #+begin_src bash
-meson setup build
+mkdir build
 cd build
-# to complile project run
-meson compile
-# to run tests run
-meson test
+cmake ..
+make
+sudo ./Autopi
 #+end_src
 
 * Contributors
