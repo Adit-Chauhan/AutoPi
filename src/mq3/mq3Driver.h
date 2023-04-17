@@ -6,6 +6,7 @@
 #define AUTOPI_MQ3DRIVER_H
 #include "mq3sensor.h"
 #include <memory>
+
 class mq3Callback {
 public:
   virtual void hasSample(float sample) = 0;
