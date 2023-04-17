@@ -60,7 +60,9 @@ public:
       @param type The type of thread to add.
       @param thread The thread to add.
       */
-  void add(ThreadTypes type, std::thread thread);
+  void add(ThreadTypes type, std::thread thread) {
+    threads[type] = move(thread);
+  }
   /**
    *    @brief Stops the camera thread.
    */
