@@ -32,7 +32,7 @@
  */
 int main() {
   // Set log level to info
-  spdlog::set_level(spdlog::level::info);
+  spdlog::set_level(spdlog::level::debug);
   // Create an instance of the email sender class
   auto emailsender =
       std::make_shared<EmailSender>("36421f6eda2d39", "3f0572ee524be2");
@@ -41,9 +41,9 @@ int main() {
   // Create an instance of the ThreadHandler class
   auto thread_handler = std::make_shared<ThreadHandler>();
   // Register the drowsiness detection camera thread
-  auto drows = make_drowsy();
+  // auto drows = make_drowsy();
   // Start the camera thread
-  std::thread dr = std::thread(&DrowsinessDetector::run, drows.get());
+  // std::thread dr = std::thread(&DrowsinessDetector::run, drows.get());
   spdlog::info("started camera thread");
   // Register the MQ-3 gas sensor thread with email notifications
   thread_handler->register_mq3(make_mq3(emailsender));

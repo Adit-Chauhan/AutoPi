@@ -28,6 +28,7 @@ void LunaDriver::read_thread() {
   p_fd.fd = lidar.get_raw_fd();
   p_fd.events = POLLIN;
   p_fd.revents = 0;
+  spdlog::debug("Made polling fd");
   while (true) {
     //    if (check_data_type(&p_fd)) {
     //      // Flush If improper data
