@@ -43,6 +43,9 @@ class LunaPrintData : public LunaCallback {
  */
 class LunaTooClose : public LunaCallback {
 public:
+  LunaTooClose(std::shared_ptr<GPIOHandler> ptr) {
+    registerGPIOHandler(move(ptr));
+  }
   /**
    *   @brief Method that processes a sample received from the Luna sensor.
    *   @param sample Pointer to the sample data.
