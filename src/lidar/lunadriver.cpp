@@ -34,6 +34,7 @@ void LunaDriver::read_thread() {
   spdlog::info("Pollfd:: ptr = {}, fd = {}, event = {}, revents = {}",
                fmt::ptr(p_fd), p_fd->fd, p_fd->events, p_fd->revents);
   while (true) {
+    spdlog::trace("start of loop");
     //    if (check_data_type(p_fd.get())) {
     //      // Flush If improper data
     //      spdlog::error("Improper lidar Data");
