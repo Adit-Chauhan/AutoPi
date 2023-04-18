@@ -90,7 +90,7 @@ private:
 std::unique_ptr<LunaDriver> make_luna() {
   spdlog::info("LUNA:: Initilizing Luna");
   auto luna = std::make_unique<LunaDriver>();
-  std::unique_ptr<LunaTooClose> callback = std::make_unique<LunaTooClose>();
+  std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
   // callback->registerGPIOHandler(hand);
   luna->registerCallback(move(callback));
   if (callback == nullptr) {
