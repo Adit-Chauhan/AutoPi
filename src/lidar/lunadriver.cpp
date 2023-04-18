@@ -43,6 +43,8 @@ void LunaDriver::read_thread() {
     //      std::exit(42);
     //    }
     //    normal_data(p_fd.get());
+    spdlog::trace("Starting wait");
+
     wait_for_data(p_fd.get(), 9);
     lidar.read(normal_read_buffer.data(), 9);
     dataReady();
