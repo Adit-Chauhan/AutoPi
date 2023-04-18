@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <memory>
 #include <pigpio.h>
 #include <poll.h>
 #include <spdlog/spdlog.h>
@@ -24,12 +25,12 @@ void LunaDriver::dataReady() {
 }
 
 void LunaDriver::read_thread() {
-  struct pollfd p_fd;
-  p_fd.fd = lidar.get_raw_fd();
-  p_fd.events = POLLIN;
-  p_fd.revents = 0;
+  std::unique_ptr<pollfd> p_fd = std::make_unique<pollfd>();
+  p_fd->fd = lidar.get_raw_fd();
+  p_fd->events = POLLIN;
+  p_fd->revents = 0;
   while (true) {
-    if (check_data_type(&p_fd)) {
+    if (check_data_type(p_fd.get())) {
       // Flush If improper data
       spdlog::error("Improper lidar Data");
 #ifdef DBG_SLEEP
@@ -40,7 +41,7 @@ void LunaDriver::read_thread() {
 #endif
       std::exit(42);
     }
-    normal_data(&p_fd);
+    normal_data(p_fd.get());
     //   wait_for_data(&p_fd, 9);
     // lidar.read(normal_read_buffer.data(), 9);
     dataReady();
