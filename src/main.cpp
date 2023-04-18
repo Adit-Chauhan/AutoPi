@@ -33,13 +33,18 @@
 void no_fn(int signal) {}
 
 int main() {
+  spdlog ::set_level(spdlog::level::trace);
   if (gpioInitialise() < 0) {
     spdlog::error("pigpio initialization failed.");
     std::exit(42);
   }
   auto sender = std::make_shared<EmailSender>("", "");
 
-  spdlog ::set_level(spdlog::level::trace);
+  // Make mq3 sensor
+  auto driver = std::make_unique<mq3Driver>();
+  auto drunk = std::make_unique<isDrunk>(std::make_unique<DrunkEmail>(e));
+  driver->registerCallback(move(drunk));
+  driver->loop_for_10_sec();
   auto serve = std::make_unique<Server>();
   serve->register_callback_action("/hello", std::make_unique<ServerHello>());
   serve->run();
