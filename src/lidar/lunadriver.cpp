@@ -30,20 +30,21 @@ void LunaDriver::read_thread() {
   p_fd->events = POLLIN;
   p_fd->revents = 0;
   while (true) {
-    if (check_data_type(p_fd.get())) {
-      // Flush If improper data
-      spdlog::error("Improper lidar Data");
-#ifdef DBG_SLEEP
-      spdlog::error("Improper lidar Data:: {:x}  {:x}", normal_read_buffer[0],
-                    normal_read_buffer[1]);
-      sleep(1);
-      reset_luna();
-#endif
-      std::exit(42);
-    }
-    normal_data(p_fd.get());
-    //   wait_for_data(&p_fd, 9);
-    // lidar.read(normal_read_buffer.data(), 9);
+    //    if (check_data_type(p_fd.get())) {
+    //      // Flush If improper data
+    //      spdlog::error("Improper lidar Data");
+    //#ifdef DBG_SLEEP
+    //      spdlog::error("Improper lidar Data:: {:x}  {:x}",
+    //      normal_read_buffer[0],
+    //                    normal_read_buffer[1]);
+    //      sleep(1);
+    //      reset_luna();
+    //#endif
+    //      std::exit(42);
+    //    }
+    //    normal_data(p_fd.get());
+    wait_for_data(p_fd.get(), 9);
+    lidar.read(normal_read_buffer.data(), 9);
     dataReady();
   }
 }
