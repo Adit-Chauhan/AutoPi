@@ -36,26 +36,12 @@ void LunaDriver::read_thread() {
                fmt::ptr(p_fd), p_fd->fd, p_fd->events, p_fd->revents);
   while (true) {
     spdlog::trace("start of loop");
-    //    if (check_data_type(p_fd.get())) {
-    //      // Flush If improper data
-    //      spdlog::error("Improper lidar Data");
-    //#ifdef DBG_SLEEP
-    //      spdlog::error("Improper lidar Data:: {:x}  {:x}",
-    //      normal_read_buffer[0],
-    //                    normal_read_buffer[1]);
-    //      sleep(1);
-    //      reset_luna();
-    //#endif
-    //      std::exit(42);
-    //    }
-    //    normal_data(p_fd.get());
-    // spdlog::trace("Starting wait");
-    //    wait_for_data(p_fd, 9);
-    //    spdlog::info(
-    //        "Pollfd after wait:: ptr = {}, fd = {}, event = {}, revents = {}",
-    //        fmt::ptr(p_fd), p_fd->fd, p_fd->events, p_fd->revents);
-
-    lidar.read(normal_read_buffer, 9);
+    if (check_data_type(p_fd)) {
+      // Flush If improper data
+      spdlog::error("Improper lidar Data");
+      std::exit(42);
+    }
+    normal_data(p_fd);
     dataReady();
   }
 }
@@ -76,10 +62,6 @@ int LunaDriver::check_data_type(pollfd *p_fd) {
     return arr[1]; // Return next read size
   }
   spdlog::debug("Found error");
-#ifdef DBG_SLEEP
-  normal_read_buffer[0] = arr[0];
-  normal_read_buffer[1] = arr[1];
-#endif       // DBG_SLEEP
   return -1; // Error
 }
 
