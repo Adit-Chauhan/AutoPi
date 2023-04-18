@@ -1,12 +1,20 @@
 #+title: AutoPi
+[[./logo1.jpg]]
 
 *AutoPi* is a driving assistance project that helps in you drive safely.
 This project aims to provide an ultimate safety companion for your ride using an embedded system that combines drowsiness detection, alcohol detection, and Lidar technology to keep you and others safe on the road. The system detects whether the driver is intoxicated or sleepy and sends an alert to their loved ones for their protection.
 
 The project utilizes smart technology to enhance road safety and prevent accidents caused by drunk or drowsy driving. The code for this project is available on GitHub, and we encourage developers to contribute and make the roads safer for everyone.
 
-* Contributors
+* Dependencies
+  To build the AutoPi , you need the following dependencies: 
+  1. CMake()
+  2. OpenCV()
+  3. pigpio
+  4. Gtest
 
+* Hardware Schematic 
+ [[./githubproject .jpg]]
 
 
 * Build Instructions
@@ -15,17 +23,18 @@ Install meson and ninja for building
 #+end_quote
 
 #+begin_src bash
-meson setup build
+mkdir build
 cd build
-# to complile project run
-meson compile
-# to run tests run
-meson test
+cmake ..
+make
+sudo ./Autopi
 #+end_src
 
+* Future Scope And Limitations 
+As a future scope, the code for sending emails using SMTP is currently compiling without any errors, but the mail is not being sent properly due to incorrect SMTP username and password. The issue is being investigated, and the plan is to find the correct SMTP credentials and update the code accordingly. This will ensure that the code can send emails successfully using SMTP. 
 
 * Follow us on
 #+begin_quote
-[[https://instagram.com/aut_opi][Instagram]]: AutoPi 
+[[https://instagram.com/aut_opi][Instagram]]: AutoPi
 #+end_quote
 

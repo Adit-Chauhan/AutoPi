@@ -1,20 +1,17 @@
-//#include "utils/server.h"
-//#include <spdlog/spdlog.h>
-//#include <string>
-// class HelloResp : public serverCallback {
-//  void serverAction() { spdlog::info("Running Hello Resp"); }
-//};
-//
-// class DateResp : public serverCallback {
-//  void serverAction() { spdlog::info("Running Date Resp"); }
-//};
+/**
+    @file main.cpp
+    @brief The main entry point of the application.
+    */
+#include "Email/email.h"
 #include "lidar/lunadriver.h"
 #include "mq3/mq3Driver.h"
 #include "mq3/mq3sensor.h"
 #include "pigpio.h"
-#include "utils/server.h"
+#include "utils/gpio_callbacks.h"
+#include "utils/thread_handler.h"
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <memory>
@@ -23,17 +20,21 @@
 #include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
+/**
 
-class HelloResp : public serverCallback {
-  void serverAction() { spdlog::info("Running Hello Resp"); }
-};
+    @brief The main entry point of the application.
+    The function creates instances of required classes and starts the server.
+    @return The exit status code of the application.
+    */
 
 class LunaPrintData : public LunaCallback {
   void hasSample(uint8_t *sample) {
     std::array<uint8_t, 9> array;
     std::copy(sample, sample + 9, array.begin());
-
-    spdlog::debug("Data :: {}", spdlog::to_hex(array));
+    uint16_t dist = array[3];
+    dist = dist << 8;
+    dist |= array[2];
+    spdlog::debug("Data :: {}, Distance = {}", spdlog::to_hex(array), dist);
   }
 };
 
@@ -56,22 +57,11 @@ class isDrunk : public mq3Callback {
 };
 
 int main() {
-  spdlog::set_level(spdlog::level::debug);
+  spdlog::set_level(spdlog::level::trace);
   if (gpioInitialise() < 0) {
     spdlog::error("pigpio initialization failed.");
-    return 1;
+    std::exit(42);
   }
-  //  mq3Driver driver;
-  //  isDrunk *drunk = new isDrunk();
-  //  driver.registerCallback(drunk);
-  //
-  //  spdlog::info("Hello mq3");
-  //  for (int i = 21; i > 0; i--) {
-  //    sleep(1);
-  //    driver.dataReady();
-  //  }
-  //  spdlog::info("bye mq3");
-
   LunaDriver luna;
   std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
   luna.registerCallback(move(callback));

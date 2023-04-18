@@ -1,9 +1,10 @@
 #include "server.h"
-#include <arpa/inet.h>     // for htons
-#include <cerrno>          // for errno
-#include <cstring>         // for strlen, strtok, strerror, NULL
-#include <exception>       // for exception
-#include <fmt/core.h>      // for basic_string_view, format, vformat_to
+#include <arpa/inet.h> // for htons
+#include <cerrno>      // for errno
+#include <cstring>     // for strlen, strtok, strerror, NULL
+#include <exception>   // for exception
+#include <fmt/core.h>  // for basic_string_view, format, vformat_to
+#include <memory>
 #include <netinet/in.h>    // for sockaddr_in, INADDR_ANY, in_addr
 #include <spdlog/spdlog.h> // for error, info
 #include <string>          // for string, basic_string, hash, operator==
@@ -62,9 +63,9 @@ void Server::run() {
   }
 }
 
-void Server::register_callback_action(std::string api_route,
-                                      serverCallback *callbackAction) {
-  routs.insert({api_route, callbackAction});
+void Server::register_callback_action(
+    std::string api_route, std::unique_ptr<serverCallback> callbackAction) {
+  routs.insert({api_route, move(callbackAction)});
 }
 
 void Server::handle_call(int client_socket) {
@@ -78,14 +79,13 @@ void Server::handle_call(int client_socket) {
 
   // Execute different commands based on the accessed URL
 
-  serverCallback *action = routs[path];
-  if (action == NULL) {
+  if (routs[path] == NULL) {
     const char *response =
         "HTTP/1.1 404 Not Found\nContent-Type: text/plain\n\n404 Not Found";
     write(client_socket, response, strlen(response));
   } else {
 
-    action->serverAction();
+    routs[path]->serverAction();
     const char *response =
         "HTTP/1.1 200 OK\nContent-Type: text/plain\n\n200 OK";
     write(client_socket, response, strlen(response));
