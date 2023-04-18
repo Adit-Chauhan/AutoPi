@@ -45,13 +45,13 @@ int main() {
   // Create an instance of the ThreadHandler class
   auto thread_handler = std::make_shared<ThreadHandler>();
   // Register the drowsiness detection camera thread
-  thread_handler->register_cam(make_drowsy());
+  // thread_handler->register_cam(make_drowsy());
   // Register the MQ-3 gas sensor thread with email notifications
-  thread_handler->register_mq3(make_mq3(emailsender));
+  // thread_handler->register_mq3(make_mq3(emailsender));
   // Create an instance of the LunaDriver class
   auto luna = make_luna();
   // Start the camera thread
-  thread_handler->start_camera();
+  //  thread_handler->start_camera();
   // Create an instance of the server class
   auto serv = make_server(thread_handler, emailsender);
   // Start the server
