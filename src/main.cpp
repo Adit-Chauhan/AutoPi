@@ -140,10 +140,10 @@ public:
 
 int main() {
   spdlog::set_level(spdlog::level::trace);
-  if (gpioInitialise() < 0) {
-    spdlog::error("pigpio initialization failed.");
-    std::exit(42);
-  }
+  //  if (gpioInitialise() < 0) {
+  //    spdlog::error("pigpio initialization failed.");
+  //    std::exit(42);
+  //  }
   spdlog::info("Initialised gpio");
   auto email_sender =
       std::make_shared<EmailSender>("36421f6eda2d39", "3f0572ee524be2");
