@@ -1,0 +1,3 @@
+[submodule "smtp_easy"]
+	path = smtp_easy
+	url = https://github.com/IgorMoiseev1988/smtp_easy.git
