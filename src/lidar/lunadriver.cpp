@@ -25,7 +25,8 @@ void LunaDriver::dataReady() {
 }
 
 void LunaDriver::read_thread() {
-  std::unique_ptr<pollfd> p_fd = std::make_unique<pollfd>();
+  // Cause a mem leak
+  pollfd *p_fd = new pollfd;
   p_fd->fd = lidar.get_raw_fd();
   p_fd->events = POLLIN;
   p_fd->revents = 0;
@@ -45,7 +46,7 @@ void LunaDriver::read_thread() {
     //    normal_data(p_fd.get());
     spdlog::trace("Starting wait");
 
-    wait_for_data(p_fd.get(), 9);
+    wait_for_data(p_fd, 9);
     lidar.read(normal_read_buffer.data(), 9);
     dataReady();
   }
