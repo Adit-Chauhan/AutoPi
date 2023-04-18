@@ -11,6 +11,7 @@
 #ifndef LUNA_INIT_H_
 #define LUNA_INIT_H_
 #include "../lidar/lunadriver.h"
+#include <array>
 #include <cstdint>
 #include <memory>
 #include <pigpio.h>
@@ -54,6 +55,9 @@ public:
         pinSet = false;
       return;
     }
+    std::array<uint8_t, 9> arr;
+    std::copy(sample, sample + 9, arr.begin());
+    spdlog::debug("LIDAR:: {}", spdlog::to_hex(arr));
     if (handle == nullptr) {
       spdlog::debug("handle not set");
     }
