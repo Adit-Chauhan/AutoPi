@@ -29,7 +29,9 @@ class LunaPrintData : public LunaCallback {
   */
   void hasSample(uint8_t *sample) {
     std::array<uint8_t, 9> array;
+    spdlog::trace("Made array");
     std::copy(sample, sample + 9, array.begin());
+    spdlog::trace("copy sample");
     uint16_t dist = array[3];
     dist = dist << 8;
     dist = dist | array[2];
