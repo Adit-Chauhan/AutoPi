@@ -50,6 +50,7 @@ int main() {
   // thread_handler->register_mq3(make_mq3(emailsender));
   // Create an instance of the LunaDriver class
   auto luna = make_luna();
+  spdlog::info("Made luna");
   // Start the camera thread
   //  thread_handler->start_camera();
   // Create an instance of the server class
