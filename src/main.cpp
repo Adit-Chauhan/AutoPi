@@ -49,7 +49,7 @@ int main() {
   // Register the MQ-3 gas sensor thread with email notifications
   thread_handler->register_mq3(make_mq3(emailsender));
   // Create an instance of the LunaDriver class
-  auto luna = make_luna(gpio);
+  auto luna = make_luna();
   // Start the camera thread
   thread_handler->start_camera();
   // Create an instance of the server class
