@@ -42,8 +42,8 @@ int main() {
 
   // Make mq3 sensor
   auto driver = std::make_unique<mq3Driver>();
-  auto drunk = std::make_unique<isDrunk>(std::make_unique<DrunkEmail>(e));
-  driver->registerCallback(move(drunk));
+  auto drunk = std::make_unique<isDrunk>(std::make_unique<DrunkEmail>(sender));
+  driver->registerCallback(std::move(drunk));
   driver->loop_for_10_sec();
   auto serve = std::make_unique<Server>();
   serve->register_callback_action("/hello", std::make_unique<ServerHello>());
