@@ -13,6 +13,7 @@
 #include "../lidar/lunadriver.h"
 #include <cstdint>
 #include <memory>
+#include <pigpio.h>
 #include <spdlog/fmt/bin_to_hex.h>
 #include <spdlog/spdlog.h>
 /**
@@ -47,13 +48,17 @@ public:
    *   @param sample Pointer to the sample data.
    */
   void hasSample(uint8_t *sample) {
+    spdlog::debug("Got sample");
     if (get_dist(sample) > 10) {
       if (pinSet)
         pinSet = false;
       return;
     }
+    if (handle == nullptr) {
+      spdlog::debug("handle not set");
+    }
     if (!pinSet)
-      handle->set(pin);
+      gpioWrite(pin, 1);
   }
 
 private:
@@ -78,11 +83,11 @@ private:
  *  callback function.
  *   @return A unique pointer to the initialized Luna driver object.
  */
-std::unique_ptr<LunaDriver> make_luna(std::shared_ptr<GPIOHandler> hand) {
+std::unique_ptr<LunaDriver> make_luna() {
   spdlog::info("LUNA:: Initilizing Luna");
   auto luna = std::make_unique<LunaDriver>();
   std::unique_ptr<LunaTooClose> callback = std::make_unique<LunaTooClose>();
-  callback->registerGPIOHandler(hand);
+  // callback->registerGPIOHandler(hand);
   luna->registerCallback(move(callback));
   if (callback == nullptr) {
     spdlog::info("LUNA:: Callback Moved Successfully");

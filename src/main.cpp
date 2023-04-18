@@ -30,13 +30,18 @@
     @return The exit status code of the application.
     */
 int main() {
+  if (gpioInitialise() < 0) {
+    spdlog::error("pigpio initialization failed.");
+    std::exit(42);
+  }
+  spdlog::info("init gpio");
   // Set log level to info
-  spdlog::set_level(spdlog::level::info);
+  spdlog::set_level(spdlog::level::debug);
   // Create an instance of the email sender class
   auto emailsender =
       std::make_shared<EmailSender>("36421f6eda2d39", "3f0572ee524be2");
   // Create an instance of the GPIOHandler class
-  auto gpio = std::make_shared<GPIOHandler>();
+  // auto gpio = std::make_shared<GPIOHandler>();
   // Create an instance of the ThreadHandler class
   auto thread_handler = std::make_shared<ThreadHandler>();
   // Register the drowsiness detection camera thread
