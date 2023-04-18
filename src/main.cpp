@@ -28,6 +28,78 @@
  *   @return The exit status code of the application.
  */
 
+class DrunkCallback : public emailCallback {
+public:
+  /**
+   *   @brief Construct a new DrunkCallback object.
+   *   @param sender A shared pointer to an EmailSender object.
+   */
+  DrunkCallback(std::shared_ptr<EmailSender> sender) : emailCallback(sender){};
+  /**
+   *   @brief Sends an email alert to a friend in case the driver is drunk.
+   *   This function sends an email with the subject "Driver is drunk" and the
+   * message "Please take appropriate action." using the EmailSender object
+   * passed to the constructor. It also logs a message using spdlog::info().
+   *   @see emailCallback::send_email()
+   */
+  void send_email() override {
+    std::string subject = "Driver is drunk";
+    std::string body = "Please take appropriate action.";
+    m_sender->sendEmails(subject, body);
+    spdlog::info("Drunk email sent to friend.");
+  }
+};
+
+/**
+ *   @brief The SleepyCallback class is used to send an email alert to a friend
+ * in case the driver is drowsy.
+ *   @see emailCallback
+ */
+class SleepyCallback : public emailCallback {
+public:
+  /**
+   *     @brief Construct a new SleepyCallback object.
+   *     @param sender A shared pointer to an EmailSender object.
+   */
+  SleepyCallback(std::shared_ptr<EmailSender> sender) : emailCallback(sender){};
+  /**
+   *   @brief Sends an email alert to a friend in case the driver is drowsy.
+   *   This function sends an email with the subject "Driver is drowsy" and the
+   * message "Please take appropriate action." using the EmailSender object
+   * passed to the constructor. It also logs a message using spdlog::info().
+   *   @see emailCallback::send_email()
+   */
+  void send_email() override {
+    std::string subject = "Driver is drowsy";
+    std::string body = "Please take appropriate action.";
+    m_sender->sendEmails(subject, body);
+    spdlog::info("Drowsy Email sent");
+  }
+};
+
+class ServerExampleCallback : public emailCallback {
+public:
+  /**
+   *     @brief Construct a new SleepyCallback object.
+   *     @param sender A shared pointer to an EmailSender object.
+   */
+  ServerExampleCallback(std::shared_ptr<EmailSender> sender)
+      : emailCallback(sender){};
+  /**
+   *   @brief Sends an email alert to a friend in case the driver is drowsy.
+   *   This function sends an email with the subject "Driver is drowsy" and the
+   * message "Please take appropriate action." using the EmailSender object
+   * passed to the constructor. It also logs a message using spdlog::info().
+   *   @see emailCallback::send_email()
+   */
+  void send_email() override {
+    std::string subject = "Test Email";
+    std::string body = "Email sent from server as a test";
+    m_sender->sendEmails(subject, body);
+    spdlog::info("Test Email sent");
+  }
+};
+
 class LunaPrintData : public LunaCallback {
   void hasSample(uint8_t *sample) {
     std::array<uint8_t, 9> array;
@@ -45,17 +117,23 @@ class LunaPrintData : public LunaCallback {
 class isDrunk : public mq3Callback {
   int count_over_20 = 0;
   bool stopCount = false;
+  std::unique_ptr<emailCallback> m;
+
+public:
+  isDrunk(std::unique_ptr<emailCallback> mail) : m(move(mail)) {}
   void hasSample(float sample) {
     if (stopCount)
       return;
-    spdlog::info("Sample {}", sample);
-    if (sample < 20) {
+
+    spdlog::debug("Sample {}", sample);
+    if (sample > 20) {
       count_over_20++;
     }
-    if (count_over_20 > 10) {
+    if (count_over_20 > 1500) {
       stopCount = true;
       // Reshmi's email call back
-      spdlog::info("send email");
+      m->send_email();
+      spdlog::info("sent email");
     }
   }
 };
@@ -66,12 +144,25 @@ int main() {
     spdlog::error("pigpio initialization failed.");
     std::exit(42);
   }
+  spdlog::info("Initialised gpio");
+  auto email_sender =
+      std::make_shared<EmailSender>("36421f6eda2d39", "3f0572ee524be2");
+  auto drunk_email = std::make_unique<DrunkCallback>(email_sender);
+  auto sleepy_email = std::make_unique<SleepyCallback>(email_sender);
+  auto serv_email = std::make_unique<ServerExampleCallback>(email_sender);
+  spdlog::info("Initialised email callbacks");
+
+  auto mq3 = std::make_shared<mq3Driver>();
+  auto drunkCallback = std::make_unique<isDrunk>(move(drunk_email));
+  mq3->registerCallback(move(drunkCallback));
+  spdlog::info("Initialised mq3 sensor");
+
   LunaDriver luna;
   std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
   luna.registerCallback(move(callback));
   std::thread lunaRead = luna.start_read_thread();
 
-while (true) {
+  while (true) {
     sleep(1);
   }
   return 0;
