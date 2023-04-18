@@ -9,7 +9,7 @@
 #include <termios.h>           // for termios, cfmakeraw, cfsetispeed, cfse...
 #include <unistd.h>            // for read, usleep
 
-#define FLUSH_ALL_READ
+//#define FLUSH_ALL_READ
 
 Serial::Serial(const char *fname, termios *config) {
   g_fd = open(fname, O_RDWR | O_NONBLOCK | O_NOCTTY);
