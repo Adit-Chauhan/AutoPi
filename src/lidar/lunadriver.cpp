@@ -30,6 +30,8 @@ void LunaDriver::read_thread() {
   p_fd->fd = lidar.get_raw_fd();
   p_fd->events = POLLIN;
   p_fd->revents = 0;
+  spdlog::info("Pollfd:: ptr = {}, fd = {}, event = {}, revents = {}", p_fd,
+               p_fd->fd, p_fd->events, p_fd->revents);
   while (true) {
     //    if (check_data_type(p_fd.get())) {
     //      // Flush If improper data
@@ -46,6 +48,10 @@ void LunaDriver::read_thread() {
     //    normal_data(p_fd.get());
     spdlog::trace("Starting wait");
     wait_for_data(p_fd, 9);
+    spdlog::info(
+        "Pollfd after wait:: ptr = {}, fd = {}, event = {}, revents = {}", p_fd,
+        p_fd->fd, p_fd->events, p_fd->revents);
+
     lidar.read(normal_read_buffer.data(), 9);
     dataReady();
   }
@@ -84,6 +90,10 @@ void LunaDriver::registerCallback(std::unique_ptr<LunaCallback> fn) {
 
 void LunaDriver::wait_for_data(pollfd *p_fd, uint8_t num_bytes) {
   int bytes_available;
+  spdlog::info(
+      "Pollfd before wait:: ptr = {}, fd = {}, event = {}, revents = {}", p_fd,
+      p_fd->fd, p_fd->events, p_fd->revents);
+
   while (bytes_available < num_bytes) {
     spdlog::trace("Runing poll");
     int check = poll(p_fd, 1, -1);
@@ -92,8 +102,10 @@ void LunaDriver::wait_for_data(pollfd *p_fd, uint8_t num_bytes) {
     }
     ioctl(p_fd->fd, FIONREAD, &bytes_available);
     spdlog::trace("Number of bytes {}", bytes_available);
+    spdlog::info(
+        "Pollfd during wait:: ptr = {}, fd = {}, event = {}, revents = {}",
+        p_fd, p_fd->fd, p_fd->events, p_fd->revents);
   }
-  return;
 }
 
 void LunaDriver::normal_data(pollfd *p_fd) {
