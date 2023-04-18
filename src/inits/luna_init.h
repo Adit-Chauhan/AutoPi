@@ -52,7 +52,7 @@ public:
     std::array<uint8_t, 9> arr;
     std::copy(sample, sample + 9, arr.begin());
     spdlog::debug("LIDAR:: {}", spdlog::to_hex(arr));
-    if (get_dist(sample) > 10) {
+    if (get_dist(arr[2], arr[3]) > 10) {
       if (pinSet)
         pinSet = false;
       return;
@@ -74,10 +74,10 @@ private:
    * @param sample Pointer to the sample data.
    * @return The distance measurement extracted from the sample data.
    */
-  inline uint16_t get_dist(uint8_t *sample) {
-    uint16_t dist = sample[3];
+  inline uint16_t get_dist(uint8_t low, uint8_t high) {
+    uint16_t dist = high;
     dist = dist << 8;
-    dist |= sample[2];
+    dist |= low;
     return dist;
   }
 };
