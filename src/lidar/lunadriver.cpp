@@ -23,6 +23,7 @@ void LunaDriver::dataReady() {
     return;
   }
   callback->hasSample(normal_read_buffer);
+  spdlog::trace("exiting Data ready");
 }
 
 void LunaDriver::read_thread() {
