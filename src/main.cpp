@@ -65,8 +65,9 @@ int main() {
   LunaDriver luna;
   std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
   luna.registerCallback(move(callback));
-  luna.start_read_thread();
-  while (1) {
+
+  std::thread lunaRead = luna.start_read_thread();
+  while (true) {
     sleep(1);
   }
   return 0;
