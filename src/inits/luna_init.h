@@ -95,8 +95,8 @@ private:
 std::unique_ptr<LunaDriver> make_luna(std::shared_ptr<GPIOHandler> hand) {
   spdlog::info("LUNA:: Initilizing Luna");
   auto luna = std::make_unique<LunaDriver>();
-  std::unique_ptr<LunaTooClose> callback = std::make_unique<LunaTooClose>();
-  callback->registerGPIOHandler(hand);
+  std::unique_ptr<LunaTooClose> callback = std::make_unique<LunaTooClose>(hand);
+  // callback->registerGPIOHandler(hand);
   luna->registerCallback(move(callback));
   if (callback == nullptr) {
     spdlog::info("LUNA:: Callback Moved Successfully");
