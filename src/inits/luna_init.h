@@ -59,6 +59,10 @@ public:
     std::array<uint8_t, 9> arr;
     std::copy(sample, sample + 9, arr.begin());
     spdlog::debug("LIDAR :: {}", spdlog::to_hex(arr));
+    if (handle == nullptr) {
+      spdlog::debug("No handle");
+      return;
+    }
     if (!pinSet)
       handle->set(pin);
   }
