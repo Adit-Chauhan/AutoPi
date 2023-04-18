@@ -57,11 +57,11 @@ public:
         pinSet = false;
       return;
     }
-    if (handle == nullptr) {
-      spdlog::debug("handle not set");
-    }
-    if (!pinSet)
-      ;
+    //    if (handle == nullptr) {
+    //      spdlog::debug("handle not set");
+    //    }
+    //    if (!pinSet)
+    //      ;
     //  gpioWrite(pin, 1);
   }
 
