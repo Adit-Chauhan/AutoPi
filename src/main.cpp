@@ -152,10 +152,10 @@ int main() {
   auto serv_email = std::make_unique<ServerExampleCallback>(email_sender);
   spdlog::info("Initialised email callbacks");
 
-  auto mq3 = std::make_shared<mq3Driver>();
-  auto drunkCallback = std::make_unique<isDrunk>(move(drunk_email));
-  mq3->registerCallback(move(drunkCallback));
-  spdlog::info("Initialised mq3 sensor");
+  //  auto mq3 = std::make_shared<mq3Driver>();
+  //  auto drunkCallback = std::make_unique<isDrunk>(move(drunk_email));
+  //  mq3->registerCallback(move(drunkCallback));
+  //  spdlog::info("Initialised mq3 sensor");
 
   LunaDriver luna;
   std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
