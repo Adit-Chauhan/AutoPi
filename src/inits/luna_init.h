@@ -94,19 +94,5 @@ private:
  *  callback function.
  *   @return A unique pointer to the initialized Luna driver object.
  */
-std::unique_ptr<LunaDriver> make_luna() {
-  spdlog::info("LUNA:: Initilizing Luna");
-  auto luna = std::make_unique<LunaDriver>();
-  std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
-  // callback->registerGPIOHandler(hand);
-  luna->registerCallback(move(callback));
-  if (callback == nullptr) {
-    spdlog::info("LUNA:: Callback Moved Successfully");
-  }
-
-  std::thread lunaRead = luna->start_read_thread();
-  spdlog::info("LUNA:: Started Read Thread");
-  return luna;
-}
 
 #endif // LUNA_INIT_H_
