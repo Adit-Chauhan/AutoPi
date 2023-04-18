@@ -47,11 +47,11 @@ void LunaDriver::read_thread() {
     //      std::exit(42);
     //    }
     //    normal_data(p_fd.get());
-    spdlog::trace("Starting wait");
-    wait_for_data(p_fd, 9);
-    spdlog::info(
-        "Pollfd after wait:: ptr = {}, fd = {}, event = {}, revents = {}",
-        fmt::ptr(p_fd), p_fd->fd, p_fd->events, p_fd->revents);
+    // spdlog::trace("Starting wait");
+    //    wait_for_data(p_fd, 9);
+    //    spdlog::info(
+    //        "Pollfd after wait:: ptr = {}, fd = {}, event = {}, revents = {}",
+    //        fmt::ptr(p_fd), p_fd->fd, p_fd->events, p_fd->revents);
 
     lidar.read(normal_read_buffer.data(), 9);
     dataReady();
