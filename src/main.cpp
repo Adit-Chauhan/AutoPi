@@ -15,6 +15,7 @@
 #include "utils/server.h"
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <memory>
@@ -32,8 +33,10 @@ class LunaPrintData : public LunaCallback {
   void hasSample(uint8_t *sample) {
     std::array<uint8_t, 9> array;
     std::copy(sample, sample + 9, array.begin());
-
-    spdlog::debug("Data :: {}", spdlog::to_hex(array));
+    uint16_t dist = array[3];
+    dist = dist << 8;
+    dist |= array[2];
+    spdlog::debug("Data :: {}, Distance = {}", spdlog::to_hex(array), dist);
   }
 };
 
