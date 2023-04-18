@@ -34,7 +34,7 @@
 void no_fn(int signal) {}
 
 int main() {
-  signal(SIGBUS, no_fn);
+  signal(7, no_fn);
   signal(11, no_fn);
 
   if (gpioInitialise() < 0) {
