@@ -11,6 +11,7 @@
 #ifndef LUNA_INIT_H_
 #define LUNA_INIT_H_
 #include "../lidar/lunadriver.h"
+#include <algorithm>
 #include <cstdint>
 #include <memory>
 #include <spdlog/fmt/bin_to_hex.h>
@@ -52,6 +53,9 @@ public:
         pinSet = false;
       return;
     }
+    std::array<uint8_t, 9> arr;
+    std::copy(sample, sample + 9, arr.begin());
+    spdlog::debug("LIDAR :: {}", spdlog::to_hex(arr));
     if (!pinSet)
       handle->set(pin);
   }
