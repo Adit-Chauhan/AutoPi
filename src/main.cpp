@@ -37,7 +37,9 @@ int main() {
     spdlog::error("pigpio initialization failed.");
     std::exit(42);
   }
-  spdlog::set_level(spdlog::level::trace);
+  auto sender = std::make_shared<EmailSender>("", "");
+
+  spdlog ::set_level(spdlog::level::trace);
   auto serve = std::make_unique<Server>();
   serve->register_callback_action("/hello", std::make_unique<ServerHello>());
   serve->run();
