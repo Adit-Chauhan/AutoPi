@@ -6,11 +6,13 @@
 #ifndef DROWSINESS_DETECTOR_H
 #define DROWSINESS_DETECTOR_H
 
+#include "../Email/email.h"
 #include <ctime>
+#include <memory>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/objdetect.hpp>
-
+#include <utility>
 /**
  *    @brief The DrowsinessDetector class is used for detecting drowsiness in
  * drivers.
@@ -38,6 +40,13 @@ public:
    */
   void stop() { stop_capture = true; };
 
+  /**
+   *   @brief registers new email callback
+   */
+  void register_callback(std::unique_ptr<emailCallback> mail) {
+    callback = std::move(mail);
+  }
+
 private:
   cv::CascadeClassifier face_cascade; //!< The face cascade used for detecting
                                       //!< faces in the frames.
@@ -50,6 +59,7 @@ private:
   bool cascades_loaded; //!<  Whether the cascades have been successfully loaded
                         //!<  or not.
   bool stop_capture = false; //!<  Whether to stop capturing frames or not.
+  std::unique_ptr<emailCallback> callback; //!< Email Callback
 
   /**
    * @brief Detects and displays the eyes in a
