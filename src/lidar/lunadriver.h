@@ -62,9 +62,7 @@ public:
   }
 
 private:
-  std::array<uint8_t, 9> *normal_read_buffer =
-      new std::array<uint8_t,
-                     9>(); //!< stores the read value from normal read operation
+  uint8_t normal_read_buffer[9];
   std::vector<uint8_t>
       other_read_buffer; //!< future proofing stores values for 0x5A header
                          //!< results, currently unused
