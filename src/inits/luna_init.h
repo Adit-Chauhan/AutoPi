@@ -28,14 +28,13 @@ class LunaPrintData : public LunaCallback {
     @param sample A pointer to the sample data.
   */
   void hasSample(uint8_t *sample) {
-    std::array<uint8_t, 9> array;
     spdlog::trace("Made array");
-    std::copy(sample, sample + 9, array.begin());
-    spdlog::trace("copy sample");
-    uint16_t dist = array[3];
+    uint16_t dist = *(sample + 3);
+    spdlog::trace("accessed sample 3");
     dist = dist << 8;
-    dist = dist | array[2];
-    spdlog::debug("LIDAR:: {} , Data:: {}", spdlog::to_hex(array), dist);
+    dist = dist | *(sample + 2);
+    spdlog::trace("accessed sample 2");
+    spdlog::debug("Data:: {}", dist);
   }
 };
 
