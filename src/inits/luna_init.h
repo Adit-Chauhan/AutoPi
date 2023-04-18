@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <memory>
+#include <pigpio.h>
 #include <spdlog/fmt/bin_to_hex.h>
 #include <spdlog/spdlog.h>
 /**
@@ -63,8 +64,10 @@ public:
       spdlog::debug("No handle");
       return;
     }
-    if (!pinSet)
-      handle->set(pin);
+    if (!pinSet) {
+      gpioWrite(pin, 1);
+      pinSet = true;
+    }
   }
 
 private:
