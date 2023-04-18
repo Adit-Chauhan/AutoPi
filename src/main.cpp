@@ -9,6 +9,7 @@
 #include "mq3/mq3sensor.h"
 #include "pigpio.h"
 #include "utils/gpio_callbacks.h"
+#include "utils/server.h"
 #include "utils/thread_handler.h"
 #include <algorithm>
 #include <array>
@@ -139,6 +140,36 @@ public:
   }
 };
 
+class ServerHello : public serverCallback {
+public:
+  void serverAction() { spdlog::info("Hello From Server Action"); }
+};
+
+class ServerEmail : public serverCallback {
+public:
+  ServerEmail(std::unique_ptr<emailCallback> email) : callback(move(email)) {}
+  void serverAction() {
+    callback->send_email();
+    spdlog::info("sent email");
+  }
+
+private:
+  std::unique_ptr<emailCallback> callback;
+};
+
+class ServerRunDrunkTest : public serverCallback {
+public:
+  ServerRunDrunkTest(std::shared_ptr<mq3Driver> driver) : sensor(driver) {}
+  void serverAction() {
+    std::thread run_test =
+        std::thread(&mq3Driver::loop_for_10_sec, sensor.get());
+    spdlog::info("Started Manual Drink test");
+  }
+
+private:
+  std::shared_ptr<mq3Driver> sensor;
+};
+
 int main() {
   spdlog::set_level(spdlog::level::trace);
   if (gpioInitialise() < 0) {
@@ -158,9 +189,9 @@ int main() {
   mq3->registerCallback(move(drunkCallback));
   spdlog::info("Initialised mq3 sensor");
 
-  auto cam = std::unique_ptr<DrowsinessDetector>();
-  cam->register_callback(move(sleepy_email));
-  spdlog::info("Initialised Camera");
+  // auto cam = std::unique_ptr<DrowsinessDetector>();
+  // cam->register_callback(move(sleepy_email));
+  // spdlog::info("Initialised Camera");
 
   LunaDriver luna;
   std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
@@ -168,10 +199,16 @@ int main() {
   spdlog::info("Initialised Lidar");
 
   std::thread lunaRead = luna.start_read_thread();
-  std::thread camThread = std::thread(&DrowsinessDetector::run, cam.get());
+  //  std::thread camThread = std::thread(&DrowsinessDetector::run, cam.get());
   spdlog::info("started threads");
-  while (true) {
-    sleep(1);
-  }
+  auto serv = std::make_unique<Server>();
+  serv->register_callback_action("/hello", std::make_unique<ServerHello>());
+  serv->register_callback_action(
+      "/email", std::make_unique<ServerEmail>(move(serv_email)));
+  serv->register_callback_action("/DrunkTest",
+                                 std::make_unique<ServerRunDrunkTest>(mq3));
+  spdlog::info("register servers");
+
+  serv->run();
   return 0;
 }
