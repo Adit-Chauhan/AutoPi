@@ -38,9 +38,6 @@ int main() {
     std::exit(42);
   }
   spdlog::set_level(spdlog::level::trace);
-  auto luna = std::make_unique<LunaDriver>();
-  luna->registerCallback(std::make_unique<LunaPrintData>());
-  luna->start_read_thread();
   auto serve = std::make_unique<Server>();
   serve->register_callback_action("/hello", std::make_unique<ServerHello>());
   serve->run();
