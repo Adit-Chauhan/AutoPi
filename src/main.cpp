@@ -37,7 +37,7 @@ int main() {
     spdlog::error("pigpio initialization failed.");
     std::exit(42);
   }
-
+  spdlog::set_level(spdlog::level::debug);
   auto luna = std::make_unique<LunaDriver>();
   luna->registerCallback(std::make_unique<LunaPrintData>());
   luna->start_read_thread();
