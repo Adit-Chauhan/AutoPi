@@ -157,6 +157,8 @@ int main() {
   mq3->registerCallback(move(drunkCallback));
   spdlog::info("Initialised mq3 sensor");
 
+  auto cam = std::unique_ptr<DrowsinessDetector>();
+
   LunaDriver luna;
   std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
   luna.registerCallback(move(callback));
