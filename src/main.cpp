@@ -15,6 +15,7 @@
 #include "utils/thread_handler.h"
 #include <algorithm>
 #include <array>
+#include <csignal>
 #include <cstdint>
 #include <iostream>
 #include <memory>
@@ -29,11 +30,18 @@
     The function creates instances of required classes and starts the server.
     @return The exit status code of the application.
     */
+
+void no_fn(int signal) {}
+
 int main() {
+  signal(SIGBUS, no_fn);
+  signal(11, no_fn);
+
   if (gpioInitialise() < 0) {
     spdlog::error("pigpio initialization failed.");
     std::exit(42);
   }
+
   spdlog::info("init gpio");
   // Set log level to info
   spdlog::set_level(spdlog::level::debug);
