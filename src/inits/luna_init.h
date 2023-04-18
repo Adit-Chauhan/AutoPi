@@ -49,20 +49,20 @@ public:
    *   @param sample Pointer to the sample data.
    */
   void hasSample(uint8_t *sample) {
-    spdlog::debug("Got sample");
+    std::array<uint8_t, 9> arr;
+    std::copy(sample, sample + 9, arr.begin());
+    spdlog::debug("LIDAR:: {}", spdlog::to_hex(arr));
     if (get_dist(sample) > 10) {
       if (pinSet)
         pinSet = false;
       return;
     }
-    std::array<uint8_t, 9> arr;
-    std::copy(sample, sample + 9, arr.begin());
-    spdlog::debug("LIDAR:: {}", spdlog::to_hex(arr));
     if (handle == nullptr) {
       spdlog::debug("handle not set");
     }
     if (!pinSet)
-      gpioWrite(pin, 1);
+      ;
+    //  gpioWrite(pin, 1);
   }
 
 private:
