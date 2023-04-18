@@ -22,7 +22,7 @@ void LunaDriver::dataReady() {
   if (callback == NULL) {
     return;
   }
-  callback->hasSample(normal_read_buffer.data());
+  callback->hasSample(normal_read_buffer->data());
 }
 
 void LunaDriver::read_thread() {
@@ -53,7 +53,7 @@ void LunaDriver::read_thread() {
     //        "Pollfd after wait:: ptr = {}, fd = {}, event = {}, revents = {}",
     //        fmt::ptr(p_fd), p_fd->fd, p_fd->events, p_fd->revents);
 
-    lidar.read(normal_read_buffer.data(), 9);
+    lidar.read(normal_read_buffer->data(), 9);
     dataReady();
   }
 }
