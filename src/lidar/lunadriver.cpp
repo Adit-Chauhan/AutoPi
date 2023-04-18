@@ -50,8 +50,10 @@ void LunaDriver::read_thread() {
 int LunaDriver::check_data_type(pollfd *p_fd) {
   spdlog::debug("Checking Data type");
   wait_for_data(p_fd, 2);
+  spdlog::trace("waited for data");
   std::array<uint8_t, 2> arr;
   lidar.read(arr.data(), 2);
+  spdlog::trace("print data");
   if (arr[0] == 0x59 && arr[1] == 0x59) {
     spdlog::debug("Found Normal Data");
     return 0; // Normal Data
