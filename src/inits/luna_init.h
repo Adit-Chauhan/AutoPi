@@ -51,8 +51,12 @@ public:
   void hasSample(uint8_t *sample) {
     std::array<uint8_t, 9> arr;
     std::copy(sample, sample + 9, arr.begin());
-    spdlog::debug("LIDAR:: {}", spdlog::to_hex(arr));
-    if (get_dist(arr[2], arr[3]) > 10) {
+    uint16_t dist = arr[3];
+    dist = dist << 8;
+    dist = dist | arr[2];
+    spdlog::debug("LIDAR:: {} , Data:: {}", spdlog::to_hex(arr), dist);
+    if (dist > 10) {
+      spdlog::info("setting pin");
       if (pinSet)
         pinSet = false;
       return;
