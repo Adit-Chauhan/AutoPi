@@ -10,6 +10,7 @@
 #include "tf_luna.hpp"
 #include <array>
 #include <cstdint>
+#include <cstdlib>
 #include <memory>
 #include <poll.h>
 #include <thread>
@@ -62,7 +63,7 @@ public:
   }
 
 private:
-  uint8_t normal_read_buffer[9];
+  uint8_t *normal_read_buffer = (uint8_t *)malloc(sizeof(uint8_t) * 9);
   std::vector<uint8_t>
       other_read_buffer; //!< future proofing stores values for 0x5A header
                          //!< results, currently unused
