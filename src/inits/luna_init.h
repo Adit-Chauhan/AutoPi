@@ -65,6 +65,7 @@ public:
       return;
     }
     if (!pinSet) {
+      spdlog::debug("Trying to set pin");
       gpioWrite(pin, 1);
       pinSet = true;
     }
