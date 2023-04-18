@@ -2,6 +2,7 @@
     @file main.cpp
     @brief The main entry point of the application.
     */
+#include "DrowsinessCheck/DrowsinessDetector.h"
 #include "Email/email.h"
 #include "inits/camera_init.h"
 #include "inits/luna_init.h"
@@ -44,7 +45,9 @@ int main() {
   auto driver = std::make_unique<mq3Driver>();
   auto drunk = std::make_unique<isDrunk>(std::make_unique<DrunkEmail>(sender));
   driver->registerCallback(std::move(drunk));
-  driver->loop_for_10_sec();
+  // driver->loop_for_10_sec();
+  auto drow = std::make_unique<DrowsinessDetector>();
+  drow->run();
   auto serve = std::make_unique<Server>();
   serve->register_callback_action("/hello", std::make_unique<ServerHello>());
   serve->run();
