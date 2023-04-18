@@ -57,7 +57,7 @@ class isDrunk : public mq3Callback {
 };
 
 int main() {
-
+  spdlog::set_level(spdlog::level::trace);
   if (gpioInitialise() < 0) {
     spdlog::error("pigpio initialization failed.");
     std::exit(42);
