@@ -35,6 +35,9 @@ class LunaPrintData : public LunaCallback {
     dist = dist << 8;
     dist |= array[2];
     spdlog::debug("Data :: {}, Distance = {}", spdlog::to_hex(array), dist);
+    if (dist < 10) {
+      spdlog::debug("About to crash!!");
+    }
   }
 };
 
@@ -65,7 +68,6 @@ int main() {
   LunaDriver luna;
   std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
   luna.registerCallback(move(callback));
-
   std::thread lunaRead = luna.start_read_thread();
   while (true) {
     sleep(1);
