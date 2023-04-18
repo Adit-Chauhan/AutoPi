@@ -1,6 +1,6 @@
 /**
- *   @file drowsiness_detector.h
- *   @brief This file contains the declaration of the DrowsinessDetector class,
+ *  @file drowsiness_detector.h
+ *  @brief This file contains the declaration of the DrowsinessDetector class,
  * which is used for detecting drowsiness in drivers.
  */
 #ifndef DROWSINESS_DETECTOR_H
@@ -14,7 +14,7 @@
 #include <opencv2/objdetect.hpp>
 #include <utility>
 /**
- *    @brief The DrowsinessDetector class is used for detecting drowsiness in
+ * @brief The DrowsinessDetector class is used for detecting drowsiness in
  * drivers.
  */
 class DrowsinessDetector {

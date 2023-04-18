@@ -6,7 +6,7 @@ DrowsinessDetector::DrowsinessDetector()
 
     : no_eyes_count(0), total_count(0), start_time(time(0)),
       cascades_loaded(true) {
-
+  // Load face cascade
   if (!face_cascade.load("/home/autopi/temp/AutoPi/data/"
                          "haarcascade_frontalface_default.xml")) {
 
@@ -14,7 +14,7 @@ DrowsinessDetector::DrowsinessDetector()
 
     cascades_loaded = false;
   }
-
+  // Load eye cascade
   if (!eye_cascade.load("/home/autopi/temp/AutoPi/data/"
                         "haarcascade_eye_tree_eyeglasses.xml")) {
 
@@ -70,6 +70,7 @@ void DrowsinessDetector::detectAndDisplay(cv::Mat frame) {
   cv::cvtColor(frame, frame_gray, cv::COLOR_BGR2GRAY);
   cv::equalizeHist(frame_gray, frame_gray);
   std::vector<cv::Rect> faces;
+  // Detect faces using face cascade
   face_cascade.detectMultiScale(frame_gray, faces, 1.5, 3);
 
   if (faces.empty()) {

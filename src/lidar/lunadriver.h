@@ -86,7 +86,7 @@ private:
   int check_data_type(pollfd *p_fd);
   /**
    * @brief Waits for a specified number of bytes to be available to read from
-   * the sensor.
+   * the system buffer
    * @param p_fd Pointer to the pollfd struct.
    * @param num_bytes The number of bytes to wait for.
    */
