@@ -28,12 +28,13 @@ class LunaPrintData : public LunaCallback {
     @param sample A pointer to the sample data.
   */
   void hasSample(uint8_t *sample) {
-    std::array<uint8_t, 9> array;
-    std::copy(sample, sample + 9, array.begin());
-    uint16_t dist = array[3];
+    spdlog::trace("Made array");
+    uint16_t dist = *(sample + 3);
+    spdlog::trace("accessed sample 3");
     dist = dist << 8;
-    dist = dist | array[2];
-    spdlog::debug("LIDAR:: {} , Data:: {}", spdlog::to_hex(array), dist);
+    dist = dist | *(sample + 2);
+    spdlog::trace("accessed sample 2");
+    spdlog::debug("Data:: {}", dist);
   }
 };
 
@@ -94,19 +95,5 @@ private:
  *  callback function.
  *   @return A unique pointer to the initialized Luna driver object.
  */
-std::unique_ptr<LunaDriver> make_luna() {
-  spdlog::info("LUNA:: Initilizing Luna");
-  auto luna = std::make_unique<LunaDriver>();
-  std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
-  // callback->registerGPIOHandler(hand);
-  luna->registerCallback(move(callback));
-  if (callback == nullptr) {
-    spdlog::info("LUNA:: Callback Moved Successfully");
-  }
-
-  std::thread lunaRead = luna->start_read_thread();
-  spdlog::info("LUNA:: Started Read Thread");
-  return luna;
-}
 
 #endif // LUNA_INIT_H_

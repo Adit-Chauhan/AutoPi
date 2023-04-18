@@ -2,6 +2,7 @@
     @file main.cpp
     @brief The main entry point of the application.
     */
+#include "DrowsinessCheck/DrowsinessDetector.h"
 #include "Email/email.h"
 #include "lidar/lunadriver.h"
 #include "mq3/mq3Driver.h"
@@ -11,7 +12,7 @@
 #include "utils/thread_handler.h"
 #include <algorithm>
 #include <array>
-#include <cmath>
+#include <csignal>
 #include <cstdint>
 #include <iostream>
 #include <memory>
@@ -20,12 +21,12 @@
 #include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
+#include <utility>
 /**
-
-    @brief The main entry point of the application.
-    The function creates instances of required classes and starts the server.
-    @return The exit status code of the application.
-    */
+ *   @brief The main entry point of the application.
+ *   The function creates instances of required classes and starts the server.
+ *   @return The exit status code of the application.
+ */
 
 class LunaPrintData : public LunaCallback {
   void hasSample(uint8_t *sample) {
@@ -69,7 +70,8 @@ int main() {
   std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
   luna.registerCallback(move(callback));
   std::thread lunaRead = luna.start_read_thread();
-  while (true) {
+
+while (true) {
     sleep(1);
   }
   return 0;
