@@ -30,7 +30,10 @@ class LunaPrintData : public LunaCallback {
   void hasSample(uint8_t *sample) {
     std::array<uint8_t, 9> array;
     std::copy(sample, sample + 9, array.begin());
-    spdlog::debug("Data :: {}", spdlog::to_hex(array));
+    uint16_t dist = array[3];
+    dist = dist << 8;
+    dist = dist | array[2];
+    spdlog::debug("LIDAR:: {} , Data:: {}", spdlog::to_hex(array), dist);
   }
 };
 
