@@ -25,6 +25,7 @@
 #include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
+#include <utility>
 /**
  *   @brief The main entry point of the application.
  *   The function creates instances of required classes and starts the server.
@@ -47,7 +48,11 @@ int main() {
   driver->registerCallback(std::move(drunk));
   // driver->loop_for_10_sec();
   auto drow = std::make_unique<DrowsinessDetector>();
-  drow->run();
+  // drow->run();
+  auto luna = std::make_unique<LunaDriver>();
+  auto clb = std::make_unique<LunaPrintData>();
+  luna->registerCallback(std::move(clb));
+  luna->start_read_thread();
   auto serve = std::make_unique<Server>();
   serve->register_callback_action("/hello", std::make_unique<ServerHello>());
   serve->run();
