@@ -20,6 +20,7 @@
 #include <spdlog/fmt/bin_to_hex.h>
 #include <spdlog/spdlog.h>
 #include <string>
+#include <thread>
 #include <unistd.h>
 #include <utility>
 /**
@@ -158,12 +159,17 @@ int main() {
   spdlog::info("Initialised mq3 sensor");
 
   auto cam = std::unique_ptr<DrowsinessDetector>();
+  cam->register_callback(move(sleepy_email));
+  spdlog::info("Initialised Camera");
 
   LunaDriver luna;
   std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
   luna.registerCallback(move(callback));
-  std::thread lunaRead = luna.start_read_thread();
+  spdlog::info("Initialised Lidar");
 
+  std::thread lunaRead = luna.start_read_thread();
+  std::thread camThread = std::thread(&DrowsinessDetector::run, cam.get());
+  spdlog::info("started threads");
   while (true) {
     sleep(1);
   }
