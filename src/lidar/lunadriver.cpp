@@ -45,9 +45,6 @@ void LunaDriver::read_thread() {
     //    }
     //    normal_data(p_fd.get());
     spdlog::trace("Starting wait");
-    if (p_fd == NULL) {
-      spdlog::trace("NULL p_fd");
-    }
     wait_for_data(p_fd, 9);
     lidar.read(normal_read_buffer.data(), 9);
     dataReady();
@@ -88,6 +85,7 @@ void LunaDriver::registerCallback(std::unique_ptr<LunaCallback> fn) {
 void LunaDriver::wait_for_data(pollfd *p_fd, uint8_t num_bytes) {
   int bytes_available;
   while (bytes_available < num_bytes) {
+    spdlog::trace("Runing poll");
     int check = poll(p_fd, 1, -1);
     if (check != 1 || p_fd->revents == POLLERR || p_fd->revents == POLLNVAL) {
       spdlog::error("Error in polling fd");
