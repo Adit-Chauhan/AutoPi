@@ -113,11 +113,9 @@ void LunaDriver::normal_data(pollfd *p_fd) {
   wait_for_data(p_fd, 7);
   uint8_t data[7];
   lidar.read(data, 7);
-  normal_read_buffer = {
-      0x59,
-      0x59,
-  };
-  std::copy(data, data + 7, normal_read_buffer.begin() + 2);
+  *(normal_read_buffer->data()) = 0x59;
+  *(normal_read_buffer->data() + 1) = 0x59;
+  std::copy(data, data + 7, normal_read_buffer->begin() + 2);
   is_normal_data = true;
 }
 
