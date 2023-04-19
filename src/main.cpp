@@ -132,9 +132,9 @@ private:
 class isDrunk : public mq3Callback {
   int count_over_20 =
       0; ///< Number of samples that are greater than 20 (threshold)
-  bool stopCount = false;           ///< Flag to stop counting samples
   std::unique_ptr<emailCallback> m; ///< Pointer to email callback object
 public:
+  bool stopCount = false; ///< Flag to stop counting samples
   /**
    * @brief Constructor for the isDrunk class.
    * @param mail A unique pointer to the email callback object.
@@ -151,7 +151,7 @@ public:
       return;
 
     spdlog::debug("Sample {}", sample);
-    if (sample > 20) {
+    if (sample < 20) {
       spdlog::trace("Count is over 20");
       count_over_20++;
     }
