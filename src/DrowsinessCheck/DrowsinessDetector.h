@@ -48,9 +48,10 @@ public:
   void register_callback(std::unique_ptr<emailCallback> mail) {
     callback = std::move(mail);
   }
-  void start_thread() {
+  std::thread start_thread() {
     std::thread t = std::thread(&DrowsinessDetector::run, this);
     spdlog::info("Started thread");
+    return t;
   }
 
 private:
