@@ -207,7 +207,7 @@ public:
    * @brief Constructor for the ServerRunDrunkTest class.
    * @param driver A shared pointer to the MQ-3 driver object.
    */
-  ServerRunDrunkTest(std::shared_ptr<mq3Driver> driver) : sensor(driver) {}
+  ServerRunDrunkTest(mq3Driver *driver) : sensor(driver) {}
   /**
    * @brief Callback function that is called when the server action is
    * triggered. Starts a new thread to run the MQ-3 alcohol sensor test for 10
@@ -219,7 +219,7 @@ public:
   }
 
 private:
-  std::shared_ptr<mq3Driver> sensor; ///< Pointer to MQ-3 driver object
+  mq3Driver *sensor; ///< Pointer to MQ-3 driver object
 };
 
 /**
@@ -277,8 +277,8 @@ int main() {
   serv->register_callback_action("/hello", std::make_unique<ServerHello>());
   serv->register_callback_action(
       "/email", std::make_unique<ServerEmail>(move(serv_email)));
-  serv->register_callback_action("/DrunkTest",
-                                 std::make_unique<ServerRunDrunkTest>(mq3));
+  serv->register_callback_action(
+      "/DrunkTest", std::make_unique<ServerRunDrunkTest>(mq3.get()));
   spdlog::info("register servers");
 
   // Start the server and wait for inputs
