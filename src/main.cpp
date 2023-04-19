@@ -226,8 +226,8 @@ private:
 };
 
 void drunk_callback(int gpio, int level, uint32_t tick, void *userdata) {
-  std::cout << "GPIO " << gpio << " went " << (level ? "HIGH" : "LOW") << " at "
-            << tick << std::endl;
+  std::string s = (level ? "HIGH" : "LOW");
+  spdlog::info("GPIO {}  went {} at {}", gpio, s, tick);
   std::shared_ptr<std::string> *data =
       static_cast<std::shared_ptr<std::string> *>(userdata);
   std::cout << "User data: " << **data << std::endl;
