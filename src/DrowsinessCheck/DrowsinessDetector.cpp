@@ -51,13 +51,13 @@ void DrowsinessDetector::run() {
 
     detectAndDisplay(frame);
 
-    //  cv::imshow("Drowsiness Detector", frame);
+      cv::imshow("Drowsiness Detector", frame);
 
-    // if (cv::waitKey(1000/30) == 27) {
+     if (cv::waitKey(1000/30) == 27) {
 
-    //  break;
+      break;
 
-    // }
+     }
   }
 }
 
@@ -85,7 +85,7 @@ void DrowsinessDetector::detectAndDisplay(cv::Mat frame) {
     eye_cascade.detectMultiScale(faceROI, eyes);
 
     if (difftime(time(0), start_time) >= 15) {
-      if (static_cast<double>(no_eyes_count) / total_count >= 0.2) {
+      if (static_cast<double>(no_eyes_count) / total_count >= 0.30) {
         spdlog::info(
             "****ALERT***** " + std::to_string(no_eyes_count) + " " +
             std::to_string(total_count) + " " +
