@@ -117,6 +117,9 @@ class LunaPrintData : public LunaCallback {
       spdlog::info("About to crash!!");
     }
   }
+
+private:
+  bool pin_set = false;
 };
 /**
  * @brief A class that checks if a person is drunk by counting the number of
@@ -253,9 +256,9 @@ int main() {
   mq3->registerCallback(move(drunkCallback));
   spdlog::info("Initialised mq3 sensor");
 
-  // auto cam = std::unique_ptr<DrowsinessDetector>();
-  // cam->register_callback(move(sleepy_email));
-  // spdlog::info("Initialised Camera");
+  auto cam = std::unique_ptr<DrowsinessDetector>();
+  cam->register_callback(move(sleepy_email));
+  spdlog::info("Initialised Camera");
 
   // Initialize Luna driver for lidar sensor and register the appropriate
   // pointers
@@ -266,7 +269,7 @@ int main() {
 
   // Start Non Stop Threads
   std::thread lunaRead = luna.start_read_thread();
-  //  std::thread camThread = std::thread(&DrowsinessDetector::run, cam.get());
+  std::thread camThread = std::thread(&DrowsinessDetector::run, cam.get());
   spdlog::info("started threads");
 
   // Create Server class and register server callbacks
