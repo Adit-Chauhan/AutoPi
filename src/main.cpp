@@ -256,7 +256,7 @@ int main() {
 
   std::shared_ptr<std::string> user_data =
       std::make_shared<std::string>("my data");
-  gpioSetISRFuncEx(2, EITHER_EDGE, 1000, drunk_callback, &user_data);
+  gpioSetISRFuncEx(2, RISING_EDGE, 1000, drunk_callback, &user_data);
   spdlog::info("Initialised gpio");
   // Create email sender with API keys
   auto email_sender =
