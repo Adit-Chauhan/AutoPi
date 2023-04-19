@@ -118,7 +118,14 @@ class LunaPrintData : public LunaCallback {
     spdlog::debug("Data :: {}, Distance = {}", spdlog::to_hex(array), dist);
     if (dist < 10) {
       spdlog::info("About to crash!!");
+      //      if (!pin_set) {
+      //        gpioWrite(7, 1);  // Buzz pin
+      //        pin_set = true;
+      //      }
     }
+    //   else if (pin_set) {
+    //     pin_set = false; // Debuzz
+    //   }
   }
 
 private:
@@ -243,6 +250,7 @@ int main() {
     spdlog::error("pigpio initialization failed.");
     std::exit(42);
   }
+  gpioSetMode(7, PI_OUTPUT);
   spdlog::info("Initialised gpio");
   // Create email sender with API keys
   auto email_sender =
