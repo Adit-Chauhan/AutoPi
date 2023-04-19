@@ -225,6 +225,14 @@ private:
   std::shared_ptr<mq3Driver> sensor; ///< Pointer to MQ-3 driver object
 };
 
+void drunk_callback(int gpio, int level, uint32_t tick, void *userdata) {
+  std::cout << "GPIO " << gpio << " went " << (level ? "HIGH" : "LOW") << " at "
+            << tick << std::endl;
+  std::shared_ptr<std::string> *data =
+      static_cast<std::shared_ptr<std::string> *>(userdata);
+  std::cout << "User data: " << **data << std::endl;
+}
+
 /**
  * @brief Main function for the application.
  *
@@ -243,6 +251,12 @@ int main() {
     spdlog::error("pigpio initialization failed.");
     std::exit(42);
   }
+  gpioSetMode(2, PI_INPUT);
+  gpioSetPullUpDown(2, PI_PUD_DOWN);
+
+  std::shared_ptr<std::string> user_data =
+      std::make_shared<std::string>("my data");
+  gpioSetISRFuncEx(2, EITHER_EDGE, 1000, drunk_callback, &user_data);
   spdlog::info("Initialised gpio");
   // Create email sender with API keys
   auto email_sender =
