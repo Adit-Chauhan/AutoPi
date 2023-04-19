@@ -273,8 +273,9 @@ int main() {
 
   // Start Non Stop Threads
   std::thread lunaRead = luna.start_read_thread();
-  spdlog::info("started threads");
   std::thread t = cam.start_thread();
+  spdlog::info("started threads");
+
   // Create Server class and register server callbacks
   auto serv = std::make_unique<Server>();
   serv->register_callback_action("/hello", std::make_unique<ServerHello>());
