@@ -12,6 +12,8 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/objdetect.hpp>
+#include <spdlog/spdlog.h>
+#include <thread>
 #include <utility>
 /**
  * @brief The DrowsinessDetector class is used for detecting drowsiness in
@@ -45,6 +47,10 @@ public:
    */
   void register_callback(std::unique_ptr<emailCallback> mail) {
     callback = std::move(mail);
+  }
+  void start_thread() {
+    std::thread t = std::thread(&DrowsinessDetector::run, this);
+    spdlog::info("Started thread");
   }
 
 private:

@@ -260,8 +260,8 @@ int main() {
 
   auto cam = DrowsinessDetector();
   cam.register_callback(move(sleepy_email));
-  cam.run();
   spdlog::info("Initialised Camera");
+  cam.start_thread();
 
   // Initialize Luna driver for lidar sensor and register the appropriate
   // pointers
