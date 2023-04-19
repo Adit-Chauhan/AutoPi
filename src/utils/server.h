@@ -1,6 +1,7 @@
 #include <memory>
-#include <netinet/in.h>  // for sockaddr_in
-#include <string>        // for string, basic_string
+#include <netinet/in.h> // for sockaddr_in
+#include <string>       // for string, basic_string
+#include <thread>
 #include <unordered_map> // for unordered_map
 /**
  * @brief An enumeration of errors that may occur while setting up or running a
@@ -70,6 +71,7 @@ private:
   const int port = 8080; //!< default port to use
   int server_socket;     //!< socket fd
   struct sockaddr_in address;
+  std::thread hold; //!< used to hold thead so it does not get cleaned up by os
   /**
    * @brief handle_call run appropriate callback function.
    * @param client_socket The file descriptor of the client socket.

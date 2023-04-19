@@ -25,6 +25,9 @@
 #include <thread>
 #include <unistd.h>
 #include <utility>
+
+std::thread hold;
+
 /**
  * @brief A callback for when the driver is drunk
  * It will send an email to the registered user
@@ -214,8 +217,7 @@ public:
    * seconds.
    */
   void serverAction() {
-    std::thread run_test =
-        std::thread(&mq3Driver::loop_for_10_sec, sensor.get());
+    hold = std::thread(&mq3Driver::loop_for_10_sec, sensor.get());
     spdlog::info("Started Manual Drink test");
   }
 
@@ -261,20 +263,18 @@ int main() {
   auto cam = DrowsinessDetector();
   cam.register_callback(move(sleepy_email));
   spdlog::info("Initialised Camera");
-  std::thread t = cam.start_thread();
 
   // Initialize Luna driver for lidar sensor and register the appropriate
   // pointers
-  //  LunaDriver luna;
-  //  std::unique_ptr<LunaPrintData> callback =
-  //  std::make_unique<LunaPrintData>(); luna.registerCallback(move(callback));
-  //  spdlog::info("Initialised Lidar");
-  //
-  //  // Start Non Stop Threads
-  //  std::thread lunaRead = luna.start_read_thread();
-  //  // std::thread camThread = std::thread(&DrowsinessDetector::run,
-  //  cam.get()); spdlog::info("started threads");
+  LunaDriver luna;
+  std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
+  luna.registerCallback(move(callback));
+  spdlog::info("Initialised Lidar");
 
+  // Start Non Stop Threads
+  std::thread lunaRead = luna.start_read_thread();
+  spdlog::info("started threads");
+  std::thread t = cam.start_thread();
   // Create Server class and register server callbacks
   auto serv = std::make_unique<Server>();
   serv->register_callback_action("/hello", std::make_unique<ServerHello>());
