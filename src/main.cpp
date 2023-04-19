@@ -149,10 +149,12 @@ public:
 
     spdlog::debug("Sample {}", sample);
     if (sample > 20) {
+      spdlog::trace("Count is over 20");
       count_over_20++;
     }
     if (count_over_20 > 1500) {
       stopCount = true;
+      spdlog::debug("sending email");
       m->send_email(); ///< Email Callback
       spdlog::info("sent email");
     }
@@ -233,7 +235,7 @@ private:
  */
 int main() {
   // Set logging level to info
-  spdlog::set_level(spdlog::level::info);
+  spdlog::set_level(spdlog::level::debug);
   // Initialize pigpio library for GPIO operations
   if (gpioInitialise() < 0) {
     spdlog::error("pigpio initialization failed.");
@@ -256,9 +258,9 @@ int main() {
   mq3->registerCallback(move(drunkCallback));
   spdlog::info("Initialised mq3 sensor");
 
-  auto cam = std::unique_ptr<DrowsinessDetector>();
-  cam->register_callback(move(sleepy_email));
-  spdlog::info("Initialised Camera");
+  // auto cam = std::unique_ptr<DrowsinessDetector>();
+  // cam->register_callback(move(sleepy_email));
+  // spdlog::info("Initialised Camera");
 
   // Initialize Luna driver for lidar sensor and register the appropriate
   // pointers
@@ -269,7 +271,7 @@ int main() {
 
   // Start Non Stop Threads
   std::thread lunaRead = luna.start_read_thread();
-  std::thread camThread = std::thread(&DrowsinessDetector::run, cam.get());
+  // std::thread camThread = std::thread(&DrowsinessDetector::run, cam.get());
   spdlog::info("started threads");
 
   // Create Server class and register server callbacks
