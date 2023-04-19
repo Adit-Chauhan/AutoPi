@@ -257,7 +257,7 @@ int main() {
   auto drunkCallback = std::make_unique<isDrunk>(move(drunk_email));
   mq3->registerCallback(move(drunkCallback));
   spdlog::info("Initialised mq3 sensor");
-  mq3->loop_for_10_sec();
+  std::thread drunk = mq3->start_thread();
   // auto cam = std::unique_ptr<DrowsinessDetector>();
   // cam->register_callback(move(sleepy_email));
   // spdlog::info("Initialised Camera");

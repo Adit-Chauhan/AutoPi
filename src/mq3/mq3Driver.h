@@ -11,6 +11,7 @@
 #include "mq3sensor.h"
 #include <memory>
 #include <spdlog/spdlog.h>
+#include <thread>
 /**
 @brief An abstract class for handling the sample event from the MQ3 driver
 */
@@ -61,6 +62,9 @@ public:
     spdlog::debug("Starting loop");
     while (count-- > 0)
       dataReady();
+  }
+  std::thread start_thread() {
+    return std::thread(&mq3Driver::loop_for_10_sec, this);
   }
   /**
   @brief Destructor for the mq3Driver class
