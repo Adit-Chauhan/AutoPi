@@ -6,7 +6,7 @@ DrowsinessDetector::DrowsinessDetector()
 
     : no_eyes_count(0), total_count(0), start_time(time(0)),
       cascades_loaded(true) {
-
+  // Load face cascade
   if (!face_cascade.load("/home/autopi/temp/AutoPi/data/"
                          "haarcascade_frontalface_default.xml")) {
 
@@ -14,7 +14,7 @@ DrowsinessDetector::DrowsinessDetector()
 
     cascades_loaded = false;
   }
-
+  // Load eye cascade
   if (!eye_cascade.load("/home/autopi/temp/AutoPi/data/"
                         "haarcascade_eye_tree_eyeglasses.xml")) {
 
@@ -51,13 +51,13 @@ void DrowsinessDetector::run() {
 
     detectAndDisplay(frame);
 
-    //  cv::imshow("Drowsiness Detector", frame);
+      cv::imshow("Drowsiness Detector", frame);
 
-    // if (cv::waitKey(1000/30) == 27) {
+     if (cv::waitKey(1000/30) == 27) {
 
-    //  break;
+      break;
 
-    // }
+     }
   }
 }
 
@@ -70,6 +70,7 @@ void DrowsinessDetector::detectAndDisplay(cv::Mat frame) {
   cv::cvtColor(frame, frame_gray, cv::COLOR_BGR2GRAY);
   cv::equalizeHist(frame_gray, frame_gray);
   std::vector<cv::Rect> faces;
+  // Detect faces using face cascade
   face_cascade.detectMultiScale(frame_gray, faces, 1.5, 3);
 
   if (faces.empty()) {
@@ -84,7 +85,7 @@ void DrowsinessDetector::detectAndDisplay(cv::Mat frame) {
     eye_cascade.detectMultiScale(faceROI, eyes);
 
     if (difftime(time(0), start_time) >= 15) {
-      if (static_cast<double>(no_eyes_count) / total_count >= 0.2) {
+      if (static_cast<double>(no_eyes_count) / total_count >= 0.30) {
         spdlog::info(
             "****ALERT***** " + std::to_string(no_eyes_count) + " " +
             std::to_string(total_count) + " " +

@@ -21,8 +21,8 @@ public:
   /**
    *   @brief Constructs a new EmailSender object with the given login
    * credentials.
-   *   @param username The username for the email account.
-   *   @param password The password for the email account.
+   *   @param username The username for the SMTP account.
+   *   @param password The password for the SMTP account.
    */
   EmailSender(const std::string &username, const std::string &password);
   /**

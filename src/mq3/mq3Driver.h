@@ -10,6 +10,7 @@
 #define AUTOPI_MQ3DRIVER_H
 #include "mq3sensor.h"
 #include <memory>
+#include <spdlog/spdlog.h>
 /**
 @brief An abstract class for handling the sample event from the MQ3 driver
 */
@@ -43,6 +44,7 @@ public:
   void dataReady() {
     sensor->dataReady = false;
     sensor->read_sensor();
+    spdlog::debug("Starting callback");
     callback->hasSample(sensor->get_sensor_ppm());
   }
 
@@ -56,6 +58,7 @@ public:
 
   void loop_for_10_sec() {
     int count = 10 * 200;
+    spdlog::debug("Starting loop");
     while (count-- > 0)
       dataReady();
   }

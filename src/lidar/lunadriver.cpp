@@ -1,19 +1,19 @@
 #include "lunadriver.h"
-#include "../utils/serial.h"
-#include "tf_luna.hpp"
-#include <algorithm>
-#include <array>
-#include <cstdint>
-#include <pigpio.h>
-#include <poll.h>
-#include <spdlog/spdlog.h>
-#include <sys/ioctl.h>
-#include <sys/poll.h>
-#include <thread>
-#include <unistd.h>
+#include "tf_luna.hpp"     // for Luna
+#include <algorithm>       // for copy
+#include <array>           // for array
+#include <cstdint>         // for uint8_t
+#include <cstdlib>         // for exit
+#include <exception>       // for exception
+#include <fmt/core.h>      // for basic_string_view, format, vformat_to
+#include <poll.h>          // for pollfd, poll, POLLERR, POLLIN, POLLNVAL
+#include <spdlog/spdlog.h> // for debug, error, info, trace
+#include <sys/ioctl.h>     // for ioctl, FIONREAD
+#include <thread>          // for thread
+#include <unistd.h>        // for usleep, NULL
+#include <utility>         // for move
 
 //#define DBG_SLEEP
-
 LunaDriver::LunaDriver() {}
 
 void LunaDriver::dataReady() {
@@ -41,8 +41,6 @@ void LunaDriver::read_thread() {
       std::exit(42);
     }
     normal_data(&p_fd);
-    //   wait_for_data(&p_fd, 9);
-    // lidar.read(normal_read_buffer.data(), 9);
     dataReady();
   }
 }

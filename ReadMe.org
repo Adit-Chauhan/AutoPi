@@ -8,8 +8,8 @@ The project utilizes smart technology to enhance road safety and prevent acciden
 
 * Dependencies
   To build the AutoPi , you need the following dependencies: 
-  1. CMake()
-  2. OpenCV()
+  1. CMake
+  2. OpenCV
   3. pigpio
   4. Gtest
 
@@ -18,9 +18,6 @@ The project utilizes smart technology to enhance road safety and prevent acciden
 
 
 * Build Instructions
-#+begin_quote
-Install meson and ninja for building
-#+end_quote
 
 #+begin_src bash
 mkdir build
@@ -30,11 +27,27 @@ make
 sudo ./Autopi
 #+end_src
 
-* Future Scope And Limitations 
-As a future scope, the code for sending emails using SMTP is currently compiling without any errors, but the mail is not being sent properly due to incorrect SMTP username and password. The issue is being investigated, and the plan is to find the correct SMTP credentials and update the code accordingly. This will ensure that the code can send emails successfully using SMTP. 
+
+* Code Explanation
+When the program start it initializes the GPIO, email sender, MQ3 sensor, camera and lidar in that order.
+
+It will then start the persistent threads of camera sensor and lidar, and finally will start the server and wait on the requests.
+** Email Sender
+It initializes and logs into the server and then provides the required callbacks for sending the emails.
+** MQ3 sensor
+Is called on demand when a request is sent to the server and will perform a test for 10 seconds. If it detects if the person is drunk then it will send an email.
+** Lidar
+Lidar will give an crash message when the distance is less than a certain threshold.
+** Camera
+Camera will detect if the driver is drowsy and send an email if found to be so.
+
+* Future Scope And Limitations
++ SMTP is using a proxy server instead of an actual server a proper server is needed for email to function as needed.
++ Lidar is very limited due to budget constraints, a more powerful lidar and more number of lidars working in conjunction will increase safety.
++ Alcohol detector may need to take more serious steps but that possibility is yet to be explored
 
 * Follow us on
 #+begin_quote
-[[https://instagram.com/aut_opi][Instagram]]: AutoPi
+[[https://instagram.com/aut_opi][Instagram]]: AutoPi
 #+end_quote
 
