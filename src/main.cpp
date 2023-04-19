@@ -237,7 +237,7 @@ private:
  */
 int main() {
   // Set logging level to info
-  spdlog::set_level(spdlog::level::debug);
+  spdlog::set_level(spdlog::level::info);
   // Initialize pigpio library for GPIO operations
   if (gpioInitialise() < 0) {
     spdlog::error("pigpio initialization failed.");
