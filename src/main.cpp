@@ -148,7 +148,7 @@ public:
       return;
 
     spdlog::debug("Sample {}", sample);
-    if (sample > 20) {
+    if (sample < 20) {
       spdlog::trace("Count is over 20");
       count_over_20++;
     }
