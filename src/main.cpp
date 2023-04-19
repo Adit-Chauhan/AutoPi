@@ -258,21 +258,22 @@ int main() {
   mq3->registerCallback(move(drunkCallback));
   spdlog::info("Initialised mq3 sensor");
 
-  // auto cam = std::unique_ptr<DrowsinessDetector>();
-  // cam->register_callback(move(sleepy_email));
-  // spdlog::info("Initialised Camera");
+  auto cam = DrowsinessDetector();
+  cam.register_callback(move(sleepy_email));
+  cam.run();
+  spdlog::info("Initialised Camera");
 
   // Initialize Luna driver for lidar sensor and register the appropriate
   // pointers
-  LunaDriver luna;
-  std::unique_ptr<LunaPrintData> callback = std::make_unique<LunaPrintData>();
-  luna.registerCallback(move(callback));
-  spdlog::info("Initialised Lidar");
-
-  // Start Non Stop Threads
-  std::thread lunaRead = luna.start_read_thread();
-  // std::thread camThread = std::thread(&DrowsinessDetector::run, cam.get());
-  spdlog::info("started threads");
+  //  LunaDriver luna;
+  //  std::unique_ptr<LunaPrintData> callback =
+  //  std::make_unique<LunaPrintData>(); luna.registerCallback(move(callback));
+  //  spdlog::info("Initialised Lidar");
+  //
+  //  // Start Non Stop Threads
+  //  std::thread lunaRead = luna.start_read_thread();
+  //  // std::thread camThread = std::thread(&DrowsinessDetector::run,
+  //  cam.get()); spdlog::info("started threads");
 
   // Create Server class and register server callbacks
   auto serv = std::make_unique<Server>();
